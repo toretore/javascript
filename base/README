@@ -1,0 +1,143 @@
+Base is a simple, uhm, base class which provides attribute and event-ish
+functionality. The subclass ElementBase extends this to work with DOM elements.
+
+Base needs Broadcaster [http://github.com/toretore/experiments/blob/master/javascript/broadcaster.js]
+
+ElementBase needs Prototype.
+
+== Attributes ==
+
+Each Base object has a get and set method which abstracts away the setting of
+attributes. This has many advantages, such as being able to provide "virtual"
+attributes, and you can also provide a "catch-all" method which is run when
+an attribute is not found.
+
+  var person = new Base();
+  person.set('firstname', 'Jim');
+  person.set('lastname', 'Lahey');
+  console.log(person.get('firstname')); //Logs "Jim"
+
+You can create custom getters and setters for each value:
+
+  person.getFirstnameValue = function(){
+    return this.getValue('firstname').toUpperCase();
+  };
+  console.log(person.get('firstname')); //Logs "JIM"
+
+  person.getNameValue = function(){
+    return this.get('firstname')+' '+this.get('lastname');
+  };
+  console.log(person.get('name')); //"JIM Lahey"
+
+  person.setNameValue = function(name){
+    var names = name.split(' ');
+    this.set('firstname', names[0]);
+    this.set('lastname', names[1]);
+  };
+  person.set('name', 'Phil Collins');
+  console.log(person.get('firstname')); //"PHIL"
+  console.log(person.get('lastname')); //"Collins"
+  console.log(person.get('name')); //"PHIL Collins"
+
+The method attributeNotFound is called whenever get is called and the requested
+attribute is not found (i.e. it's "undefined"). The default implementation
+is to simply return undefined, but this can be overridden:
+
+  person.attributeNotFound = function(name){
+    return name.toUpperCase();
+  };
+  console.log(person.get('humbaba')); //"HUMBABA"
+
+
+== Events ==
+
+Base provides some simple event-like functionality through its listen and fire
+methods. These are simply a thin wrapper for a Broadcaster object that is
+available as an object property "broadcaster".
+
+  ship.listen('typhoon', function(precipitation){
+    if (precipitation == 'shit') {
+      this.get('jib').haul();
+    }
+  });
+
+  ship.fire('typhoon', 'rain'); //Nothing happens
+  ship.fire('typhoon', 'shit'); //Shit typhoon, haul in the jib
+
+Events are implemented as a simple callback chain where each function
+subscribing to a particular message gets run when that message is fired.
+When firing a message, any additional parameters are passed along to the
+listening callback function.
+
+Each time an attribute gets changed, two messages are fired: One common
+"value changed" message that is the same for all attributes and one
+"foo value changed" message that is custom to each attribute. You can listen
+to these to provide behaviour when an attribute changes:
+
+  person.listen('value changed', function(name, newval, oldval){
+    console.log(name+' wasn changed from '+oldval+' to '+newval);
+  });
+
+  person.listen('firstname changed', function(newval, oldval){
+    console.log('First name was changed from '+oldval+' to '+newval);
+  });
+
+Events can be bubbled to other Broadcaster or Base objects:
+
+  var b = new Broadcaster();
+  person.bubble(b);
+  b.listen('firstname changed', function(person, newName, oldName){ /* ... */ });
+
+  var o = new Base();
+  person.bubble(o, 'namespace');
+  o.listen('namespace:firstname changed', function(person, newName, oldName){ /* ... */ });
+
+Bubbled messages can optionally include a namespace which will be prepended to
+the message when bubbled.
+
+
+== ElementBase ==
+
+ElementBase extends Base with getter and setter functionality that looks inside
+a wrapped DOM element first to find and set attributes. If a suitable element
+is not found inside the wrapped element, getting and setting works like in a
+normal Base object.
+
+  <div class="post">
+    <h2 class="title">How to maximize return on your social graph</h2>
+    <p class="body">Optimize virality of your crowdsourcing marketing strategy with SEO techniques.</p>
+  </div>
+
+  var Post = ElementBase.extend({});
+  var post = new Post($$('.post').first());
+  post.get('title'); //"How to maximize return on your social graph"
+  post.set('body', 'Be a douchebag.');
+
+Elements containing the value for a certain attribute are by default located
+by looking for the first element inside the wrapped element (the post div in
+the example above) having the attribute class name. You can change this by
+overriding the getElementFromSelector method:
+
+  //Require elements to also have the "value" class
+  Post.prototype.getElementBySelector = function(attribute){
+    return this.element.down('.value.'+attribute);
+  };
+
+If you only need to override this for a single attribute, you can define
+a custom element getter method for it:
+
+  //Return the anchor tag inside the .title element
+  Post.prototype.getTitleElement = function(){
+    return this.element.down('.title a');
+  };
+
+These elements are also used for setting values. Getting and setting values
+is implemented using innerHTML, but can be customised by overriding the
+extractValueFromElement and insertValueInElement methods:
+
+  Post.prototype.extractValueFromElement = function(element){
+    return element.innerHTML.replace(/<.*>/, '');
+  };
+  Post.prototype.insertValueInElement = function(element, value){
+    element.innerHTML = value.toUpperCase();
+  };
