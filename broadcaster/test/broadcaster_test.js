@@ -58,7 +58,7 @@ TestCase("BroadcasterTest", {
     assertEquals(5, counter);
   },
 
-  /*'test should be able to remove all listeners for a specific message': function(){
+  'test should be able to remove all listeners for a specific message': function(){
     var counter = 0,
         fn1 = function(){ counter++; },
         fn2 = function(){ counter++; };
@@ -74,7 +74,7 @@ TestCase("BroadcasterTest", {
     assertEquals(3, counter);
     this.b.fire('bar');
     assertEquals(4, counter);
-  },*/
+  },
 
   'test should be able to listen to global message "*" which will receive all messages': function(){
     var counter = 0;

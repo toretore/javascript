@@ -87,8 +87,12 @@ Broadcaster = function(){
   p.stopListening = function(message, callback){
     var l = this.listeners, m = message, c = callback, i;
     if (l[m]) {
-      for (i=0; i<l[m].length; i++) {
-        if (l[m][i].callback == c) { l[m].splice(i,1); }
+      if (c) {//Remove a specific listener
+        for (i=0; i<l[m].length; i++) {
+          if (l[m][i].callback == c) { l[m].splice(i,1); }
+        }
+      } else {//Remove all listeners for message
+        l[m].splice(0, l[m].length);
       }
     }
   };
