@@ -90,6 +90,9 @@
     listen: function(){
       return this.b.listen.apply(this.b, arguments);
     },
+    stopListening: function(){
+      return this.b.stopListening.apply(this.b, arguments);
+    },
     fire: function(){
       return this.b.fire.apply(this.b, arguments);
     },

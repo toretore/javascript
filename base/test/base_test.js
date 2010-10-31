@@ -61,6 +61,32 @@ TestCase("BaseTest", {
     assertEquals('bar', foo);
     assertEquals('BAR', faa);
   },
+  
+  'test should be able to remove single listener': function(){
+    var counter = 0,
+        l1 = function(){ counter++; },
+        l2 = function(){ counter++; };
+    this.o.listen('foo', l1);
+    this.o.listen('foo', l2);
+    this.o.fire('foo');
+    assertEquals(2, counter);
+    this.o.stopListening('foo', l1);
+    this.o.fire('foo');
+    assertEquals(3, counter); //Not 4
+  },
+  
+  'test should be able to remove all listeners for a given message': function(){
+    var counter = 0,
+        l1 = function(){ counter++; },
+        l2 = function(){ counter++; };
+    this.o.listen('foo', l1);
+    this.o.listen('foo', l2);
+    this.o.fire('foo');
+    assertEquals(2, counter);
+    this.o.stopListening('foo');
+    this.o.fire('foo');
+    assertEquals(2, counter);
+  },
 
   'test set should fire "value changed" message': function(){
     var name, newVal, oldVal;
