@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Better Calendar</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <script src="prototype.js"></script>
+    <script src="../../broadcaster/broadcaster.js"></script>
+    <script src="../../base/base.js"></script>
+    <script src="../better-calendar.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+
+    <form>
+
+      <div id="calendar">
+        <table>
+          <thead>
+            <tr>
+              <td>M</td><td>T</td><td>W</td><td>T</td><td>F</td><td>S</td><td>S</td>
+            </tr>
+            <tr>
+              <td colspan="3" class=""><span class="prev-month">&lt;</span><span class="month" data-names="Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"></span><span class="next-month">&gt;</span></td>
+              <td colspan="1" class="select-today">Today</td>
+              <td colspan="3" class=""><span class="prev-year">&lt;</span><span class="year"></span><span class="next-year">&gt;</span></td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="week">
+              <td class="day mon"></td>
+              <td class="day tue"></td>
+              <td class="day wed"></td>
+              <td class="day thu"></td>
+              <td class="day fri"></td>
+              <td class="day sat"></td>
+              <td class="day sun"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        <label>Text</label>
+        <input type="text" id="text-date" />
+      </p>
+
+      <p>
+        <label>Selects</label>
+        <select id="select-day">
+          <option selected="selected" value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+          <option value="13">13</option>
+          <option value="14">14</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="19">19</option>
+          <option value="20">20</option>
+          <option value="21">21</option>
+          <option value="22">22</option>
+          <option value="23">23</option>
+          <option value="24">24</option>
+          <option value="25">25</option>
+          <option value="26">26</option>
+          <option value="27">27</option>
+          <option value="28">28</option>
+          <option value="29">29</option>
+          <option value="30">30</option>
+          <option value="31">31</option>
+        </select>
+        <select id="select-month">
+          <option selected="selected" value="1">January</option>
+          <option value="2">February</option>
+          <option value="3">March</option>
+          <option value="4">April</option>
+          <option value="5">May</option>
+          <option value="6">June</option>
+          <option value="7">July</option>
+          <option value="8">August</option>
+          <option value="9">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">Desember</option>
+        </select>
+        <select id="select-year">
+          <option value="2005">2005</option>
+          <option value="2006">2006</option>
+          <option value="2007">2007</option>
+          <option value="2008">2008</option>
+          <option value="2009">2009</option>
+          <option selected="selected" value="2010">2010</option>
+          <option value="2011">2011</option>
+          <option value="2012">2012</option>
+          <option value="2013">2013</option>
+          <option value="2014">2014</option>
+          <option value="2015">2015</option>
+        </select>
+      </p>
+
+    </form>
+
+    <script>
+      var calendar = new TemplateCalendar($('calendar'));
+      calendar.listen('selected value changed', function(d){ console.log(d);  });
+      calendar.get('calendar').listen('date value changed', function(d){
+        $('text-date').value = d.toString();
+      });
+      bridge = new SelectBridge(calendar.get('calendar'), $('select-year'), $('select-month'), $('select-day'));
+    </script>
+  </body>
+</html>

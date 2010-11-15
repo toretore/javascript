@@ -1,0 +1,44 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+
+}
+
+body {
+  width: 50em;
+  margin: auto;
+}
+
+#calendar {
+  margin: 1em 0;
+}
+
+  #calendar table {
+    border: 0.4em solid #000;
+    border-spacing: 0;
+    text-align: center;
+  }
+
+    #calendar table td {
+      width: 2em;
+    }
+
+    #calendar table tr.selector {
+      background: #eee;
+    }
+
+    #calendar table .week td {
+      
+    }
+
+      #calendar table .week td.selected {
+        background: #000;
+        color: #fff;
+      }
+
+      #calendar table .week td:hover {
+        background: #eee;
+      }
