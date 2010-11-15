@@ -291,22 +291,26 @@ TemplateCalendar = Base.extend({
   observe: function(){
     var that = this,
 
+        isTarget = function(el, className){
+          return el.hasClassName(className) || el.up('.'+className);
+        },
+
         onClick = function(e){
           var target = e.element(),
               cal = that.get('calendar'),
               el;
-          if (target.up('.week') && (target.hasClassName('day') || target.up('.day'))) {
+          if (target.up('.week') && isTarget(target, 'day')) {
             el = target.hasClassName('day') ? target : target.up('.day');
             if (el.innerHTML) that.set('selected', parseInt(el.innerHTML));
-          } else if (target.hasClassName('select-today') || target.up('.select-today')) {
+          } else if (isTarget(target, 'select-today')) {
             cal.set('date', new Date());
-          } else if (target.hasClassName('prev-month') || target.up('.prev-month')) {
+          } else if (isTarget(target, 'prev-month')) {
             cal.prevMonth();
-          } else if (target.hasClassName('next-month') || target.up('.next-month')) {
+          } else if (isTarget(target, 'next-month')) {
             cal.nextMonth();
-          } else if (target.hasClassName('prev-year') || target.up('.prev-year')) {
+          } else if (isTarget(target, 'prev-year')) {
             cal.prevYear();
-          } else if (target.hasClassName('next-year') || target.up('.next-year')) {
+          } else if (isTarget(target, 'next-year')) {
             cal.nextYear();
           }
         },
