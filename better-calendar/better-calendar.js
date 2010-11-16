@@ -1,8 +1,6 @@
 //A better date/time selector. WIP.
 Calendar = Base.extend({
 
-  monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-
   init: function(d){
     this._super();
     if (!d) d = new Date(); //Today
@@ -32,9 +30,6 @@ Calendar = Base.extend({
     d.setMonth(m-1);
     if (d.getDate() != dd) d.setDate(0);
     this.set('date', d);
-  },
-  getMonthNameValue: function(){
-    return this.monthNames[this.get('month')-1];
   },
 
   prevMonth: function(){ this.set('month', this.get('month')-1); },
