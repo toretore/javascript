@@ -49,6 +49,9 @@ Calendar = Base.extend({
     this.set('date', da);
   },
 
+  prevDay: function(){ this.set('day', this.get('day')-1); },
+  nextDay: function(){ this.set('day', this.get('day')+1); },
+
   getHourValue: function(){ return this.get('date').getHours(); },
   setHourValue: function(h){
     var d = this._cloneDate(this.get('date'));
@@ -56,12 +59,18 @@ Calendar = Base.extend({
     this.set('date', d);
   },
 
+  prevHour: function(){ this.set('hour', this.get('hour')-1); },
+  nextHour: function(){ this.set('hour', this.get('hour')+1); },
+
   getMinuteValue: function(){ return this.get('date').getMinutes(); },
   setMinuteValue: function(h){
     var d = this._cloneDate(this.get('date'));
     d.setMinutes(h);
     this.set('date', d);
   },
+
+  prevMinute: function(){ this.set('minute', this.get('minute')-1); },
+  nextMinute: function(){ this.set('minute', this.get('minute')+1); },
 
   getSecondValue: function(){ return this.get('date').getSeconds(); },
   setSecondValue: function(h){

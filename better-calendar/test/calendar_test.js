@@ -199,6 +199,31 @@ TestCase("CalendarTest", {
     assertEquals(8, this.c.get('hour'));
     assertEquals(18, this.c.get('minute'));
     assertEquals(0, this.c.get('second'));
+  },
+
+  'test negative values should overflow and reduce the value of the next significant value': function(){
+    this.c.set('date', new Date(2011, 0, 1, 12, 0, 0)); //Jan 1, 2011, 12:00:00
+    assertEquals(2011, this.c.get('year'));
+    assertEquals(1, this.c.get('month'));
+    assertEquals(1, this.c.get('day'));
+    assertEquals(12, this.c.get('hour'));
+    assertEquals(0, this.c.get('minute'));
+    assertEquals(0, this.c.get('second'));
+    this.c.set('month', -1);
+    assertEquals(2010, this.c.get('year'));
+    assertEquals(11, this.c.get('month'));
+    this.c.set('day', -2);
+    assertEquals(10, this.c.get('month'));
+    assertEquals(29, this.c.get('day'));
+    this.c.set('hour', -3);
+    assertEquals(28, this.c.get('day'));
+    assertEquals(21, this.c.get('hour'));
+    this.c.set('minute', -4);
+    assertEquals(20, this.c.get('hour'));
+    assertEquals(56, this.c.get('minute'));
+    this.c.set('second', -5);
+    assertEquals(55, this.c.get('minute'));
+    assertEquals(55, this.c.get('second'));
   }
 
 });
