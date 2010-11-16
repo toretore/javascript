@@ -237,8 +237,9 @@ TemplateCalendar = Base.extend({
           }
         };
 
-    this.listen('template value changed', function(t){
+    this.listen('template value changed', function(t, ot){
       that.templates = that.extractTemplates(t);
+      if (ot) ot.stopObserving('click', onClick);
       t.observe('click', onClick);
       that.drawWeeks();
     });
