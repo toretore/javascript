@@ -1,0 +1,15 @@
+BetterCalendar is a better date selector.
+
+
+   <Template>
+       |
++--------------+       +------------+       +----------+
+|              |       |            |       |          |
+|   Renderer   | <---> |  Calendar  | <---> |  Inputs  |
+|              |       |            |       |          |
++--------------+       +------------+       +----------+
+
+It separates concerns. With events.
+It makes few assumptions, so it's flexible.
+It's not for dumb people looking to get out of doing any work themselves.
+It's a WIP.
