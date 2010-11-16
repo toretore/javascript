@@ -100,6 +100,12 @@ Calendar = Base.extend({
     return w;
   },
 
+  isToday: function(){
+    var today = new Date();
+    return today.getFullYear() == this.get('year') && today.getMonth() == this.get('month')-1 &&
+      today.getDate() == this.get('day');
+  },
+
   _cloneDate: function(d){
     return new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds());
   }
@@ -254,10 +260,11 @@ TemplateCalendar = Base.extend({
         weeksParent = week && week.up(),
         year = template.down('.year'),
         month = template.down('.month'),
-        monthNames = month && (''+month.readAttribute('data-names')).split(' ');
+        monthNames = month && (''+month.readAttribute('data-names')).split(' '),
+        today = template.down('.select-today');
     week = week && $(week.cloneNode(true));
 
-    return {week:week, weeksParent:weeksParent, year:year, month:month, monthNames:monthNames};
+    return {week:week, weeksParent:weeksParent, year:year, month:month, monthNames:monthNames, today:today};
   },
   
   buildWeeks: function(weeks, weekTemplate){
@@ -267,7 +274,9 @@ TemplateCalendar = Base.extend({
       var el = $(weekTemplate.cloneNode(true));
       week.each(function(day,i){
         var d = el.down('.'+that.days[i]);
-        d && d.update(day);
+        if (d) {
+          day ? d.update(day) : d.addClassName('empty');
+        }
       });
       return el;
     });
@@ -295,6 +304,9 @@ TemplateCalendar = Base.extend({
   setMonth: function(m){
     this.templates.month && this.templates.monthNames && this.templates.month.update(this.templates.monthNames[m-1]);
   },
+  markToday: function(b){
+    this.templates.today && this.templates.today[b ? 'addClassName' : 'removeClassName']('active');
+  },
 
 
   observe: function(){
@@ -313,14 +325,26 @@ TemplateCalendar = Base.extend({
             if (el.innerHTML) that.set('selected', parseInt(el.innerHTML));
           } else if (isTarget(target, 'select-today')) {
             cal.set('date', new Date());
-          } else if (isTarget(target, 'prev-month')) {
-            cal.prevMonth();
-          } else if (isTarget(target, 'next-month')) {
-            cal.nextMonth();
           } else if (isTarget(target, 'prev-year')) {
             cal.prevYear();
           } else if (isTarget(target, 'next-year')) {
             cal.nextYear();
+          } else if (isTarget(target, 'prev-month')) {
+            cal.prevMonth();
+          } else if (isTarget(target, 'next-month')) {
+            cal.nextMonth();
+          } else if (isTarget(target, 'prev-day')) {
+            cal.prevDay();
+          } else if (isTarget(target, 'next-day')) {
+            cal.nextDay();
+          } else if (isTarget(target, 'prev-hour')) {
+            cal.prevHour();
+          } else if (isTarget(target, 'next-hour')) {
+            cal.nextHour();
+          } else if (isTarget(target, 'prev-minute')) {
+            cal.prevMinute();
+          } else if (isTarget(target, 'next-minute')) {
+            cal.nextMinute();
           }
         },
 
@@ -345,7 +369,10 @@ TemplateCalendar = Base.extend({
     });
 
     this.listen('selected value changed', function(day){
-      that.get('calendar').set('day', day);
+      var cal = that.get('calendar');
+      cal.set('day', day);
+      console.log(cal.get('date'));
+      that.markToday(cal.isToday());
     });
   }
 

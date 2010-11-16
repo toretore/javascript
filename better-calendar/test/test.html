@@ -16,13 +16,24 @@
       <div id="calendar">
         <table>
           <thead>
-            <tr>
-              <td>M</td><td>T</td><td>W</td><td>T</td><td>F</td><td>S</td><td>S</td>
+            <tr class="date-controls">
+              <td colspan="2">
+                <span class="control prev-month">◀</span>
+                <span class="month" data-names="Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"></span>
+                <span class="control next-month">▶</span></td>
+              <td colspan="3">
+                <span class="control prev-day">◀</span>
+                <span class="control select-today">Today</span>
+                <span class="control next-day">▶</span>
+              </td>
+              <td colspan="2">
+                <span class="control prev-year">◀</span>
+                <span class="year"></span>
+                <span class="control next-year">▶</span>
+              </td>
             </tr>
-            <tr>
-              <td colspan="3" class=""><span class="prev-month">&lt;</span><span class="month" data-names="Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"></span><span class="next-month">&gt;</span></td>
-              <td colspan="1" class="select-today"><span>Today</span></td>
-              <td colspan="3" class=""><span class="prev-year">&lt;</span><span class="year"></span><span class="next-year">&gt;</span></td>
+            <tr class="weekdays">
+              <td>M</td><td>T</td><td>W</td><td>T</td><td>F</td><td>S</td><td>S</td>
             </tr>
           </thead>
           <tbody>
