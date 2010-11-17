@@ -202,6 +202,12 @@ TemplateCalendar = Base.extend({
   setMonth: function(m){
     this.templates.month && this.templates.monthNames && this.templates.month.update(this.templates.monthNames[m-1]);
   },
+  setHour: function(h){
+    this.templates.hour && this.templates.hour.update(h);
+  },
+  setMinute: function(m){
+    this.templates.minute && this.templates.minute.update(m);
+  },
   markToday: function(b){
     this.templates.today && this.templates.today[b ? 'addClassName' : 'removeClassName']('active');
   },
@@ -225,7 +231,7 @@ TemplateCalendar = Base.extend({
   observe: function(){
     var that = this,
 
-        onClick = function(e){
+        executeControl = function(e){
           var target = e.element(),
               control = target.readAttribute('data-control'),
               param = target.readAttribute('data-control-param');
@@ -233,6 +239,25 @@ TemplateCalendar = Base.extend({
           control = control && that.controls[control];
 
           if (control) param ? control.call(that, param) : control.call(that);
+        },
+
+        timeout = null, //Not sure if some browsers will choke on non-last var without assignment
+        interval = null,
+
+        //Simulate repeat-click when holding down button
+        //TODO: Does this work with kb?
+        onMouseDown = function(e){
+          executeControl(e); //First, "normal" click
+          timeout = setTimeout(function(){//Then, after a second
+            executeControl(e);//Execute again
+            interval = setInterval(function(){//And then every 200ms after that
+              executeControl(e);
+            }, 200);
+          }, 1000);
+        },
+        onMouseUp = function(){//Until button is released
+          clearTimeout(timeout);
+          clearInterval(interval);
         },
 
         calendarDateChange = function(nd, od){
@@ -245,8 +270,10 @@ TemplateCalendar = Base.extend({
 
     this.listen('template value changed', function(t, ot){
       that.templates = that.extractTemplates(t);
-      if (ot) ot.stopObserving('click', onClick);
-      t.observe('click', onClick);
+      if (ot) ot.stopObserving('mousedown', onMouseDown);
+      if (ot) ot.stopObserving('mouseup', onMouseUp);
+      t.observe('mousedown', onMouseDown);
+      t.observe('mouseup', onMouseUp);
       that.drawWeeks();
     });
 
