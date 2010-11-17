@@ -212,10 +212,6 @@ TemplateCalendar = Base.extend({
   observe: function(){
     var that = this,
 
-        isTarget = function(el, className){
-          return el.hasClassName(className) || el.up('.'+className);
-        },
-
         onClick = function(e){
           var target = e.element(),
               control = target.readAttribute('data-control'),
