@@ -114,18 +114,16 @@ TemplateCalendar = Base.extend({
   days: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
   
   getSelectedValue: function(){
-    var el = this.templates.weeksParent && this.templates.weeksParent.down('.day.selected');
+    var el = this.templates.template.down('.week .day.selected');
     return el && parseInt(el.innerHTML);
   },
   setSelectedValue: function(day){
-    if (this.templates.weeksParent) {
-      var current = this.templates.weeksParent.down('.day.selected');
-          next = this.templates.weeksParent.select('.day').find(function(el){
-            return el.innerHTML == day;
-          });
-      current && current.removeClassName('selected');
-      next && next.addClassName('selected');
-    }
+    var current = this.templates.template.down('.week .day.selected');
+        next = this.templates.template.select('.week .day').find(function(el){
+          return el.innerHTML == day;
+        });
+    current && current.removeClassName('selected');
+    next && next.addClassName('selected');
   },
 
   init: function(t, c){
@@ -138,14 +136,24 @@ TemplateCalendar = Base.extend({
   
   extractTemplates: function(template){
     var week = template.down('.week'),
-        weeksParent = week && week.up(),
         year = template.down('.year'),
         month = template.down('.month'),
         monthNames = month && (''+month.readAttribute('data-names')).split(' '),
-        today = template.down('[data-control=today]');
-    week = week && $(week.cloneNode(true));
+        today = template.down('[data-control=today]'),
+        weekInsertionPoint;
 
-    return {week:week, weeksParent:weeksParent, year:year, month:month, monthNames:monthNames, today:today};
+    if (week) {
+      //Detect where to insert week elements.
+      if (week.previous()) {//If no previous sibling, insert at top of parent element
+        weekInsertionPoint = {position: 'after', element: week.previous()};
+      } else {//If there's a prev sibling, insert after it
+        weekInsertionPoint = {position: 'top', element: week.up()};
+      }
+      week = $(week.cloneNode(true));
+    }
+
+    return {template:template, week:week, weekInsertionPoint:weekInsertionPoint,
+      year:year, month:month, monthNames:monthNames, today:today};
   },
   
   buildWeeks: function(weeks, weekTemplate){
@@ -169,13 +177,18 @@ TemplateCalendar = Base.extend({
   
   drawWeeks: function(){
     var cal = this.get('calendar'),
-        target = this.templates.weeksParent,
+        target = this.templates.weekInsertionPoint,
         week = this.templates.week;
 
     if (cal && target && week) {
-      target.update();
-      this.buildWeeks(cal.get('weeks'), week).each(function(wk){
-        target.insert(wk);
+      //Remove any week elements already in the target. If target.position is 'top', target.element
+      //is the parent, otherwise it's a sibling, so do up() to get parent.
+      (target.position == 'top' ? target.element : target.element.up()).select('.week').invoke('remove');
+      //Insert weeks, last week first because each week is inserted before the previous
+      this.buildWeeks(cal.get('weeks'), week).reverse().each(function(wk){
+        var ins = {};
+        ins[target.position] = wk; //{top: wk} or {after: wk}
+        target.element.insert(ins);
       });
       this.set('selected', cal.get('day'));
       this.setYear(cal.get('year'));
