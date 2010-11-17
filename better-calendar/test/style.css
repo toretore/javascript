@@ -12,54 +12,53 @@ body {
   margin: auto;
 }
 
-#calendar {
-  margin: 1em 0;
-}
-
-  #calendar table {
+  .calendar {
+    min-width: 10em;
+    margin: 1em 0;
     border: 0.4em solid #000;
     border-spacing: 0;
     text-align: center;
   }
 
-    #calendar table thead .date-controls {
+    .calendar thead .date-controls {
       background: #000;
       color: #fff;
     }
 
-      #calendar table thead .date-controls td {
+      .calendar thead .date-controls td {
         padding-bottom: 0.4em;
       }
 
-      #calendar table thead .date-controls td span, #calendar table thead .date-controls td a {
+      .calendar thead .date-controls td span, .calendar thead .date-controls td a {
         text-decoration: none;
         display: inline-block;
         font-size: 80%;
         padding: 0.2em;
+        color: #fff;
       }
 
-      #calendar table thead .date-controls td .control:hover {
+      .calendar thead .date-controls td .control:hover {
         cursor: pointer;
       }
 
-      #calendar table thead .date-controls td .today.active {
+      .calendar thead .date-controls td .today.active {
         background: #fff;
         color: #000;
       }
 
-    #calendar table thead .weekdays {
+    .calendar thead .weekdays {
       background: #eee;
     }
 
-      #calendar table thead .weekdays td {
+      .calendar thead .weekdays td {
         padding: 0.2em;
       }
 
-    #calendar table td {
+    .calendar td {
       width: 2em;
     }
 
-    #calendar table .week .day {
+    .calendar .week .day {
       display: block;
       padding: 0.2em;
       text-decoration: none;
@@ -67,22 +66,41 @@ body {
       outline: none;
     }
 
-      #calendar table .week .day.selected {
+      .calendar .week .day.selected {
         background: #000;
         color: #fff;
       }
 
-        #calendar table .week .day.selected:hover, #calendar table .week .day.selected:focus {
+        .calendar .week .day.selected:hover, .calendar .week .day.selected:focus {
           background: #000;
         }
 
-      #calendar table .week .day:hover, #calendar table .week .day:focus {
+      .calendar .week .day:hover, .calendar .week .day:focus {
         background: #eee;
         cursor: pointer;
       }
 
-      #calendar table .week .day.empty:hover {
+      .calendar .week .day.empty:hover {
         background: transparent;
         color: inherit;
         cursor: inherit;
       }
+
+    .calendar .time {
+      
+    }
+
+      .calendar .time a {
+        display: inline-block;
+        text-decoration: none;
+        color: #000;
+        font-size: 80%;
+      }
+
+      .calendar .time .control.now {
+        display: block;
+      }
+
+        .calendar .time .control.now.active {
+          background: #000;
+        }

@@ -224,6 +224,42 @@ TestCase("CalendarTest", {
     this.c.set('second', -5);
     assertEquals(55, this.c.get('minute'));
     assertEquals(55, this.c.get('second'));
+  },
+
+  'test setToday should set year, month, day to today, but not time': function(){
+    this.c.set('date', new Date(2008, 0, 1, 12, 0, 0)); //Jan 1, 2008, 12:00:00
+    assertEquals(2008, this.c.get('year'));
+    assertEquals(1, this.c.get('month'));
+    assertEquals(1, this.c.get('day'));
+    assertEquals(12, this.c.get('hour'));
+    assertEquals(0, this.c.get('minute'));
+    assertEquals(0, this.c.get('second'));
+    var today = new Date();
+    this.c.setToday();
+    assertEquals(today.getFullYear(), this.c.get('year'));
+    assertEquals(today.getMonth()+1, this.c.get('month'));
+    assertEquals(today.getDate(), this.c.get('day'));
+    assertEquals(12, this.c.get('hour'));
+    assertEquals(0, this.c.get('minute'));
+    assertEquals(0, this.c.get('second'));
+  },
+
+  'test setNow should set hour, minute, second to now, but not date': function(){
+    this.c.set('date', new Date(2008, 0, 1, 12, 0, 0)); //Jan 1, 2008, 12:00:00
+    assertEquals(2008, this.c.get('year'));
+    assertEquals(1, this.c.get('month'));
+    assertEquals(1, this.c.get('day'));
+    assertEquals(12, this.c.get('hour'));
+    assertEquals(0, this.c.get('minute'));
+    assertEquals(0, this.c.get('second'));
+    var now = new Date();
+    this.c.setNow();
+    assertEquals(2008, this.c.get('year'));
+    assertEquals(1, this.c.get('month'));
+    assertEquals(1, this.c.get('day'));
+    assertEquals(now.getHours(), this.c.get('hour'));
+    assertEquals(now.getMinutes(), this.c.get('minute'));
+    assertEquals(now.getSeconds(), this.c.get('second'));
   }
 
 });

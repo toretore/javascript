@@ -74,6 +74,25 @@ Calendar = Base.extend({
     this.set('date', d);
   },
 
+
+  setToday: function(){
+    var today = new Date(),
+        d = this._cloneDate(this.get('date'));
+    d.setFullYear(today.getFullYear());
+    d.setMonth(today.getMonth());
+    d.setDate(today.getDate());
+    this.set('date', d);
+  },
+  setNow: function(){
+    var today = new Date(),
+        d = this._cloneDate(this.get('date'));
+    d.setHours(today.getHours());
+    d.setMinutes(today.getMinutes());
+    d.setSeconds(today.getSeconds());
+    this.set('date', d);
+  },
+
+
   //Returns an array of arrays for the current month where each array is a week.
   //The first and last is padded with null values representing dates in the
   //previous and next month.
@@ -112,7 +131,7 @@ Calendar = Base.extend({
 TemplateCalendar = Base.extend({
 
   days: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
-  
+
   getSelectedValue: function(){
     var el = this.templates.template.down('.week .day.selected');
     return el && parseInt(el.innerHTML);
@@ -133,11 +152,13 @@ TemplateCalendar = Base.extend({
     this.set('template', t);
     this.set('calendar', c);
   },
-  
+
   extractTemplates: function(template){
     var week = template.down('.week'),
         year = template.down('.year'),
         month = template.down('.month'),
+        hour = template.down('.hour'),
+        minute = template.down('.minute'),
         monthNames = month && (''+month.readAttribute('data-names')).split(' '),
         today = template.down('[data-control=today]'),
         weekInsertionPoint;
@@ -153,9 +174,9 @@ TemplateCalendar = Base.extend({
     }
 
     return {template:template, week:week, weekInsertionPoint:weekInsertionPoint,
-      year:year, month:month, monthNames:monthNames, today:today};
+      year:year, month:month, monthNames:monthNames, today:today, hour:hour, minute:minute};
   },
-  
+
   buildWeeks: function(weeks, weekTemplate){
     var that = this;
 
@@ -174,8 +195,8 @@ TemplateCalendar = Base.extend({
       return el;
     });
   },
-  
-  drawWeeks: function(){
+
+  draw: function(){
     var cal = this.get('calendar'),
         target = this.templates.weekInsertionPoint,
         week = this.templates.week;
@@ -194,8 +215,12 @@ TemplateCalendar = Base.extend({
       this.setYear(cal.get('year'));
       this.setMonth(cal.get('month'));
     }
+    if (cal) {
+      this.setHour(cal.get('hour'));
+      this.setMinute(cal.get('minute'));
+    }
   },
-  
+
   setYear: function(y){
     this.templates.year && this.templates.year.update(y);
   },
@@ -203,9 +228,11 @@ TemplateCalendar = Base.extend({
     this.templates.month && this.templates.monthNames && this.templates.month.update(this.templates.monthNames[m-1]);
   },
   setHour: function(h){
+    if (h < 10) h = '0'+h;
     this.templates.hour && this.templates.hour.update(h);
   },
   setMinute: function(m){
+    if (m < 10) m = '0'+m;
     this.templates.minute && this.templates.minute.update(m);
   },
   markToday: function(b){
@@ -223,10 +250,11 @@ TemplateCalendar = Base.extend({
     'next-hour': function(){ this.get('calendar').nextHour(); },
     'prev-minute': function(){ this.get('calendar').prevMinute(); },
     'next-minute': function(){ this.get('calendar').nextMinute(); },
-    'today': function(){ this.get('calendar').set('date', new Date()); },
+    'today': function(){ this.get('calendar').setToday(); },
+    'now': function(){ this.get('calendar').setNow(); },
+    'today-now': function(){ var c=this.get('calendar'); c.setToday(); c.setNow(); },
     'set-day': function(day){ this.get('calendar').set('day', parseInt(day)); }
   },
-
 
   observe: function(){
     var that = this,
@@ -275,10 +303,12 @@ TemplateCalendar = Base.extend({
 
         calendarDateChange = function(nd, od){
           if (nd.getFullYear() != od.getFullYear() || nd.getMonth() != od.getMonth()){
-            that.drawWeeks();
+            that.draw();
           } else if (nd.getDate() != od.getDate()) {
             that.set('selected', nd.getDate());
           }
+          if (nd.getHours() != od.getHours()) that.setHour(nd.getHours());
+          if (nd.getMinutes() != od.getMinutes()) that.setMinute(nd.getMinutes());
         };
 
     this.listen('template value changed', function(t, ot){
@@ -289,18 +319,17 @@ TemplateCalendar = Base.extend({
       t.observe('mousedown', onMouseDown);
       t.observe('mouseup', onMouseUp);
       t.observe('click', onClick);
-      that.drawWeeks();
+      that.draw();
     });
 
     this.listen('calendar value changed', function(cal, oldCal){
-      that.drawWeeks();
+      that.draw();
       oldCal && oldCal.stopListening('date value changed', calendarDateChange);
       cal && cal.listen('date value changed', calendarDateChange);
     });
 
     this.listen('selected value changed', function(day){
       var cal = that.get('calendar');
-      cal.set('day', day);
       that.markToday(cal.isToday());
     });
   }
@@ -348,7 +377,7 @@ SelectBridge = Base.extend({
   setHourValue: function(v){ this._writeSelect('hour', v); },
   getMinuteValue: function(){ return parseInt(this._readSelect('minute')); },
   setMinuteValue: function(v){ this._writeSelect('minute', v); },
-  
+
   getDateValue: function(){
     return new Date(this.get('year'), this.get('month')-1, this.get('day'), this.get('hour'), this.get('minute'));
   },

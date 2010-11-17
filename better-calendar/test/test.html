@@ -13,49 +13,104 @@
 
     <form>
 
-      <div id="calendar">
-        <table>
-          <thead>
-            <tr class="date-controls">
-              <td colspan="2">
-                <a class="control" data-control="prev-month">◀</a>
-                <a class="month" data-names="Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"></a>
-                <a class="control" data-control="next-month">▶</a>
-              </td>
-              <td colspan="3">
-                <a class="control" data-control="prev-day">◀</a>
-                <a class="control today" data-control="today">Today</a>
-                <a class="control" data-control="next-day">▶</a>
-              </td>
-              <td colspan="2">
-                <a class="control" data-control="prev-year">◀</a>
-                <span class="year"></span>
-                <a class="control" data-control="next-year">▶</a>
-              </td>
-            </tr>
-            <tr class="weekdays">
-              <td>M</td><td>T</td><td>W</td><td>T</td><td>F</td><td>S</td><td>S</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td colspan="7"><a href="#humbaba">Can't touch this</a></td></tr><!-- This shouldn't be moved or removed -->
-            <tr class="week">
-              <td><a href="#" class="day mon"></a></td>
-              <td><a href="#" class="day tue"></a></td>
-              <td><a href="#" class="day wed"></a></td>
-              <td><a href="#" class="day thu"></a></td>
-              <td><a href="#" class="day fri"></a></td>
-              <td><a href="#" class="day sat"></a></td>
-              <td><a href="#" class="day sun"></a></td>
-            </tr>
-            <tr><td colspan="7">Can't touch this</td></tr><!-- Neither should this -->
-            <tr>
-              <td class="hour"></td>
-              <td class="minute"></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <table class="calendar" id="date-time">
+        <thead>
+          <tr class="date-controls">
+            <td colspan="2">
+              <a href="#" class="control" data-control="prev-month">◀</a>
+              <a href="#" class="month" data-names="Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"></a>
+              <a href="#" class="control" data-control="next-month">▶</a>
+            </td>
+            <td colspan="3">
+              <a href="#" class="control" data-control="prev-day">◀</a>
+              <a href="#" class="control today" data-control="today-now">Now</a>
+              <a href="#" class="control" data-control="next-day">▶</a>
+            </td>
+            <td colspan="2">
+              <a href="#" class="control" data-control="prev-year">◀</a>
+              <span class="year"></span>
+              <a href="#" class="control" data-control="next-year">▶</a>
+            </td>
+          </tr>
+          <tr class="weekdays">
+            <td>M</td><td>T</td><td>W</td><td>T</td><td>F</td><td>S</td><td>S</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="7"><a href="#humbaba">Can't touch this</a></td></tr><!-- This shouldn't be moved or removed -->
+          <tr class="week">
+            <td><a href="#" class="day mon"></a></td>
+            <td><a href="#" class="day tue"></a></td>
+            <td><a href="#" class="day wed"></a></td>
+            <td><a href="#" class="day thu"></a></td>
+            <td><a href="#" class="day fri"></a></td>
+            <td><a href="#" class="day sat"></a></td>
+            <td><a href="#" class="day sun"></a></td>
+          </tr>
+          <tr class="time">
+            <td colspan="7">
+              <a href="#" class="control" data-control="prev-hour">◀</a>
+              <span class="hour"></span>
+              <a href="#" class="control" data-control="next-hour">▶</a>
+              <a href="#" class="control" data-control="prev-minute">◀</a>
+              <span class="minute"></span>
+              <a href="#" class="control" data-control="next-minute">▶</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table class="calendar" id="time-only">
+        <tbody>
+          <tr class="time">
+            <td>
+              <a href="#" class="control now" data-control="now">Now</a>
+              <a href="#" class="control" data-control="prev-hour">◀</a>
+              <span class="hour"></span>
+              <a href="#" class="control" data-control="next-hour">▶</a>
+              <a href="#" class="control" data-control="prev-minute">◀</a>
+              <span class="minute"></span>
+              <a href="#" class="control" data-control="next-minute">▶</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table class="calendar" id="date-only">
+        <thead>
+          <tr class="date-controls">
+            <td colspan="2">
+              <a href="#" class="control" data-control="prev-month">◀</a>
+              <a href="#" class="month" data-names="Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"></a>
+              <a href="#" class="control" data-control="next-month">▶</a>
+            </td>
+            <td colspan="3">
+              <a href="#" class="control" data-control="prev-day">◀</a>
+              <a href="#" class="control today" data-control="today">Today</a>
+              <a href="#" class="control" data-control="next-day">▶</a>
+            </td>
+            <td colspan="2">
+              <a href="#" class="control" data-control="prev-year">◀</a>
+              <span class="year"></span>
+              <a href="#" class="control" data-control="next-year">▶</a>
+            </td>
+          </tr>
+          <tr class="weekdays">
+            <td>M</td><td>T</td><td>W</td><td>T</td><td>F</td><td>S</td><td>S</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="week">
+            <td><a href="#" class="day mon"></a></td>
+            <td><a href="#" class="day tue"></a></td>
+            <td><a href="#" class="day wed"></a></td>
+            <td><a href="#" class="day thu"></a></td>
+            <td><a href="#" class="day fri"></a></td>
+            <td><a href="#" class="day sat"></a></td>
+            <td><a href="#" class="day sun"></a></td>
+          </tr>
+        </tbody>
+      </table>
 
       <p>
         <label>Text</label>
@@ -135,7 +190,7 @@
           <option value="7">07</option>
           <option value="8">08</option>
           <option value="9">09</option>
-          <option value="10">10</option>
+          <option value="10" selected="selected">10</option>
           <option value="11">11</option>
           <option value="12">12</option>
           <option value="13">13</option>
@@ -161,7 +216,7 @@
           <option value="7">07</option>
           <option value="8">08</option>
           <option value="9">09</option>
-          <option value="10">10</option>
+          <option value="10" selected="selected">10</option>
           <option value="11">11</option>
           <option value="12">12</option>
           <option value="13">13</option>
@@ -217,12 +272,15 @@
     </form>
 
     <script>
-      var calendar = new TemplateCalendar($('calendar'));
-      calendar.listen('selected value changed', function(d){ console.log(d);  });
-      calendar.get('calendar').listen('date value changed', function(d){
+      var calendar = new Calendar();
+      var datetime = new TemplateCalendar($('date-time'), calendar);
+      var dateonly = new TemplateCalendar($('date-only'), calendar);
+      var timeonly = new TemplateCalendar($('time-only'), calendar);
+      datetime.listen('selected value changed', function(d){ console.log(d);  });
+      calendar.listen('date value changed', function(d){
         $('text-date').value = d.toString();
       });
-      bridge = new SelectBridge(calendar.get('calendar'), $('select-year'), $('select-month'), $('select-day'), $('select-hour'), $('select-minute'));
+      bridge = new SelectBridge(calendar, $('select-year'), $('select-month'), $('select-day'), $('select-hour'), $('select-minute'));
     </script>
   </body>
 </html>
