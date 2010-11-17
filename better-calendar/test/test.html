@@ -115,6 +115,7 @@
       <p>
         <label>Text</label>
         <input type="text" id="text-date" />
+        <input type="hidden" id="hidden-date" />
       </p>
 
       <p>
@@ -272,15 +273,17 @@
     </form>
 
     <script>
-      var calendar = new Calendar();
-      var datetime = new TemplateCalendar($('date-time'), calendar);
-      var dateonly = new TemplateCalendar($('date-only'), calendar);
-      var timeonly = new TemplateCalendar($('time-only'), calendar);
+      var calendar = new BetterCalendar.Calendar();
+      var datetime = new BetterCalendar.TemplateCalendar($('date-time'), calendar);
+      var dateonly = new BetterCalendar.TemplateCalendar($('date-only'), calendar);
+      var timeonly = new BetterCalendar.TemplateCalendar($('time-only'), calendar);
       datetime.listen('selected value changed', function(d){ console.log(d);  });
       calendar.listen('date value changed', function(d){
-        $('text-date').value = d.toString();
+        //$('text-date').value = d.toString();
       });
-      bridge = new SelectBridge(calendar, $('select-year'), $('select-month'), $('select-day'), $('select-hour'), $('select-minute'));
+      var inputBridge = new BetterCalendar.InputBridge(calendar, $('text-date'));
+      var hiddenBridge = new BetterCalendar.InputBridge(calendar, $('hidden-date'));
+      var selectBridge = new BetterCalendar.SelectBridge(calendar, $('select-year'), $('select-month'), $('select-day'), $('select-hour'), $('select-minute'));
     </script>
   </body>
 </html>

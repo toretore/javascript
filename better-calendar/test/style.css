@@ -99,6 +99,7 @@ body {
 
       .calendar .time .control.now {
         display: block;
+        min-width: 10em;
       }
 
         .calendar .time .control.now.active {

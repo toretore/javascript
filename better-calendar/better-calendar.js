@@ -1,5 +1,8 @@
 //A better date/time selector. WIP.
-Calendar = Base.extend({
+BetterCalendar = {};
+
+
+BetterCalendar.Calendar = Base.extend({
 
   init: function(d){
     this._super();
@@ -128,7 +131,7 @@ Calendar = Base.extend({
 
 
 
-TemplateCalendar = Base.extend({
+BetterCalendar.TemplateCalendar = Base.extend({
 
   days: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
 
@@ -148,7 +151,7 @@ TemplateCalendar = Base.extend({
   init: function(t, c){
     this._super();
     this.observe();
-    if (!c) c = new Calendar();
+    if (!c) c = new BetterCalendar.Calendar();
     this.set('template', t);
     this.set('calendar', c);
   },
@@ -252,7 +255,7 @@ TemplateCalendar = Base.extend({
     'next-minute': function(){ this.get('calendar').nextMinute(); },
     'today': function(){ this.get('calendar').setToday(); },
     'now': function(){ this.get('calendar').setNow(); },
-    'today-now': function(){ var c=this.get('calendar'); c.setToday(); c.setNow(); },
+    'today-now': function(){ var c=this.get('calendar'); c.set('date', new Date()) },
     'set-day': function(day){ this.get('calendar').set('day', parseInt(day)); }
   },
 
@@ -337,11 +340,71 @@ TemplateCalendar = Base.extend({
 });
 
 
-//2 way
-InputBridge = Base.extend();
+//Updates a text (or hidden) input whenever the calendar's date changes
+//Also parses the input value when it's changed and updates the calendar (probably doesn't work with hidden)
+//Only works with the YYYY-MM-DD HH:MM:SS format. Not at all flexible.
+BetterCalendar.InputBridge = Base.extend({
 
-//ditto
-SelectBridge = Base.extend({
+  init: function(calendar, input){
+    this._super();
+    this.observe();
+    this.set('calendar', calendar);
+    this.set('input', input);
+  },
+
+  observe: function(){
+    var that = this,
+        dateChange = function(d){
+          that.get('input').value = that.format(d);
+        },
+        onChange = function(e){
+          var cal = that.get('calendar'),
+              d = that.parse(that.get('input').value);
+          if (d) cal.set('date', d);
+          else dateChange(cal.get('date')); //Couldn't parse, reset
+        };
+
+    this.listen('calendar value changed', function(nc, oc){
+      if (oc) oc.stopListening('date value changed', dateChange);
+      if (nc) nc.listen('date value changed', dateChange);
+    });
+
+    this.listen('input value changed', function(ni, oi){
+      //TODO: De-Prototype this
+      if (oi) oi.stopObserving('change', onChange);
+      if (ni) ni.observe('change', onChange);
+    });
+  },
+
+  format: function(d){
+    return d.getFullYear()+'-'+this._pad(d.getMonth()+1)+'-'+
+      this._pad(d.getDate())+' '+this._pad(d.getHours())+':'+
+      this._pad(d.getMinutes())+':'+this._pad(d.getSeconds());
+  },
+
+  parse: function(s){
+    var m = s.match(/^(\d\d\d\d)-(\d\d)-(\d\d) (\d\d):(\d\d):(\d\d)$/),
+        v;
+
+    if (m) {
+      v = m.map(function(s){
+        return parseInt(s.replace(/^0/, ''));
+      });
+      return new Date(v[1], v[2]-1, v[3], v[4], v[5], v[6]);
+    } else {
+      return false;
+    }
+  },
+
+  _pad: function(num){
+    return num < 10 ? '0'+num : ''+num;
+  }
+
+});
+
+//Provides a bridge between select elements that represent a date and time and
+//a calendar. Updates the selects when the calendar's date changes and vice versa.
+BetterCalendar.SelectBridge = Base.extend({
 
   _readSelect: function(name){
     var select = this.get(name+' select');
@@ -404,6 +467,7 @@ SelectBridge = Base.extend({
   //a listener to the 'change' event.
   followSelect: function(name, callback){
     this.listen(name+' select value changed', function(n, o){
+      //TODO: De-Prototype this
       if (o) o.stopObserving('change', callback); //Stop listening to the old element
       if (n) n.observe('change', callback); //Start listening to the new
     });
