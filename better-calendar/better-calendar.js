@@ -261,14 +261,14 @@ TemplateCalendar = Base.extend({
 
         executeControl = function(e){
           var target = e.element(),
-              control = target.readAttribute('data-control'),
+              name = target.readAttribute('data-control'),
               param = target.readAttribute('data-control-param');
-
-          control = control && that.controls[control];
+              control = name && that.controls[name];
 
           if (control) {
             preventDefault = true;
             param ? control.call(that, param) : control.call(that);
+            that.fire('control executed', name, param);
           } else {
             preventDefault = false;
           }
