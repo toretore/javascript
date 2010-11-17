@@ -142,7 +142,7 @@ TemplateCalendar = Base.extend({
         year = template.down('.year'),
         month = template.down('.month'),
         monthNames = month && (''+month.readAttribute('data-names')).split(' '),
-        today = template.down('.select-today');
+        today = template.down('[data-control=today]');
     week = week && $(week.cloneNode(true));
 
     return {week:week, weeksParent:weeksParent, year:year, month:month, monthNames:monthNames, today:today};
@@ -155,8 +155,12 @@ TemplateCalendar = Base.extend({
       var el = $(weekTemplate.cloneNode(true));
       week.each(function(day,i){
         var d = el.down('.'+that.days[i]);
-        if (d) {
-          day ? d.update(day) : d.addClassName('empty');
+        if (d && day) {
+          d.update(day);
+          d.writeAttribute('data-control', 'set-day');
+          d.writeAttribute('data-control-param', day);
+        } else if (d) {
+          d.addClassName('empty');
         }
       });
       return el;
@@ -189,6 +193,21 @@ TemplateCalendar = Base.extend({
     this.templates.today && this.templates.today[b ? 'addClassName' : 'removeClassName']('active');
   },
 
+  controls: {
+    'prev-year': function(){ this.get('calendar').prevYear(); },
+    'next-year': function(){ this.get('calendar').nextYear(); },
+    'prev-month': function(){ this.get('calendar').prevMonth(); },
+    'next-month': function(){ this.get('calendar').nextMonth(); },
+    'prev-day': function(){ this.get('calendar').prevDay(); },
+    'next-day': function(){ this.get('calendar').nextDay(); },
+    'prev-hour': function(){ this.get('calendar').prevHour(); },
+    'next-hour': function(){ this.get('calendar').nextHour(); },
+    'prev-minute': function(){ this.get('calendar').prevMinute(); },
+    'next-minute': function(){ this.get('calendar').nextMinute(); },
+    'today': function(){ this.get('calendar').set('date', new Date()); },
+    'set-day': function(day){ this.get('calendar').set('day', parseInt(day)); }
+  },
+
 
   observe: function(){
     var that = this,
@@ -199,34 +218,12 @@ TemplateCalendar = Base.extend({
 
         onClick = function(e){
           var target = e.element(),
-              cal = that.get('calendar'),
-              el;
-          if (target.up('.week') && isTarget(target, 'day')) {
-            el = target.hasClassName('day') ? target : target.up('.day');
-            if (el.innerHTML) that.set('selected', parseInt(el.innerHTML));
-          } else if (isTarget(target, 'select-today')) {
-            cal.set('date', new Date());
-          } else if (isTarget(target, 'prev-year')) {
-            cal.prevYear();
-          } else if (isTarget(target, 'next-year')) {
-            cal.nextYear();
-          } else if (isTarget(target, 'prev-month')) {
-            cal.prevMonth();
-          } else if (isTarget(target, 'next-month')) {
-            cal.nextMonth();
-          } else if (isTarget(target, 'prev-day')) {
-            cal.prevDay();
-          } else if (isTarget(target, 'next-day')) {
-            cal.nextDay();
-          } else if (isTarget(target, 'prev-hour')) {
-            cal.prevHour();
-          } else if (isTarget(target, 'next-hour')) {
-            cal.nextHour();
-          } else if (isTarget(target, 'prev-minute')) {
-            cal.prevMinute();
-          } else if (isTarget(target, 'next-minute')) {
-            cal.nextMinute();
-          }
+              control = target.readAttribute('data-control'),
+              param = target.readAttribute('data-control-param');
+
+          control = control && that.controls[control];
+
+          if (control) param ? control.call(that, param) : control.call(that);
         },
 
         calendarDateChange = function(nd, od){

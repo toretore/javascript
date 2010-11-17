@@ -41,7 +41,7 @@ body {
         cursor: pointer;
       }
 
-      #calendar table thead .date-controls td .select-today.active {
+      #calendar table thead .date-controls td .today.active {
         background: #fff;
         color: #000;
       }
