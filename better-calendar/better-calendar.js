@@ -238,7 +238,12 @@ TemplateCalendar = Base.extend({
 
           control = control && that.controls[control];
 
-          if (control) param ? control.call(that, param) : control.call(that);
+          if (control) {
+            preventDefault = true;
+            param ? control.call(that, param) : control.call(that);
+          } else {
+            preventDefault = false;
+          }
         },
 
         timeout = null, //Not sure if some browsers will choke on non-last var without assignment
@@ -255,9 +260,13 @@ TemplateCalendar = Base.extend({
             }, 200);
           }, 1000);
         },
-        onMouseUp = function(){//Until button is released
+        onMouseUp = function(e){//Until button is released
           clearTimeout(timeout);
           clearInterval(interval);
+        },
+        onClick = function(e){
+          //Only prevent default action if target was a control
+          if (preventDefault) e.preventDefault();
         },
 
         calendarDateChange = function(nd, od){
@@ -272,8 +281,10 @@ TemplateCalendar = Base.extend({
       that.templates = that.extractTemplates(t);
       if (ot) ot.stopObserving('mousedown', onMouseDown);
       if (ot) ot.stopObserving('mouseup', onMouseUp);
+      if (ot) ot.stopObserving('click', onClick);
       t.observe('mousedown', onMouseDown);
       t.observe('mouseup', onMouseUp);
+      t.observe('click', onClick);
       that.drawWeeks();
     });
 
