@@ -297,22 +297,30 @@ SelectBridge = Base.extend({
   setMonthValue: function(v){ this._writeSelect('month', v); },
   getDayValue: function(){ return parseInt(this._readSelect('day')); },
   setDayValue: function(v){ this._writeSelect('day', v); },
+  getHourValue: function(){ return parseInt(this._readSelect('hour')); },
+  setHourValue: function(v){ this._writeSelect('hour', v); },
+  getMinuteValue: function(){ return parseInt(this._readSelect('minute')); },
+  setMinuteValue: function(v){ this._writeSelect('minute', v); },
   
   getDateValue: function(){
-    return new Date(this.get('year'), this.get('month')-1, this.get('day'));
+    return new Date(this.get('year'), this.get('month')-1, this.get('day'), this.get('hour'), this.get('minute'));
   },
   setDateValue: function(d){
     this.set('year', d.getFullYear());
     this.set('month', d.getMonth()+1);
     this.set('day', d.getDate());
+    this.set('hour', d.getHours());
+    this.set('minute', d.getMinutes());
   },
 
-  init: function(calendar, year, month, day){
+  init: function(calendar, year, month, day, hour, minute){
     this._super();
     this.observe();
     if (year) this.set('year select', year);
     if (month) this.set('month select', month);
     if (day) this.set('day select', day);
+    if (hour) this.set('hour select', hour);
+    if (minute) this.set('minute select', minute);
     this.set('calendar', calendar);
   },
 
@@ -338,6 +346,8 @@ SelectBridge = Base.extend({
     this.followSelect('year', function(){ that.get('calendar').set('year', that.get('year')); })
     this.followSelect('month', function(){ that.get('calendar').set('month', that.get('month')); })
     this.followSelect('day', function(){ that.get('calendar').set('day', that.get('day')); })
+    this.followSelect('hour', function(){ that.get('calendar').set('hour', that.get('hour')); })
+    this.followSelect('minute', function(){ that.get('calendar').set('minute', that.get('minute')); })
   }
 
 });
