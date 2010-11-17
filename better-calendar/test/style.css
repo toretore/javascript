@@ -31,7 +31,8 @@ body {
         padding-bottom: 0.4em;
       }
 
-      #calendar table thead .date-controls td span {
+      #calendar table thead .date-controls td span, #calendar table thead .date-controls td a {
+        text-decoration: none;
         display: inline-block;
         font-size: 80%;
         padding: 0.2em;
@@ -58,25 +59,29 @@ body {
       width: 2em;
     }
 
-    #calendar table .week td {
+    #calendar table .week .day {
+      display: block;
       padding: 0.2em;
+      text-decoration: none;
+      color: #000;
+      outline: none;
     }
 
-      #calendar table .week td.selected {
+      #calendar table .week .day.selected {
         background: #000;
         color: #fff;
       }
 
-        #calendar table .week td.selected:hover {
+        #calendar table .week .day.selected:hover {
           background: #000;
         }
 
-      #calendar table .week td:hover {
+      #calendar table .week .day:hover {
         background: #eee;
         cursor: pointer;
       }
 
-      #calendar table .week td.empty:hover {
+      #calendar table .week .day.empty:hover {
         background: transparent;
         color: inherit;
         cursor: inherit;
