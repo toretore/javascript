@@ -72,11 +72,11 @@ body {
         color: #fff;
       }
 
-        #calendar table .week .day.selected:hover {
+        #calendar table .week .day.selected:hover, #calendar table .week .day.selected:focus {
           background: #000;
         }
 
-      #calendar table .week .day:hover {
+      #calendar table .week .day:hover, #calendar table .week .day:focus {
         background: #eee;
         cursor: pointer;
       }

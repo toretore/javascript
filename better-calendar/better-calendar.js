@@ -246,12 +246,13 @@ TemplateCalendar = Base.extend({
           }
         },
 
+        isMouse = false,
         timeout = null, //Not sure if some browsers will choke on non-last var without assignment
         interval = null,
 
         //Simulate repeat-click when holding down button
-        //TODO: Does this work with kb?
         onMouseDown = function(e){
+          isMouse = true;
           executeControl(e); //First, "normal" click
           timeout = setTimeout(function(){//Then, after a second
             executeControl(e);//Execute again
@@ -265,6 +266,9 @@ TemplateCalendar = Base.extend({
           clearInterval(interval);
         },
         onClick = function(e){
+          //If keyboard was used, execute control onclick because mousedown/up won't have been fired
+          if (!isMouse) executeControl(e);
+          isMouse = false;//Reset
           //Only prevent default action if target was a control
           if (preventDefault) e.preventDefault();
         },
@@ -297,7 +301,6 @@ TemplateCalendar = Base.extend({
     this.listen('selected value changed', function(day){
       var cal = that.get('calendar');
       cal.set('day', day);
-      console.log(cal.get('date'));
       that.markToday(cal.isToday());
     });
   }
