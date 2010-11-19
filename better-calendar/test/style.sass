@@ -1,0 +1,240 @@
+@-webkit-keyframes today
+
+  from
+    color: #fff
+    text-shadow: 0 0 8px #fff
+
+  to
+    color: #ddd
+    text-shadow: 0 0 1px #fff
+
+*
+  margin: 0
+  padding: 0
+
+html
+
+body
+  font-family: Verdana, Arial, Helvetica
+  font-size: 100%
+  padding: 1em
+
+  .calendars
+    overflow: auto
+    padding-bottom: 2em
+
+    .calendar
+      float: left
+      margin-right: 2em
+
+      h2
+        font-size: 110%
+        margin: 0 0 0.5em 0
+
+      &.datetime
+
+        table
+          border: 0.4em solid #000
+          border-spacing: 0
+          text-align: center
+
+          a
+            color: #000
+            text-decoration: none
+
+          thead
+
+            tr
+
+              &.date-controls
+                background: #000
+                color: #fff
+
+                th
+                  padding: 0.2em 0.2em 0.6em 0.2em
+                  font-weight: normal
+                  font-size: 80%
+
+                  a
+                    color: #fff
+                    display: inline-block
+
+                    &:hover, &:focus
+                      background: #fff
+                      color: #000
+
+              &.weekdays
+                background: #eee
+                color: #666
+                font-size: 80%
+
+                th
+                  padding: 0.2em
+                  font-weight: normal
+
+          tbody
+
+            tr
+
+              &.week
+
+                td
+
+                  a
+                    display: block
+                    padding: 0.2em 0.5em
+
+                    &:hover, &:focus
+                      background: #eee
+
+                    &.selected, &.selected:hover, &.selected:focus
+                      background: #000
+                      color: #fff
+
+                    &.empty
+                      display: none
+
+              &.time
+                font-size: 80%
+
+                td
+
+                  a
+                    font-size: 80%
+                    display: inline-block
+                    padding: 0.2em
+
+      &.time
+
+        #time-only
+          background: #eee
+          background: -moz-linear-gradient(bottom, #ddd, #eee)
+          background: -webkit-gradient(linear, left bottom, left top, from(#ddd), to(#eee))
+          display: inline-block
+          padding: 0.2em 0.4em
+          -moz-border-radius: 0.4em
+          -webkit-border-radius: 0.4em
+          -moz-box-shadow: 1px 1px 3px rgba(0,0,0,0.5)
+          -webkit-box-shadow: 1px 1px 3px rgba(0,0,0,0.5)
+
+          .hour-controls, .container, .minute-controls
+            display: inline-block
+            vertical-align: middle
+
+          .container
+            background: #fff
+            background: -moz-linear-gradient(bottom, #fff, #eee)
+            background: -webkit-gradient(linear, left bottom, left top, from(#fff), to(#eee))
+            padding: 0.3em
+            border: 1px inset #fff
+
+          .hour-controls, .minute-controls
+
+            a
+              display: block
+              text-decoration: none
+              color: #666
+              text-shadow: 1px 1px #f8f8f8
+
+          .now
+            display: block
+            font-size: 70%
+            text-align: center
+            color: #666
+
+      &.date
+        font-size: 90%
+
+        table
+          border-spacing: 0
+          background: #333
+          background: -moz-linear-gradient(bottom, #222, #555)
+          background: -webkit-gradient(linear, left bottom, left top, from(#222), to(#555))
+          padding: 0.5em
+          text-align: center
+          -moz-box-shadow: 2px 2px 5px rgba(0,0,0,1)
+          -webkit-box-shadow: 2px 2px 5px rgba(0,0,0,1)
+          border: 1px outset #555
+          color: #ddd
+
+          a
+            color: #ddd
+            text-decoration: none
+
+          thead
+
+            tr
+              font-size: 90%
+
+              &.ongabonga
+                background: rgba(0,0,0,0.3)
+
+                td
+                  padding: 0.2em
+
+              &.date-controls
+
+                td
+                  padding: 0.3em 0
+
+                  a
+                    display: inline-block
+                    padding: 0.2em 0.4em
+                    -moz-border-radius: 2px
+                    -webkit-border-radius: 2px
+                    -webkit-transition: all 1s
+
+                    &:hover, &:focus
+                      background: rgba(0,0,0,0.5)
+
+                    &.today.active
+                      color: #fff
+                      text-shadow: 0 0 8px #fff
+                      -webkit-animation-name: today
+                      -webkit-animation-duration: 1s
+                      -webkit-animation-iteration-count: infinite
+                      -webkit-animation-direction: alternate
+                      -webkit-animation-delay: 1s
+                      -webkit-animation-timing-function: linear
+
+              &.weekdays
+
+                td
+                  border-top: 1px solid rgba(0,0,0,1)
+                  border-bottom: 1px solid rgba(0,0,0,1)
+
+          tbody
+
+            tr
+
+              &.week
+
+                td
+
+                  a
+                    display: block
+                    padding: 0.3em 0.7em
+                    -moz-border-radius: 2px
+                    -webkit-border-radius: 2px
+                    outline: none
+                    -webkit-transition: all 0.3s
+
+                    &:hover, &:focus
+                      background: rgba(255,255,255,0.2)
+
+                    &.empty
+                      display: none
+
+                    &.selected, &.selected:hover, &.selected:focus
+                      background: -moz-linear-gradient(bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.4))
+                      background: -webkit-gradient(linear, left bottom, left top, from(rgba(255,255,255,0.1)), to(rgba(255,255,255,0.4)))
+
+  .inputs
+    overflow: hidden
+
+    p
+      float: left
+      margin-right: 2em
+
+      label
+        display: block

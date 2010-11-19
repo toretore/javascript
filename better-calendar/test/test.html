@@ -13,262 +13,276 @@
 
     <form>
 
-      <table class="calendar" id="date-time">
-        <thead>
-          <tr class="date-controls">
-            <td colspan="2">
-              <a href="#" class="control" data-control="prev-month">◀</a>
-              <a href="#" class="month" data-names="Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"></a>
-              <a href="#" class="control" data-control="next-month">▶</a>
-            </td>
-            <td colspan="3">
-              <a href="#" class="control" data-control="prev-day">◀</a>
-              <a href="#" class="control today" data-control="today-now">Now</a>
-              <a href="#" class="control" data-control="next-day">▶</a>
-            </td>
-            <td colspan="2">
-              <a href="#" class="control" data-control="prev-year">◀</a>
-              <span class="year"></span>
-              <a href="#" class="control" data-control="next-year">▶</a>
-            </td>
-          </tr>
-          <tr class="weekdays">
-            <td>M</td><td>T</td><td>W</td><td>T</td><td>F</td><td>S</td><td>S</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td colspan="7"><a href="#humbaba">Can't touch this</a></td></tr><!-- This shouldn't be moved or removed -->
-          <tr class="week">
-            <td><a href="#" class="day mon"></a></td>
-            <td><a href="#" class="day tue"></a></td>
-            <td><a href="#" class="day wed"></a></td>
-            <td><a href="#" class="day thu"></a></td>
-            <td><a href="#" class="day fri"></a></td>
-            <td><a href="#" class="day sat"></a></td>
-            <td><a href="#" class="day sun"></a></td>
-          </tr>
-          <tr class="time">
-            <td colspan="7">
-              <a href="#" class="control" data-control="prev-hour">◀</a>
-              <span class="hour"></span>
-              <a href="#" class="control" data-control="next-hour">▶</a>
-              <a href="#" class="control" data-control="prev-minute">◀</a>
-              <span class="minute"></span>
-              <a href="#" class="control" data-control="next-minute">▶</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="calendars">
 
-      <table class="calendar" id="time-only">
-        <tbody>
-          <tr class="time">
-            <td>
-              <a href="#" class="control now" data-control="now">Akkurat no</a>
-              <a href="#" class="control" data-control="prev-hour">◀</a>
-              <span class="hour"></span>
-              <a href="#" class="control" data-control="next-hour">▶</a>
-              <a href="#" class="control" data-control="prev-minute">◀</a>
-              <span class="minute"></span>
-              <a href="#" class="control" data-control="next-minute">▶</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <div class="calendar datetime">
+          <h2>Date &amp; time</h2>
 
-      <table class="calendar" id="date-only">
-        <thead>
-          <tr>
-            <td colspan="7" class="ongabonga">
-              <span class="month" data-names="janvier février mars avril mai juin juillet août septembre octobre novembre décembre"></span>
-              <span class="year"></span>
-            </td>
-          </tr>
-          <tr class="date-controls">
-            <td colspan="7">
-              <a href="#" class="control" data-control="prev-year">«</a>
-              <a href="#" class="control" data-control="prev-month">≤</a>
-              <a href="#" class="control" data-control="prev-day">&lt;</a>
-              <a href="#" class="control today" data-control="today">aujourd'hui</a>
-              <a href="#" class="control" data-control="next-day">&gt;</a>
-              <a href="#" class="control" data-control="next-month">≥</a>
-              <a href="#" class="control" data-control="next-year">»</a>
-            </td>
-          </tr>
-          <tr class="weekdays">
-            <td>L</td><td>M</td><td>M</td><td>J</td><td>V</td><td>S</td><td>D</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="week">
-            <td><a href="#" class="day mon"></a></td>
-            <td><a href="#" class="day tue"></a></td>
-            <td><a href="#" class="day wed"></a></td>
-            <td><a href="#" class="day thu"></a></td>
-            <td><a href="#" class="day fri"></a></td>
-            <td><a href="#" class="day sat"></a></td>
-            <td><a href="#" class="day sun"></a></td>
-          </tr>
-        </tbody>
-      </table>
+          <table id="date-time">
+            <thead>
+              <tr class="date-controls">
+                <th colspan="7">
+                  <a href="#" class="control" data-control="prev-month">◀</a>
+                  <span class="month" data-names="Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"></span>
+                  <a href="#" class="control" data-control="next-month">▶</a>
+                  <a href="#" class="control" data-control="prev-day">◀</a>
+                  <a href="#" class="control today" data-control="today-now">Now</a>
+                  <a href="#" class="control" data-control="next-day">▶</a>
+                  <a href="#" class="control" data-control="prev-year">◀</a>
+                  <span class="year"></span>
+                  <a href="#" class="control" data-control="next-year">▶</a>
+                </th>
+              </tr>
+              <tr class="weekdays">
+                <th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th><th>S</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="week">
+                <td><a href="#" class="day mon"></a></td>
+                <td><a href="#" class="day tue"></a></td>
+                <td><a href="#" class="day wed"></a></td>
+                <td><a href="#" class="day thu"></a></td>
+                <td><a href="#" class="day fri"></a></td>
+                <td><a href="#" class="day sat"></a></td>
+                <td><a href="#" class="day sun"></a></td>
+              </tr>
+              <tr class="time">
+                <td colspan="7">
+                  <a href="#" class="control" data-control="prev-hour">◀</a>
+                  <a href="#" class="control" data-control="prev-minute">◀</a>
+                  <span class="hour"></span>:<span class="minute"></span>
+                  <a href="#" class="control" data-control="next-minute">▶</a>
+                  <a href="#" class="control" data-control="next-hour">▶</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-      <p>
-        <label>Text</label>
-        <input type="text" id="text-date" />
-        <input type="hidden" id="hidden-date" />
-      </p>
+        <div class="calendar time">
+          <h2>Time only</h2>
 
-      <p>
-        <label>Selects</label>
-        <select id="select-day">
-          <option selected="selected" value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-          <option value="11">11</option>
-          <option value="12">12</option>
-          <option value="13">13</option>
-          <option value="14">14</option>
-          <option value="15">15</option>
-          <option value="16">16</option>
-          <option value="17">17</option>
-          <option value="18">18</option>
-          <option value="19">19</option>
-          <option value="20">20</option>
-          <option value="21">21</option>
-          <option value="22">22</option>
-          <option value="23">23</option>
-          <option value="24">24</option>
-          <option value="25">25</option>
-          <option value="26">26</option>
-          <option value="27">27</option>
-          <option value="28">28</option>
-          <option value="29">29</option>
-          <option value="30">30</option>
-          <option value="31">31</option>
-        </select>
-        <select id="select-month">
-          <option selected="selected" value="1">January</option>
-          <option value="2">February</option>
-          <option value="3">March</option>
-          <option value="4">April</option>
-          <option value="5">May</option>
-          <option value="6">June</option>
-          <option value="7">July</option>
-          <option value="8">August</option>
-          <option value="9">September</option>
-          <option value="10">October</option>
-          <option value="11">November</option>
-          <option value="12">Desember</option>
-        </select>
-        <select id="select-year">
-          <option value="2005">2005</option>
-          <option value="2006">2006</option>
-          <option value="2007">2007</option>
-          <option value="2008">2008</option>
-          <option value="2009">2009</option>
-          <option selected="selected" value="2010">2010</option>
-          <option value="2011">2011</option>
-          <option value="2012">2012</option>
-          <option value="2013">2013</option>
-          <option value="2014">2014</option>
-          <option value="2015">2015</option>
-        </select>
-        <select id="select-hour">
-          <option value="0">00</option>
-          <option value="1">01</option>
-          <option value="2">02</option>
-          <option value="3">03</option>
-          <option value="4">04</option>
-          <option value="5">05</option>
-          <option value="6">06</option>
-          <option value="7">07</option>
-          <option value="8">08</option>
-          <option value="9">09</option>
-          <option value="10" selected="selected">10</option>
-          <option value="11">11</option>
-          <option value="12">12</option>
-          <option value="13">13</option>
-          <option value="14">14</option>
-          <option value="15">15</option>
-          <option value="16">16</option>
-          <option value="17">17</option>
-          <option value="18">18</option>
-          <option value="19">19</option>
-          <option value="20">20</option>
-          <option value="21">21</option>
-          <option value="22">22</option>
-          <option value="23">23</option>
-        </select>
-        <select id="select-minute">
-          <option value="0">00</option>
-          <option value="1">01</option>
-          <option value="2">02</option>
-          <option value="3">03</option>
-          <option value="4">04</option>
-          <option value="5">05</option>
-          <option value="6">06</option>
-          <option value="7">07</option>
-          <option value="8">08</option>
-          <option value="9">09</option>
-          <option value="10" selected="selected">10</option>
-          <option value="11">11</option>
-          <option value="12">12</option>
-          <option value="13">13</option>
-          <option value="14">14</option>
-          <option value="15">15</option>
-          <option value="16">16</option>
-          <option value="17">17</option>
-          <option value="18">18</option>
-          <option value="19">19</option>
-          <option value="20">20</option>
-          <option value="21">21</option>
-          <option value="22">22</option>
-          <option value="23">23</option>
-          <option value="24">24</option>
-          <option value="25">25</option>
-          <option value="26">26</option>
-          <option value="27">27</option>
-          <option value="28">28</option>
-          <option value="29">29</option>
-          <option value="30">30</option>
-          <option value="31">31</option>
-          <option value="32">32</option>
-          <option value="33">33</option>
-          <option value="34">34</option>
-          <option value="35">35</option>
-          <option value="36">36</option>
-          <option value="37">37</option>
-          <option value="38">38</option>
-          <option value="39">39</option>
-          <option value="40">40</option>
-          <option value="41">41</option>
-          <option value="42">42</option>
-          <option value="43">43</option>
-          <option value="44">44</option>
-          <option value="45">45</option>
-          <option value="46">46</option>
-          <option value="47">47</option>
-          <option value="48">48</option>
-          <option value="49">49</option>
-          <option value="50">50</option>
-          <option value="51">51</option>
-          <option value="52">52</option>
-          <option value="53">53</option>
-          <option value="54">54</option>
-          <option value="55">55</option>
-          <option value="56">56</option>
-          <option value="57">57</option>
-          <option value="58">58</option>
-          <option value="59">59</option>
-        </select>
-      </p>
+          <div id="time-only">
+            <div class="hour-controls">
+              <a href="#" data-control="next-hour">▴</a>
+              <a href="#" data-control="prev-hour">▾</a>
+            </div>
+            <div class="container">
+              <span class="hour"></span>:<span class="minute"></span>
+            </div>
+            <div class="minute-controls">
+              <a href="#" data-control="next-minute">▴</a>
+              <a href="#" data-control="prev-minute">▾</a>
+            </div>
+            <a href="#" class="now" data-control="now">Akkorat no</a>
+          </div>
+        </div>
+
+
+        <div class="calendar date">
+          <h2>Date only</h2>
+
+          <table id="date-only">
+            <thead>
+              <tr class="ongabonga">
+                <td colspan="7">
+                  <span class="month" data-names="janvier février mars avril mai juin juillet août septembre octobre novembre décembre"></span>
+                  <span class="year"></span>
+                </td>
+              </tr>
+              <tr class="date-controls">
+                <td colspan="7">
+                  <a href="#" class="control" data-control="prev-year">«</a>
+                  <a href="#" class="control" data-control="prev-month">≤</a>
+                  <a href="#" class="control" data-control="prev-day">&lt;</a>
+                  <a href="#" class="control today" data-control="today">aujourd'hui</a>
+                  <a href="#" class="control" data-control="next-day">&gt;</a>
+                  <a href="#" class="control" data-control="next-month">≥</a>
+                  <a href="#" class="control" data-control="next-year">»</a>
+                </td>
+              </tr>
+              <tr class="weekdays">
+                <td>L</td><td>M</td><td>M</td><td>J</td><td>V</td><td>S</td><td>D</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="week">
+                <td><a href="#" class="day mon"></a></td>
+                <td><a href="#" class="day tue"></a></td>
+                <td><a href="#" class="day wed"></a></td>
+                <td><a href="#" class="day thu"></a></td>
+                <td><a href="#" class="day fri"></a></td>
+                <td><a href="#" class="day sat"></a></td>
+                <td><a href="#" class="day sun"></a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <div class="inputs">
+
+        <p>
+          <label>Text</label>
+          <input type="text" id="text-date" />
+          <input type="hidden" id="hidden-date" />
+        </p>
+
+        <p>
+          <label>Selects</label>
+          <select id="select-day">
+            <option selected="selected" value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+            <option value="24">24</option>
+            <option value="25">25</option>
+            <option value="26">26</option>
+            <option value="27">27</option>
+            <option value="28">28</option>
+            <option value="29">29</option>
+            <option value="30">30</option>
+            <option value="31">31</option>
+          </select>
+          <select id="select-month">
+            <option selected="selected" value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">Desember</option>
+          </select>
+          <select id="select-year">
+            <option value="2005">2005</option>
+            <option value="2006">2006</option>
+            <option value="2007">2007</option>
+            <option value="2008">2008</option>
+            <option value="2009">2009</option>
+            <option selected="selected" value="2010">2010</option>
+            <option value="2011">2011</option>
+            <option value="2012">2012</option>
+            <option value="2013">2013</option>
+            <option value="2014">2014</option>
+            <option value="2015">2015</option>
+          </select>
+          <select id="select-hour">
+            <option value="0">00</option>
+            <option value="1">01</option>
+            <option value="2">02</option>
+            <option value="3">03</option>
+            <option value="4">04</option>
+            <option value="5">05</option>
+            <option value="6">06</option>
+            <option value="7">07</option>
+            <option value="8">08</option>
+            <option value="9">09</option>
+            <option value="10" selected="selected">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+          </select>
+          <select id="select-minute">
+            <option value="0">00</option>
+            <option value="1">01</option>
+            <option value="2">02</option>
+            <option value="3">03</option>
+            <option value="4">04</option>
+            <option value="5">05</option>
+            <option value="6">06</option>
+            <option value="7">07</option>
+            <option value="8">08</option>
+            <option value="9">09</option>
+            <option value="10" selected="selected">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+            <option value="24">24</option>
+            <option value="25">25</option>
+            <option value="26">26</option>
+            <option value="27">27</option>
+            <option value="28">28</option>
+            <option value="29">29</option>
+            <option value="30">30</option>
+            <option value="31">31</option>
+            <option value="32">32</option>
+            <option value="33">33</option>
+            <option value="34">34</option>
+            <option value="35">35</option>
+            <option value="36">36</option>
+            <option value="37">37</option>
+            <option value="38">38</option>
+            <option value="39">39</option>
+            <option value="40">40</option>
+            <option value="41">41</option>
+            <option value="42">42</option>
+            <option value="43">43</option>
+            <option value="44">44</option>
+            <option value="45">45</option>
+            <option value="46">46</option>
+            <option value="47">47</option>
+            <option value="48">48</option>
+            <option value="49">49</option>
+            <option value="50">50</option>
+            <option value="51">51</option>
+            <option value="52">52</option>
+            <option value="53">53</option>
+            <option value="54">54</option>
+            <option value="55">55</option>
+            <option value="56">56</option>
+            <option value="57">57</option>
+            <option value="58">58</option>
+            <option value="59">59</option>
+          </select>
+        </p>
+
+      </div>
 
     </form>
 

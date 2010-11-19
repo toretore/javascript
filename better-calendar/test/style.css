@@ -1,117 +1,163 @@
+@-webkit-keyframes today {
+  from {
+    color: white;
+    text-shadow: 0 0 8px white; }
+
+  to {
+    color: #dddddd;
+    text-shadow: 0 0 1px white; } }
+
 * {
   margin: 0;
-  padding: 0;
-}
-
-html {
-
-}
+  padding: 0; }
 
 body {
-  width: 50em;
-  margin: auto;
-}
-
-  .calendar {
-    min-width: 10em;
-    margin: 1em 0;
-    border: 0.4em solid #000;
-    border-spacing: 0;
-    text-align: center;
-  }
-
-    .calendar thead {
-      background: #000;
-      color: #fff;
-    }
-
-      .calendar thead .ongabonga {
-        font-size: 80%;
-      }
-
-    .calendar thead .date-controls {
-      background: #000;
-      color: #fff;
-    }
-
-      .calendar thead .date-controls td {
-        padding-bottom: 0.4em;
-      }
-
-      .calendar thead .date-controls td span, .calendar thead .date-controls td a {
-        text-decoration: none;
+  font-family: Verdana, Arial, Helvetica;
+  font-size: 100%;
+  padding: 1em; }
+  body .calendars {
+    overflow: auto;
+    padding-bottom: 2em; }
+    body .calendars .calendar {
+      float: left;
+      margin-right: 2em; }
+      body .calendars .calendar h2 {
+        font-size: 110%;
+        margin: 0 0 0.5em 0; }
+      body .calendars .calendar.datetime table {
+        border: 0.4em solid black;
+        border-spacing: 0;
+        text-align: center; }
+        body .calendars .calendar.datetime table a {
+          color: black;
+          text-decoration: none; }
+        body .calendars .calendar.datetime table thead tr.date-controls {
+          background: black;
+          color: white; }
+          body .calendars .calendar.datetime table thead tr.date-controls th {
+            padding: 0.2em 0.2em 0.6em 0.2em;
+            font-weight: normal;
+            font-size: 80%; }
+            body .calendars .calendar.datetime table thead tr.date-controls th a {
+              color: white;
+              display: inline-block; }
+              body .calendars .calendar.datetime table thead tr.date-controls th a:hover, body .calendars .calendar.datetime table thead tr.date-controls th a:focus {
+                background: white;
+                color: black; }
+        body .calendars .calendar.datetime table thead tr.weekdays {
+          background: #eeeeee;
+          color: #666666;
+          font-size: 80%; }
+          body .calendars .calendar.datetime table thead tr.weekdays th {
+            padding: 0.2em;
+            font-weight: normal; }
+        body .calendars .calendar.datetime table tbody tr.week td a {
+          display: block;
+          padding: 0.2em 0.5em; }
+          body .calendars .calendar.datetime table tbody tr.week td a:hover, body .calendars .calendar.datetime table tbody tr.week td a:focus {
+            background: #eeeeee; }
+          body .calendars .calendar.datetime table tbody tr.week td a.selected, body .calendars .calendar.datetime table tbody tr.week td a.selected:hover, body .calendars .calendar.datetime table tbody tr.week td a.selected:focus {
+            background: black;
+            color: white; }
+          body .calendars .calendar.datetime table tbody tr.week td a.empty {
+            display: none; }
+        body .calendars .calendar.datetime table tbody tr.time {
+          font-size: 80%; }
+          body .calendars .calendar.datetime table tbody tr.time td a {
+            font-size: 80%;
+            display: inline-block;
+            padding: 0.2em; }
+      body .calendars .calendar.time #time-only {
+        background: #eeeeee;
+        background: -moz-linear-gradient(bottom, #dddddd, #eeeeee);
+        background: -webkit-gradient(linear, left bottom, left top, from(#dddddd), to(#eeeeee));
         display: inline-block;
-        font-size: 80%;
-        padding: 0.2em;
-        color: #fff;
-      }
-
-      .calendar thead .date-controls td .control:hover {
-        cursor: pointer;
-      }
-
-      .calendar thead .date-controls td .today.active {
-        background: #fff;
-        color: #000;
-      }
-
-    .calendar thead .weekdays {
-      background: #eee;
-      color: #333;
-    }
-
-      .calendar thead .weekdays td {
-        padding: 0.2em;
-      }
-
-    .calendar td {
-      width: 2em;
-    }
-
-    .calendar .week .day {
-      display: block;
-      padding: 0.2em;
-      text-decoration: none;
-      color: #000;
-      outline: none;
-    }
-
-      .calendar .week .day.selected {
-        background: #000;
-        color: #fff;
-      }
-
-        .calendar .week .day.selected:hover, .calendar .week .day.selected:focus {
-          background: #000;
-        }
-
-      .calendar .week .day:hover, .calendar .week .day:focus {
-        background: #eee;
-        cursor: pointer;
-      }
-
-      .calendar .week .day.empty:hover {
-        background: transparent;
-        color: inherit;
-        cursor: inherit;
-      }
-
-    .calendar .time {
-      
-    }
-
-      .calendar .time a {
-        display: inline-block;
-        text-decoration: none;
-        color: #000;
-        font-size: 80%;
-      }
-
-      .calendar .time .control.now {
-        display: block;
-        min-width: 10em;
-      }
-
-        .calendar .time .control.now.active {
-          background: #000;
-        }
+        padding: 0.2em 0.4em;
+        -moz-border-radius: 0.4em;
+        -webkit-border-radius: 0.4em;
+        -moz-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        -webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); }
+        body .calendars .calendar.time #time-only .hour-controls, body .calendars .calendar.time #time-only .container, body .calendars .calendar.time #time-only .minute-controls {
+          display: inline-block;
+          vertical-align: middle; }
+        body .calendars .calendar.time #time-only .container {
+          background: white;
+          background: -moz-linear-gradient(bottom, white, #eeeeee);
+          background: -webkit-gradient(linear, left bottom, left top, from(white), to(#eeeeee));
+          padding: 0.3em;
+          border: 1px inset white; }
+        body .calendars .calendar.time #time-only .hour-controls a, body .calendars .calendar.time #time-only .minute-controls a {
+          display: block;
+          text-decoration: none;
+          color: #666666;
+          text-shadow: 1px 1px #f8f8f8; }
+        body .calendars .calendar.time #time-only .now {
+          display: block;
+          font-size: 70%;
+          text-align: center;
+          color: #666666; }
+      body .calendars .calendar.date {
+        font-size: 90%; }
+        body .calendars .calendar.date table {
+          border-spacing: 0;
+          background: #333333;
+          background: -moz-linear-gradient(bottom, #222222, #555555);
+          background: -webkit-gradient(linear, left bottom, left top, from(#222222), to(#555555));
+          padding: 0.5em;
+          text-align: center;
+          -moz-box-shadow: 2px 2px 5px black;
+          -webkit-box-shadow: 2px 2px 5px black;
+          border: 1px outset #555555;
+          color: #dddddd; }
+          body .calendars .calendar.date table a {
+            color: #dddddd;
+            text-decoration: none; }
+          body .calendars .calendar.date table thead tr {
+            font-size: 90%; }
+            body .calendars .calendar.date table thead tr.ongabonga {
+              background: rgba(0, 0, 0, 0.3); }
+              body .calendars .calendar.date table thead tr.ongabonga td {
+                padding: 0.2em; }
+            body .calendars .calendar.date table thead tr.date-controls td {
+              padding: 0.3em 0; }
+              body .calendars .calendar.date table thead tr.date-controls td a {
+                display: inline-block;
+                padding: 0.2em 0.4em;
+                -moz-border-radius: 2px;
+                -webkit-border-radius: 2px;
+                -webkit-transition: all 1s; }
+                body .calendars .calendar.date table thead tr.date-controls td a:hover, body .calendars .calendar.date table thead tr.date-controls td a:focus {
+                  background: rgba(0, 0, 0, 0.5); }
+                body .calendars .calendar.date table thead tr.date-controls td a.today.active {
+                  color: white;
+                  text-shadow: 0 0 8px white;
+                  -webkit-animation-name: today;
+                  -webkit-animation-duration: 1s;
+                  -webkit-animation-iteration-count: infinite;
+                  -webkit-animation-direction: alternate;
+                  -webkit-animation-delay: 1s;
+                  -webkit-animation-timing-function: linear; }
+            body .calendars .calendar.date table thead tr.weekdays td {
+              border-top: 1px solid black;
+              border-bottom: 1px solid black; }
+          body .calendars .calendar.date table tbody tr.week td a {
+            display: block;
+            padding: 0.3em 0.7em;
+            -moz-border-radius: 2px;
+            -webkit-border-radius: 2px;
+            outline: none;
+            -webkit-transition: all 0.3s; }
+            body .calendars .calendar.date table tbody tr.week td a:hover, body .calendars .calendar.date table tbody tr.week td a:focus {
+              background: rgba(255, 255, 255, 0.2); }
+            body .calendars .calendar.date table tbody tr.week td a.empty {
+              display: none; }
+            body .calendars .calendar.date table tbody tr.week td a.selected, body .calendars .calendar.date table tbody tr.week td a.selected:hover, body .calendars .calendar.date table tbody tr.week td a.selected:focus {
+              background: -moz-linear-gradient(bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.4));
+              background: -webkit-gradient(linear, left bottom, left top, from(rgba(255, 255, 255, 0.1)), to(rgba(255, 255, 255, 0.4))); }
+  body .inputs {
+    overflow: hidden; }
+    body .inputs p {
+      float: left;
+      margin-right: 2em; }
+      body .inputs p label {
+        display: block; }
