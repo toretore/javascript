@@ -1,5 +1,17 @@
 //A better date/time selector. WIP.
-BetterCalendar = {};
+BetterCalendar = {
+
+  observe: function(el, ev, fn){
+    if (el.attachEvent) el.attachEvent('on'+ev, fn);
+    else el.addEventListener(ev, fn, false);
+  },
+
+  stopObserving: function(el, ev, fn){
+    if (el.detachEvent) el.detachEvent(ev, fn);
+    else el.removeEventListener(ev, fn, false);
+  }
+
+};
 
 
 BetterCalendar.Calendar = Base.extend({
@@ -238,6 +250,7 @@ BetterCalendar.TemplateCalendar = Base.extend({
     if (m < 10) m = '0'+m;
     this.templates.minute && this.templates.minute.update(m);
   },
+  //TODO: Add seconds
   markToday: function(b){
     this.templates.today && this.templates.today[b ? 'addClassName' : 'removeClassName']('active');
   },
@@ -370,9 +383,8 @@ BetterCalendar.InputBridge = Base.extend({
     });
 
     this.listen('input value changed', function(ni, oi){
-      //TODO: De-Prototype this
-      if (oi) oi.stopObserving('change', onChange);
-      if (ni) ni.observe('change', onChange);
+      if (oi) BetterCalendar.stopObserving(oi, 'change', onChange);
+      if (ni) BetterCalendar.observe(ni, 'change', onChange);
     });
   },
 
@@ -467,9 +479,8 @@ BetterCalendar.SelectBridge = Base.extend({
   //a listener to the 'change' event.
   followSelect: function(name, callback){
     this.listen(name+' select value changed', function(n, o){
-      //TODO: De-Prototype this
-      if (o) o.stopObserving('change', callback); //Stop listening to the old element
-      if (n) n.observe('change', callback); //Start listening to the new
+      if (o) BetterCalendar.stopObserving(o, 'change', callback); //Stop listening to the old element
+      if (n) BetterCalendar.observe(n, 'change', callback); //Start listening to the new
     });
   },
 
