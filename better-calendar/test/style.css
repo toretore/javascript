@@ -20,6 +20,15 @@ body {
     text-align: center;
   }
 
+    .calendar thead {
+      background: #000;
+      color: #fff;
+    }
+
+      .calendar thead .ongabonga {
+        font-size: 80%;
+      }
+
     .calendar thead .date-controls {
       background: #000;
       color: #fff;
@@ -48,6 +57,7 @@ body {
 
     .calendar thead .weekdays {
       background: #eee;
+      color: #333;
     }
 
       .calendar thead .weekdays td {
