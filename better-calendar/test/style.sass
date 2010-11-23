@@ -148,13 +148,15 @@ body
         table
           border-spacing: 0
           background: #333
-          background: -moz-linear-gradient(bottom, #222, #555)
-          background: -webkit-gradient(linear, left bottom, left top, from(#222), to(#555))
+          background: -moz-linear-gradient(bottom, #222, #444)
+          background: -webkit-gradient(linear, left bottom, left top, from(#222), to(#444))
           padding: 0.5em
           text-align: center
-          -moz-box-shadow: 2px 2px 5px rgba(0,0,0,1)
-          -webkit-box-shadow: 2px 2px 5px rgba(0,0,0,1)
-          border: 1px outset #555
+          -moz-box-shadow: 0 1px 0 0 rgba(255,255,255,0.2) inset, 2px 2px 5px rgba(0,0,0,0.7)
+          -webkit-box-shadow: 0 1px 0 0 rgba(255,255,255,0.2) inset, 2px 2px 5px rgba(0,0,0,1)
+          border: 1px solid #000
+          -moz-border-radius: 2px
+          -webkit-border-radius: 2px
           color: #ddd
 
           a
@@ -167,10 +169,12 @@ body
               font-size: 90%
 
               &.ongabonga
-                background: rgba(0,0,0,0.3)
 
                 td
                   padding: 0.2em
+                  background: rgba(0,0,0,0.3)
+                  -moz-border-radius: 1px
+                  -webkit-border-radius: 1px
 
               &.date-controls
 

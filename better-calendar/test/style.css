@@ -101,23 +101,26 @@ body {
         body .calendars .calendar.date table {
           border-spacing: 0;
           background: #333333;
-          background: -moz-linear-gradient(bottom, #222222, #555555);
-          background: -webkit-gradient(linear, left bottom, left top, from(#222222), to(#555555));
+          background: -moz-linear-gradient(bottom, #222222, #444444);
+          background: -webkit-gradient(linear, left bottom, left top, from(#222222), to(#444444));
           padding: 0.5em;
           text-align: center;
-          -moz-box-shadow: 2px 2px 5px black;
-          -webkit-box-shadow: 2px 2px 5px black;
-          border: 1px outset #555555;
+          -moz-box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.2) inset, 2px 2px 5px rgba(0, 0, 0, 0.7);
+          -webkit-box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.2) inset, 2px 2px 5px black;
+          border: 1px solid black;
+          -moz-border-radius: 2px;
+          -webkit-border-radius: 2px;
           color: #dddddd; }
           body .calendars .calendar.date table a {
             color: #dddddd;
             text-decoration: none; }
           body .calendars .calendar.date table thead tr {
             font-size: 90%; }
-            body .calendars .calendar.date table thead tr.ongabonga {
-              background: rgba(0, 0, 0, 0.3); }
-              body .calendars .calendar.date table thead tr.ongabonga td {
-                padding: 0.2em; }
+            body .calendars .calendar.date table thead tr.ongabonga td {
+              padding: 0.2em;
+              background: rgba(0, 0, 0, 0.3);
+              -moz-border-radius: 1px;
+              -webkit-border-radius: 1px; }
             body .calendars .calendar.date table thead tr.date-controls td {
               padding: 0.3em 0; }
               body .calendars .calendar.date table thead tr.date-controls td a {
