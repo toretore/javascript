@@ -80,44 +80,9 @@
         </div>
 
 
-        <div class="calendar date">
+        <div class="calendar date" id="date-only-wrapper">
           <h2>Date only</h2>
 
-          <table id="date-only">
-            <thead>
-              <tr class="ongabonga">
-                <td colspan="7">
-                  <span class="month" data-names="janvier février mars avril mai juin juillet août septembre octobre novembre décembre"></span>
-                  <span class="year"></span>
-                </td>
-              </tr>
-              <tr class="date-controls">
-                <td colspan="7">
-                  <a href="#" class="control" data-control="prev-year">«</a>
-                  <a href="#" class="control" data-control="prev-month">≤</a>
-                  <a href="#" class="control" data-control="prev-day">&lt;</a>
-                  <a href="#" class="control today" data-control="today">aujourd'hui</a>
-                  <a href="#" class="control" data-control="next-day">&gt;</a>
-                  <a href="#" class="control" data-control="next-month">≥</a>
-                  <a href="#" class="control" data-control="next-year">»</a>
-                </td>
-              </tr>
-              <tr class="weekdays">
-                <td>L</td><td>M</td><td>M</td><td>J</td><td>V</td><td>S</td><td>D</td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="week">
-                <td><a href="#" class="day mon"></a></td>
-                <td><a href="#" class="day tue"></a></td>
-                <td><a href="#" class="day wed"></a></td>
-                <td><a href="#" class="day thu"></a></td>
-                <td><a href="#" class="day fri"></a></td>
-                <td><a href="#" class="day sat"></a></td>
-                <td><a href="#" class="day sun"></a></td>
-              </tr>
-            </tbody>
-          </table>
         </div>
 
       </div>
@@ -287,9 +252,46 @@
     </form>
 
     <script>
+      var dateonlytable = new Element('table', {id:'date-only'});
+      dateonlytable.update(
+            '<thead>'+
+              '<tr class="ongabonga">'+
+                '<td colspan="7">'+
+                  '<span class="month" data-names="janvier février mars avril mai juin juillet août septembre octobre novembre décembre"></span>'+
+                  '<span class="year"></span>'+
+                '</td>'+
+              '</tr>'+
+              '<tr class="date-controls">'+
+                '<td colspan="7">'+
+                  '<a href="#" class="control" data-control="prev-year">«</a>'+
+                  '<a href="#" class="control" data-control="prev-month">≤</a>'+
+                  '<a href="#" class="control" data-control="prev-day">&lt;</a>'+
+                  '<a href="#" class="control today" data-control="today">aujourd\'hui</a>'+
+                  '<a href="#" class="control" data-control="next-day">&gt;</a>'+
+                  '<a href="#" class="control" data-control="next-month">≥</a>'+
+                  '<a href="#" class="control" data-control="next-year">»</a>'+
+                '</td>'+
+              '</tr>'+
+              '<tr class="weekdays">'+
+                '<td>L</td><td>M</td><td>M</td><td>J</td><td>V</td><td>S</td><td>D</td>'+
+              '</tr>'+
+            '</thead>'+
+            '<tbody>'+
+              '<tr class="week">'+
+                '<td><a href="#" class="day mon"></a></td>'+
+                '<td><a href="#" class="day tue"></a></td>'+
+                '<td><a href="#" class="day wed"></a></td>'+
+                '<td><a href="#" class="day thu"></a></td>'+
+                '<td><a href="#" class="day fri"></a></td>'+
+                '<td><a href="#" class="day sat"></a></td>'+
+                '<td><a href="#" class="day sun"></a></td>'+
+              '</tr>'+
+            '</tbody>'
+      );
+      $('date-only-wrapper').insert(dateonlytable);
       var calendar = new BetterCalendar.Calendar();
       var datetime = new BetterCalendar.TemplateCalendar($('date-time'), calendar);
-      var dateonly = new BetterCalendar.TemplateCalendar($('date-only'), calendar);
+      var dateonly = new BetterCalendar.TemplateCalendar(dateonlytable, calendar);
       var timeonly = new BetterCalendar.TemplateCalendar($('time-only'), calendar);
       datetime.listen('selected value changed', function(d){ console.log(d);  });
       calendar.listen('date value changed', function(d){

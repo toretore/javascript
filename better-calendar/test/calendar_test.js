@@ -1,11 +1,11 @@
 TestCase("CalendarTest", {
 
   setUp: function(){
-    this.c = new Calendar();
+    this.c = new BetterCalendar.Calendar();
   },
   
   'test date should default to right now': function(){
-    var c = new Calendar();
+    var c = new BetterCalendar.Calendar();
     assertEquals(c.get('date').getFullYear(), new Date().getFullYear());
     assertEquals(c.get('date').getMonth(), new Date().getMonth());
     assertEquals(c.get('date').getDate(), new Date().getDate());

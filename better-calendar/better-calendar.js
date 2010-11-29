@@ -192,39 +192,33 @@ BetterCalendar.TemplateCalendar = Base.extend({
       year:year, month:month, monthNames:monthNames, today:today, hour:hour, minute:minute};
   },
 
-  buildWeeks: function(weeks, weekTemplate){
-    var that = this;
-
-    return weeks.map(function(week){
-      var el = $(weekTemplate.cloneNode(true));
-      week.each(function(day,i){
-        var d = el.down('.'+that.days[i]);
-        if (d && day) {
-          d.update(day);
-          d.writeAttribute('data-control', 'set-day');
-          d.writeAttribute('data-control-param', day);
-        } else if (d) {
-          d.addClassName('empty');
-        }
-      });
-      return el;
-    });
-  },
-
   draw: function(){
-    var cal = this.get('calendar'),
+    var that = this,
+        cal = this.get('calendar'),
         target = this.templates.weekInsertionPoint,
-        week = this.templates.week;
+        weekTemplate = this.templates.week;
 
-    if (cal && target && week) {
+    if (cal && target && weekTemplate) {
       //Remove any week elements already in the target. If target.position is 'top', target.element
       //is the parent, otherwise it's a sibling, so do up() to get parent.
       (target.position == 'top' ? target.element : target.element.up()).select('.week').invoke('remove');
       //Insert weeks, last week first because each week is inserted before the previous
-      this.buildWeeks(cal.get('weeks'), week).reverse().each(function(wk){
-        var ins = {};
-        ins[target.position] = wk; //{top: wk} or {after: wk}
+      cal.get('weeks').reverse().each(function(week){
+        var el = $(weekTemplate.cloneNode(true)),
+            ins = {};
+        ins[target.position] = el; //{top: el} or {after: el}
         target.element.insert(ins);
+        //Insert days in week template
+        week.each(function(day,i){
+          var d = el.down('.'+that.days[i]);
+          if (d && day) {
+            d.update(day);
+            d.writeAttribute('data-control', 'set-day');
+            d.writeAttribute('data-control-param', day);
+          } else if (d) {
+            d.addClassName('empty');
+          }
+        });
       });
       this.set('selected', cal.get('day'));
       this.setYear(cal.get('year'));
