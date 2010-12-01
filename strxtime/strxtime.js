@@ -12,6 +12,8 @@ Strxtime = (function(){
 
   var strxtime = {
 
+    defaultLocale: 'default',
+
     addLocale: function(name, formats, inherit){
       if (inherit) {
         var o = object(inherit);
@@ -105,7 +107,7 @@ Strxtime = (function(){
     },
 
     strftime: function(date, str, locale){
-      var formats = this.formats[locale || 'default'] || {};
+      var formats = this.formats[locale || this.defaultLocale] || {};
       return str.replace(/%([a-zA-Z%])/g, function(s, f){
         return formats[f] ? formats[f](date) : s;
       });

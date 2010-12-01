@@ -175,13 +175,18 @@ StrftimeLocaleInheritanceTest = TestCase('StrftimeLocaleInheritanceTest', object
 StrftimeLocaleInheritanceTest.prototype.setUp = function(){
   StrftimeTest.prototype.setUp.apply(this, arguments);
   X.addLocale('inherited', {}, X.formats['default']);
-  X.formats['default'] = X.formats.inherited; //Replace default locale with the one inherited from it
+  this.defaultDefaultLocale = X.defaultLocale;
+  X.defaultLocale = 'inherited';
+};
+StrftimeLocaleInheritanceTest.prototype.tearDown = function(){
+  X.defaultLocale = this.defaultDefaultLocale;
 };
 
 StrftimeLocaleTest = TestCase('StrftimeLocaleTest', {
 
   setUp: function(){
     this.d = new Date(2010, 10, 12, 13, 14, 15); //13:14:15 Friday Nov 12, 2010
+    this.defaultDefaultLocale = X.defaultLocale;
   },
 
   tearDown: function(){
@@ -190,6 +195,15 @@ StrftimeLocaleTest = TestCase('StrftimeLocaleTest', {
     for (var p in X.formats) {
       if (X.formats.hasOwnProperty(p) && p != 'default') delete X.formats[p];
     }
+    X.defaultLocale = this.defaultDefaultLocale;
+  },
+
+  'test should have a defaultLocale': function(){
+    X.formats['default'].x = function(){ return 'humbaba'; }
+    X.addLocale('jambalaya', {x: function(){ return 'jesus' }});
+    assertEquals('humbaba', X.strftime(this.d, '%x'));
+    X.defaultLocale = 'jambalaya';
+    assertEquals('jesus', X.strftime(this.d, '%x'));
   },
 
   'test should not replace anything if locale doesnt exist': function(){
