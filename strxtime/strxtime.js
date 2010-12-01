@@ -4,7 +4,7 @@ Strxtime = (function(){
     return num < 10 ? '0'+num : ''+num;
   };
 
-  function object(o, props){
+  function object(o){
     var C = function(){};
     C.prototype = o;
     return new C();
