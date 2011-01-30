@@ -436,15 +436,20 @@ BetterCalendar.SelectBridge = Base.extend({
     }
   },
 
-  getYearValue: function(){ return parseInt(this._readSelect('year')); },
+  _readInt: function(name){
+    var val = parseInt(this._readSelect(name));
+    return isNaN(val) ? null : val;
+  },
+
+  getYearValue: function(){ return this._readInt('year'); },
   setYearValue: function(v){ this._writeSelect('year', v); },
-  getMonthValue: function(){ return parseInt(this._readSelect('month')); },
+  getMonthValue: function(){ return this._readInt('month'); },
   setMonthValue: function(v){ this._writeSelect('month', v); },
-  getDayValue: function(){ return parseInt(this._readSelect('day')); },
+  getDayValue: function(){ return this._readInt('day'); },
   setDayValue: function(v){ this._writeSelect('day', v); },
-  getHourValue: function(){ return parseInt(this._readSelect('hour')); },
+  getHourValue: function(){ return this._readInt('hour'); },
   setHourValue: function(v){ this._writeSelect('hour', v); },
-  getMinuteValue: function(){ return parseInt(this._readSelect('minute')); },
+  getMinuteValue: function(){ return this._readInt('minute'); },
   setMinuteValue: function(v){ this._writeSelect('minute', v); },
 
   getDateValue: function(){
