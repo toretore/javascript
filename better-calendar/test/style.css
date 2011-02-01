@@ -164,3 +164,66 @@ body {
       margin-right: 2em; }
       body .inputs p label {
         display: block; }
+    body .inputs #popup {
+      font-size: 70%;
+      text-decoration: none;
+      color: white;
+      background: black;
+      padding: 0.2em 0.5em; }
+  body .popup-calendar {
+    background: #cccccc;
+    background: -moz-linear-gradient(bottom, #999999, #bbbbbb);
+    border: 1px outset #bbbbbb;
+    -moz-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    padding: 0.3em;
+    font-size: 80%; }
+    body .popup-calendar table {
+      border-spacing: 0;
+      border: 1px inset #bbbbbb; }
+      body .popup-calendar table .controls a, body .popup-calendar table .controls span {
+        display: inline-block;
+        padding: 0 0.1em; }
+      body .popup-calendar table .controls .control {
+        text-decoration: none;
+        color: inherit;
+        border: 1px solid transparent; }
+        body .popup-calendar table .controls .control:hover, body .popup-calendar table .controls .control:focus {
+          border-style: outset;
+          border-color: #bbbbbb; }
+      body .popup-calendar table .weekdays {
+        color: rgba(0, 0, 0, 0.5); }
+        body .popup-calendar table .weekdays th {
+          font-weight: normal;
+          border-top: 1px outset #bbbbbb;
+          border-bottom: 1px outset #bbbbbb; }
+          body .popup-calendar table .weekdays th:first-child {
+            border-left: 1px outset #bbbbbb; }
+          body .popup-calendar table .weekdays th:last-child {
+            border-right: 1px outset #bbbbbb; }
+      body .popup-calendar table .week td a {
+        display: block;
+        padding: 0.1em 0.2em;
+        color: #333333;
+        text-decoration: none;
+        border: 1px outset #aaaaaa;
+        outline: none; }
+        body .popup-calendar table .week td a.selected {
+          background: rgba(0, 0, 0, 0.2);
+          border-style: inset;
+          border-color: #888888; }
+        body .popup-calendar table .week td a.empty {
+          border: none; }
+      body .popup-calendar table .time a, body .popup-calendar table .time span {
+        display: inline-block; }
+      body .popup-calendar table .time .control {
+        outline: none;
+        padding: 0 0.3em;
+        text-decoration: none;
+        color: inherit;
+        border: 1px solid transparent; }
+        body .popup-calendar table .time .control.separator {
+          padding: 0; }
+        body .popup-calendar table .time .control:hover, body .popup-calendar table .time .control:focus {
+          border-style: outset;
+          border-color: #bbbbbb; }

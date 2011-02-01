@@ -245,6 +245,7 @@
             <option value="58">58</option>
             <option value="59">59</option>
           </select>
+          <a href="#" id="popup">Popup</a>
         </p>
 
       </div>
@@ -295,12 +296,12 @@
       var timeonly = new BetterCalendar.TemplateCalendar($('time-only'), calendar);
       datetime.controls.humbaba = function(){ console.log('coffee'); };
       datetime.listen('selected value changed', function(d){ console.log(d);  });
-      calendar.listen('date value changed', function(d){
-        //$('text-date').value = d.toString();
-      });
-      var inputBridge = new BetterCalendar.InputBridge(calendar, $('text-date'));
+      //var inputBridge = new BetterCalendar.InputBridge(calendar, $('text-date'));
       var hiddenBridge = new BetterCalendar.InputBridge(calendar, $('hidden-date'));
-      var selectBridge = new BetterCalendar.SelectBridge(calendar, $('select-year'), $('select-month'), $('select-day'), $('select-hour'), $('select-minute'));
+      //var selectBridge = new BetterCalendar.SelectBridge(calendar, $('select-year'), $('select-month'), $('select-day'), $('select-hour'), $('select-minute'));
+      var popup = new BetterCalendar.Popup({includeTime:true, calendar:calendar, openers:[$('popup')], 'class':'popup-calendar',
+        selects:[$('select-year'), $('select-month'), $('select-day'), $('select-hour'), $('select-minute')],
+        input: $('text-date')});
     </script>
   </body>
 </html>

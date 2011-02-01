@@ -358,6 +358,134 @@ BetterCalendar.TemplateCalendar = Base.extend({
 });
 
 
+BetterCalendar.Popup = Base.extend({
+
+  setOrDefault: function(key, val, def){
+    this.set(key, val === undefined ? def : val);
+  },
+
+  getCalendarValue: function(){
+    return this.get('template_calendar').get('calendar');
+  },
+  setCalendarValue: function(c){
+    this.get('template_calendar').set('calendar', c);
+  },
+
+  init: function(options){
+    options = options || {};
+    this._super();
+    this.setOrDefault('include_date', options.includeDate, true);
+    this.setOrDefault('include_time', options.includeTime, false);
+    this.setOrDefault('insertion_point', options.insertionPoint, document.body);
+    this.setOrDefault('openers', options.openers, []);
+    if (options.selects) this.set('selects', options.selects);
+    if (options.input) this.set('input', options.input);
+    this.setOrDefault('class', options['class'], 'better-calendar');
+    this.element = this.buildContainer();
+    this.template = this.element.update(this.buildTemplate());
+    this.set('template_calendar', new BetterCalendar.TemplateCalendar(this.template, options.calendar));
+    this.get('insertion_point').insert(this.element);
+    this.observe();
+  },
+
+  open: function(x, y){
+    this.element.setStyle({'left':x+'px', 'top':y+'px'});
+    this.element.show();
+  },
+
+  close: function(){
+    this.element.hide();
+  },
+
+  buildContainer: function(){
+    return new Element('div', {'class':this.get('class'), style:'display:none; position:absolute; z-index:9001'});
+  },
+
+  buildTemplate: function(){
+    var t = '',
+        time;
+
+    if (this.get('include_time')) {
+      time = '<a href="#" class="control prev-minute" data-control="prev-minute">«</a>' +
+        '<a href="#" class="control prev-hour" data-control="prev-hour">&lt;</a>' +
+        '<span class="hour"></span><a href="#" class="control separator" data-control="now">:</a><span class="minute"></span>' +
+        '<a href="#" class="control next-hour" data-control="next-hour">&gt;</a>' +
+        '<a href="#" class="control next-minute" data-control="next-minute">»</a>';
+    }
+    if (this.get('include_date')) {
+      t += '<table><thead>';
+      t += '<tr class="controls"><td colspan="7"><a href="#" class="control prev-year">≤</a><a href="#" class="control prev-month" data-control="prev-month">&lt;</a>';
+      t += '<span class="month" data-names="Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"></span>';
+      t += '<a href="#" class="control today" data-control="today">⊚</a><span class="year"></span>';
+      t += '<a href="#" class="control next-month" data-control="next-month">&gt;</a><a href="#" class="control next-year" data-control="next-year">≥</a></td></tr>';
+      t += '<tr class="weekdays"><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th><th>S</th></tr>';
+      t += '</thead><tbody><tr class="week">';
+      t += '<td><a href="#" class="day mon"></a></td>';
+      t += '<td><a href="#" class="day tue"></a></td>';
+      t += '<td><a href="#" class="day wed"></a></td>';
+      t += '<td><a href="#" class="day thu"></a></td>';
+      t += '<td><a href="#" class="day fri"></a></td>';
+      t += '<td><a href="#" class="day sat"></a></td>';
+      t += '<td><a href="#" class="day sun"></a></td>';
+      t += '</tr></tbody>';
+      if (this.get('include_time')) t += '<tfoot><tr class="time"><td colspan="7">'+time+'</td></tr></tfoot>';
+      t += '</table>';
+    } else if (this.get('include_time')) {
+      t += time;
+    }
+
+    return t;
+  },
+
+  observe: function(){
+    var that = this;
+
+    this.get('openers').each(function(element){
+      var opening = false,
+          open = false,
+          opener = function(e){
+            e.preventDefault();
+            if (!open) {
+              opening = true; //Prevent the closer from executing on the same event
+              that.open(e.pointerX()+20, e.pointerY());
+              element.addClassName('active');
+              document.body.observe('click', closer); //The event triggering the opener will bubble up to <body>, triggering the just-added closer listener
+              open = true;
+            }
+          },
+          closer = function(e){
+            var el = e.element(),
+                close = true;
+            if (!opening) { //Don't close if this event is the one that triggered the opener
+              while (el != document.body) { if (el === that.element){ close = false } el = el.up(); } //Only close if click happened outside the calendar container
+              if (close) {
+                that.close();
+                element.removeClassName('active');
+                document.body.stopObserving('click', closer);
+                open = false;
+              }
+            } else {
+              opening = false;
+            }
+          };
+
+      element.observe('click', opener);
+    });
+
+    if (this.get('selects')) {
+      var bridge = BetterCalendar.object(BetterCalendar.SelectBridge.prototype);
+      BetterCalendar.SelectBridge.apply(bridge, [this.get('calendar')].concat(this.get('selects')));
+      this.set('select_bridge', bridge);
+    }
+
+    if (this.get('input')) {
+      this.set('input_bridge', new BetterCalendar.InputBridge(this.get('calendar'), this.get('input')));
+    }
+  }
+
+});
+
+
 //Updates a text (or hidden) input whenever the calendar's date changes
 //Also parses the input value when it's changed and updates the calendar (probably doesn't work with hidden)
 //Only works with the YYYY-MM-DD HH:MM:SS format. Not at all flexible.

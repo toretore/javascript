@@ -242,3 +242,91 @@ body
 
       label
         display: block
+
+    #popup
+      font-size: 70%
+      text-decoration: none
+      color: #fff
+      background: #000
+      padding: 0.2em 0.5em
+
+  .popup-calendar
+    background: #ccc
+    background: -moz-linear-gradient(bottom, #999, #bbb)
+    border: 1px outset #bbb
+    -moz-box-shadow: 1px 1px 5px rgba(0,0,0,0.4)
+    text-align: center
+    padding: 0.3em
+    font-size: 80%
+
+    table
+      border-spacing: 0
+      border: 1px inset #bbb
+
+      .controls
+
+        a, span
+          display: inline-block
+          padding: 0 0.1em
+
+        .control
+          text-decoration: none
+          color: inherit
+          border: 1px solid transparent
+
+          &:hover, &:focus
+            border-style: outset
+            border-color: #bbb
+
+      .weekdays
+        color: rgba(0,0,0,0.5)
+
+        th
+          font-weight: normal
+          border-top: 1px outset #bbb
+          border-bottom: 1px outset #bbb
+
+          &:first-child
+            border-left: 1px outset #bbb
+
+          &:last-child
+            border-right: 1px outset #bbb
+
+      .week
+
+        td
+
+          a
+            display: block
+            padding: 0.1em 0.2em
+            color: #333
+            text-decoration: none
+            border: 1px outset #aaa
+            outline: none
+
+            &.selected
+              background: rgba(0,0,0,0.2)
+              border-style: inset
+              border-color: #888
+
+            &.empty
+              border: none
+
+      .time
+
+        a, span
+          display: inline-block
+
+        .control
+          outline: none
+          padding: 0 0.3em
+          text-decoration: none
+          color: inherit
+          border: 1px solid transparent
+
+          &.separator
+            padding: 0
+
+          &:hover, &:focus
+            border-style: outset
+            border-color: #bbb
