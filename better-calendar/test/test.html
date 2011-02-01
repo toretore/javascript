@@ -34,7 +34,7 @@
                 </th>
               </tr>
               <tr class="weekdays">
-                <th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th><th>S</th>
+                <th data-control="humbaba">M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th><th>S</th>
               </tr>
             </thead>
             <tbody>
@@ -51,7 +51,7 @@
                 <td colspan="7">
                   <a href="#" class="control" data-control="prev-hour">◀</a>
                   <a href="#" class="control" data-control="prev-minute">◀</a>
-                  <span class="hour"></span>:<span class="minute"></span>
+                  <span class="hour"></span><span data-control="humbaba">:</span><span class="minute"></span>
                   <a href="#" class="control" data-control="next-minute">▶</a>
                   <a href="#" class="control" data-control="next-hour">▶</a>
                 </td>
@@ -273,7 +273,7 @@
                 '</td>'+
               '</tr>'+
               '<tr class="weekdays">'+
-                '<td>L</td><td>M</td><td>M</td><td>J</td><td>V</td><td>S</td><td>D</td>'+
+                '<td data-control="humbaba">L</td><td>M</td><td>M</td><td>J</td><td>V</td><td>S</td><td>D</td>'+
               '</tr>'+
             '</thead>'+
             '<tbody>'+
@@ -293,6 +293,7 @@
       var datetime = new BetterCalendar.TemplateCalendar($('date-time'), calendar);
       var dateonly = new BetterCalendar.TemplateCalendar(dateonlytable, calendar);
       var timeonly = new BetterCalendar.TemplateCalendar($('time-only'), calendar);
+      datetime.controls.humbaba = function(){ console.log('coffee'); };
       datetime.listen('selected value changed', function(d){ console.log(d);  });
       calendar.listen('date value changed', function(d){
         //$('text-date').value = d.toString();

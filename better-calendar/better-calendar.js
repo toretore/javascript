@@ -9,6 +9,12 @@ BetterCalendar = {
   stopObserving: function(el, ev, fn){
     if (el.detachEvent) el.detachEvent(ev, fn);
     else el.removeEventListener(ev, fn, false);
+  },
+
+  object: function(o){
+    var F = function(){};
+    F.prototype = o;
+    return new F();
   }
 
 };
@@ -162,6 +168,9 @@ BetterCalendar.TemplateCalendar = Base.extend({
 
   init: function(t, c){
     this._super();
+    //Inherit the prototype controls property so you can add a control to a single
+    //instance without sharing it with all other instances because it's on the prototype
+    this.controls = BetterCalendar.object(this.controls);
     this.observe();
     if (!c) c = new BetterCalendar.Calendar();
     this.set('template', t);
@@ -289,6 +298,8 @@ BetterCalendar.TemplateCalendar = Base.extend({
         interval = null,
 
         //Simulate repeat-click when holding down button
+        //TODO Make this more resistant. If mouseup for some reason happens outside this element it's not
+        //     registered and the interval goes on forever
         onMouseDown = function(e){
           isMouse = true;
           executeControl(e); //First, "normal" click
