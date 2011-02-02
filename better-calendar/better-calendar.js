@@ -443,13 +443,14 @@ BetterCalendar.Popup = Base.extend({
     this.get('openers').each(function(element){
       var opening = false,
           open = false,
+          html = $$('html')[0],
           opener = function(e){
             e.preventDefault();
             if (!open) {
               opening = true; //Prevent the closer from executing on the same event
               that.open(e.pointerX()+20, e.pointerY());
               element.addClassName('active');
-              document.body.observe('click', closer); //The event triggering the opener will bubble up to <body>, triggering the just-added closer listener
+              html.observe('click', closer); //The event triggering the opener will bubble up to <body>, triggering the just-added closer listener
               open = true;
             }
           },
@@ -457,11 +458,11 @@ BetterCalendar.Popup = Base.extend({
             var el = e.element(),
                 close = true;
             if (!opening) { //Don't close if this event is the one that triggered the opener
-              while (el != document.body) { if (el === that.element){ close = false } el = el.up(); } //Only close if click happened outside the calendar container
+              while (el != html) { if (el === that.element){ close = false } el = el.up(); } //Only close if click happened outside the calendar container
               if (close) {
                 that.close();
                 element.removeClassName('active');
-                document.body.stopObserving('click', closer);
+                html.stopObserving('click', closer);
                 open = false;
               }
             } else {
