@@ -152,13 +152,25 @@ TestCase("ElementBaseTest", {
 
   setUp: function(){
     /*:DOC += <div class="post" id="post_1"><h2 class="title">Humbaba</h2><p class="body">His breath is fire</p></div> */
+    /*:DOC += <div class="post" id="post_2"><h2 class="title">Humbaba</h2><p class="body">His breath is fire</p></div> */
     this.post = new ElementBase($$('.post').first());
   },
 
   'test should have access to wrapped element': function(){
     assertNotNull(this.post.element);
+    assertNotNull(this.post.get('element'));
+    assertEquals(this.post.element.id, this.post.get('element').id);
     //assertEquals($$('.post').first(), this.post.element);
     assert($$('.post').first() == this.post.element);
+  },
+
+  'test should be notified if element is changed': function(){
+    var oldEl = this.post.get('element'),
+        newEl;
+    this.post.listen('element value changed', function(n,o){ newEl = n; oldEl = o; });
+    this.post.set('element', $$('.post')[1]);
+    assertEquals('post_1', oldEl.id);
+    assertEquals('post_2', newEl.id);
   },
 
   'test should get value from element if possible': function(){
