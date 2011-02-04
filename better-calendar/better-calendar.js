@@ -149,6 +149,241 @@ BetterCalendar.Calendar = Base.extend({
 
 
 
+
+
+
+BetterCalendar.Template = ElementBase.extend({
+
+  days: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
+
+  _parseInt: function(str){
+    return parseInt(str.replace(/^0/, ''));
+  },
+  _padInt: function(i){
+    return (i < 10 ? '0' : '') + i;
+  },
+  _readInt: function(key){
+    var v = this.getValueByElement(key);
+    return v && this._parseInt(v);
+  },
+
+  getTodayValue: function(){ return this.element.hasClassName('today'); },
+  setTodayValue: function(b){ this.element[b ? 'addClassName' : 'removeClassName']('today'); },
+
+  getDayValue: function(){
+    var el = this.element.down('.week .day.selected');
+    return el && parseInt(el.innerHTML);
+  },
+  setDayValue: function(day){
+    var current = this.element.down('.week .day.selected');
+        next = this.element.select('.week .day').find(function(el){
+          return el.innerHTML == day;
+        });
+    current && current.removeClassName('selected');
+    next && next.addClassName('selected');
+  },
+
+  getHourValue: function(){ return this._readInt('hour'); },
+  setHourValue: function(h){ this.setValueByElement('hour', this._padInt(h)); },
+
+  getMinuteValue: function(){ return this._readInt('minute'); },
+  setMinuteValue: function(h){ this.setValueByElement('minute', this._padInt(h)); },
+
+  getMonthNamesValue: function(){
+    var el = this.getElement('month');
+    return el ? el.readAttribute('data-names').split(' ') : this.values.month_names;
+  },
+  setMonthNamesValue: function(m){
+    var el = this.getElement('month');
+    el ? el.writeAttribute('data-names', m.join(' ')) : this.values.month_names = m;
+  },
+
+  getMonthValue: function(){
+    var names = this.get('month_names');
+    return names && names.indexOf(this.getValueByElement('month')) + 1;
+  },
+  setMonthValue: function(n){
+    var names = this.get('month_names');
+    names && this.setValueByElement('month', names[n-1]);
+  },
+
+  init: function(element, calendar){
+    this._super(element);
+    this.controls = BetterCalendar.object(this.controls); //Allow instance-specific controls
+    this.observe();
+    this.set('calendar', calendar);
+  },
+
+  //Controls are executed when an element inside the template is clicked and its data-control
+  //attribute has a corresponding control function.
+  //<a data-control="Today">Today</a> will execute the 'today' control.
+  controls: {
+    'prev-year': function(){ this.get('calendar').prevYear(); },
+    'next-year': function(){ this.get('calendar').nextYear(); },
+    'prev-month': function(){ this.get('calendar').prevMonth(); },
+    'next-month': function(){ this.get('calendar').nextMonth(); },
+    'prev-day': function(){ this.get('calendar').prevDay(); },
+    'next-day': function(){ this.get('calendar').nextDay(); },
+    'prev-hour': function(){ this.get('calendar').prevHour(); },
+    'next-hour': function(){ this.get('calendar').nextHour(); },
+    'prev-minute': function(){ this.get('calendar').prevMinute(); },
+    'next-minute': function(){ this.get('calendar').nextMinute(); },
+    'today': function(){ this.get('calendar').setToday(); },
+    'now': function(){ this.get('calendar').setNow(); },
+    'today-now': function(){ var c=this.get('calendar'); c.set('date', new Date()) },
+    'set-day': function(day){ this.get('calendar').set('day', parseInt(day)); }
+  },
+
+  executeControl: function(name){
+    this.controls[name].apply(this, $A(arguments).slice(1));
+  },
+
+  drawWeeks: function(){
+    var that = this,
+        el = that.get('element'),
+        cal = that.get('calendar'),
+        weekTemplate = el.down('.week'),
+        target;
+
+    if (cal && weekTemplate){
+      //Detect where to insert week elements.
+      if (weekTemplate.previous()) {//If no previous sibling, insert at top of parent element
+        target = {position: 'after', element: weekTemplate.previous()};
+      } else {//If there's a prev sibling, insert after it
+        target = {position: 'top', element: weekTemplate.up()};
+      }
+      weekTemplate = $(weekTemplate.cloneNode(true));
+
+      //Remove any week elements already in the target. If target.position is 'top', target.element
+      //is the parent, otherwise it's a sibling, so do up() to get parent.
+      (target.position == 'top' ? target.element : target.element.up()).select('.week').invoke('remove');
+      //Insert weeks, last week first because each week is inserted before the previous
+      cal.get('weeks').reverse().each(function(week){
+        var el = $(weekTemplate.cloneNode(true)),
+            ins = {};
+        ins[target.position] = el; //{top: el} or {after: el}
+        target.element.insert(ins);
+        //Insert days in week template
+        week.each(function(day,i){
+          var d = el.down('.'+that.days[i]);
+          if (d && day) {
+            d.update(day);
+            d.writeAttribute('data-control', 'set-day');
+            d.writeAttribute('data-control-param', day);
+            d.removeClassName('empty');
+            d.removeClassName('selected');
+          } else if (d) {
+            d.update();
+            d.addClassName('empty');
+          }
+        });
+      });
+    }
+  },
+
+  draw: function(){
+    var that = this,
+        c = this.get('calendar');
+
+    if (c) {
+      this.drawWeeks();
+      ['year', 'month', 'day', 'hour', 'minute'].each(function(p){
+        that.set(p, c.get(p));
+      });
+    }
+  },
+
+  observe: function(){
+    var that = this,
+
+        executeControl = function(e){
+          var target = e.element(),
+              name = target.readAttribute('data-control'),
+              param = target.readAttribute('data-control-param');
+              control = name && that.controls[name];
+
+          if (control) {
+            preventDefault = true;
+            param ? control.call(that, param) : control.call(that);
+            that.fire('control executed', name, param);
+          } else {
+            preventDefault = false;
+          }
+        },
+
+        isMouse = false,
+        timeout = null, //Not sure if some browsers will choke on non-last var without assignment
+        interval = null,
+        html = $$('html')[0],
+
+        //Simulate repeat-click when holding down button
+        //TODO Make this more resistant. If mouseup for some reason happens outside this element it's not
+        //     registered and the interval goes on forever
+        onMouseDown = function(e){
+          html.observe('mouseup', onMouseUp);
+          isMouse = true;
+          executeControl(e); //First, "normal" click
+          timeout = setTimeout(function(){//Then, after a second
+            executeControl(e);//Execute again
+            interval = setInterval(function(){//And then every 200ms after that
+              executeControl(e);
+            }, 200);
+          }, 1000);
+        },
+        onMouseUp = function(e){//Until button is released
+          clearTimeout(timeout);
+          clearInterval(interval);
+          html.stopObserving('mouseup', onMouseUp);
+        },
+        onClick = function(e){
+          //If keyboard was used, execute control onclick because mousedown/up won't have been fired
+          if (!isMouse) executeControl(e);
+          isMouse = false;//Reset
+          //Only prevent default action if target was a control
+          if (preventDefault) e.preventDefault();
+        },
+
+        calendarDateChange = function(nd, od){
+          if (nd.getFullYear() != od.getFullYear() || nd.getMonth() != od.getMonth()){
+            that.draw();
+          } else {
+            if (nd.getDate() != od.getDate()) that.set('day', nd.getDate());
+            if (nd.getHours() != od.getHours()) that.set('hour', nd.getHours());
+            if (nd.getMinutes() != od.getMinutes()) that.set('minute', nd.getMinutes());
+          }
+        };
+
+    this.element.observe('mousedown', onMouseDown);
+    this.element.observe('click', onClick);
+    this.listen('element value changed', function(e, oe){
+      that.draw();
+      e.observe('mousedown', onMouseDown);
+      e.observe('click', onClick);
+      oe.stopObserving('mousedown', onMouseDown);
+      oe.stopObserving('click', onClick);
+    });
+
+    this.listen('calendar value changed', function(cal, oldCal){
+      that.draw();
+      oldCal && oldCal.stopListening('date value changed', calendarDateChange);
+      cal && cal.listen('date value changed', calendarDateChange);
+    });
+
+    this.listen('day value changed', function(){
+      this.set('today', this.get('calendar').isToday());
+    });
+
+    this.listen('month_names value changed', function(){
+      this.set('month', this.get('calendar').get('month'));
+    });
+  }
+
+});
+
+
+
+
+//TODO Old version of Template, remove
 BetterCalendar.TemplateCalendar = Base.extend({
 
   days: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],

@@ -38,6 +38,10 @@ body
           border-spacing: 0
           text-align: center
 
+          &.today
+            border-color: #f00
+            outline: none
+
           a
             color: #000
             text-decoration: none
@@ -191,16 +195,6 @@ body
                     &:hover, &:focus
                       background: rgba(0,0,0,0.5)
 
-                    &.today.active
-                      color: #fff
-                      text-shadow: 0 0 8px #fff
-                      -webkit-animation-name: today
-                      -webkit-animation-duration: 1s
-                      -webkit-animation-iteration-count: infinite
-                      -webkit-animation-direction: alternate
-                      -webkit-animation-delay: 1s
-                      -webkit-animation-timing-function: linear
-
               &.weekdays
 
                 td
@@ -232,6 +226,16 @@ body
                     &.selected, &.selected:hover, &.selected:focus
                       background: -moz-linear-gradient(bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.4))
                       background: -webkit-gradient(linear, left bottom, left top, from(rgba(255,255,255,0.1)), to(rgba(255,255,255,0.4)))
+
+          &.today thead tr.date-controls td a.today
+            color: #fff
+            text-shadow: 0 0 8px #fff
+            -webkit-animation-name: today
+            -webkit-animation-duration: 1s
+            -webkit-animation-iteration-count: infinite
+            -webkit-animation-direction: alternate
+            -webkit-animation-delay: 1s
+            -webkit-animation-timing-function: linear
 
   .inputs
     overflow: hidden

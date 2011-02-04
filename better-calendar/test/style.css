@@ -28,6 +28,9 @@ body {
         border: 0.4em solid black;
         border-spacing: 0;
         text-align: center; }
+        body .calendars .calendar.datetime table.today {
+          border-color: red;
+          outline: none; }
         body .calendars .calendar.datetime table a {
           color: black;
           text-decoration: none; }
@@ -131,15 +134,6 @@ body {
                 -webkit-transition: all 1s; }
                 body .calendars .calendar.date table thead tr.date-controls td a:hover, body .calendars .calendar.date table thead tr.date-controls td a:focus {
                   background: rgba(0, 0, 0, 0.5); }
-                body .calendars .calendar.date table thead tr.date-controls td a.today.active {
-                  color: white;
-                  text-shadow: 0 0 8px white;
-                  -webkit-animation-name: today;
-                  -webkit-animation-duration: 1s;
-                  -webkit-animation-iteration-count: infinite;
-                  -webkit-animation-direction: alternate;
-                  -webkit-animation-delay: 1s;
-                  -webkit-animation-timing-function: linear; }
             body .calendars .calendar.date table thead tr.weekdays td {
               border-top: 1px solid black;
               border-bottom: 1px solid black; }
@@ -157,6 +151,15 @@ body {
             body .calendars .calendar.date table tbody tr.week td a.selected, body .calendars .calendar.date table tbody tr.week td a.selected:hover, body .calendars .calendar.date table tbody tr.week td a.selected:focus {
               background: -moz-linear-gradient(bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.4));
               background: -webkit-gradient(linear, left bottom, left top, from(rgba(255, 255, 255, 0.1)), to(rgba(255, 255, 255, 0.4))); }
+          body .calendars .calendar.date table.today thead tr.date-controls td a.today {
+            color: white;
+            text-shadow: 0 0 8px white;
+            -webkit-animation-name: today;
+            -webkit-animation-duration: 1s;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-direction: alternate;
+            -webkit-animation-delay: 1s;
+            -webkit-animation-timing-function: linear; }
   body .inputs {
     overflow: hidden; }
     body .inputs p {

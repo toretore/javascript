@@ -291,9 +291,9 @@
       );
       $('date-only-wrapper').insert(dateonlytable);
       var calendar = new BetterCalendar.Calendar();
-      var datetime = new BetterCalendar.TemplateCalendar($('date-time'), calendar);
-      var dateonly = new BetterCalendar.TemplateCalendar(dateonlytable, calendar);
-      var timeonly = new BetterCalendar.TemplateCalendar($('time-only'), calendar);
+      var datetime = new BetterCalendar.Template($('date-time'), calendar);
+      var dateonly = new BetterCalendar.Template(dateonlytable, calendar);
+      var timeonly = new BetterCalendar.Template($('time-only'), calendar);
       datetime.controls.humbaba = function(){ console.log('coffee'); };
       datetime.listen('selected value changed', function(d){ console.log(d);  });
       //var inputBridge = new BetterCalendar.InputBridge(calendar, $('text-date'));
