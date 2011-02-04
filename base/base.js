@@ -197,6 +197,9 @@
 
   ElementBase = Base.extend({
 
+    getElementValue: function(){ return this.element; },
+    setElementValue: function(e){ this.element = e; },
+
     init: function(element){
       this.element = element;
       this._super();
