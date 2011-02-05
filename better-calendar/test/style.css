@@ -167,7 +167,7 @@ body {
       margin-right: 2em; }
       body .inputs p label {
         display: block; }
-    body .inputs #popup {
+    body .inputs #popup, body .inputs #popup-template {
       font-size: 70%;
       text-decoration: none;
       color: white;
@@ -230,3 +230,45 @@ body {
         body .popup-calendar table .time .control:hover, body .popup-calendar table .time .control:focus {
           border-style: outset;
           border-color: #bbbbbb; }
+  body .popup-template {
+    display: table;
+    font-size: 70%;
+    background: white;
+    background: -moz-linear-gradient(bottom, #f0f0f0, white);
+    background: -webkit-gradient(linear, left bottom, left top, from(#f0f0f0), to(white));
+    border: 1px solid #333333;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); }
+    body .popup-template .month-control, body .popup-template table {
+      display: table-cell; }
+    body .popup-template table {
+      padding: 0.2em;
+      border-spacing: 0;
+      text-align: center; }
+      body .popup-template table .info {
+        color: #666666; }
+        body .popup-template table .info td .month, body .popup-template table .info td .year {
+          display: inline-block;
+          padding: 0.2em; }
+      body .popup-template table .week td {
+        padding: 0.1em 0.2em;
+        cursor: pointer; }
+        body .popup-template table .week td:hover:not(.empty):not(.selected) {
+          background: rgba(0, 0, 0, 0.2); }
+        body .popup-template table .week td.selected {
+          background: black;
+          color: white; }
+      body .popup-template table .week:last-child td {
+        margin-bottom: 0.3em; }
+    body .popup-template .month-control {
+      padding: 0 0.5em;
+      vertical-align: middle;
+      color: black;
+      text-decoration: none;
+      outline: none; }
+      body .popup-template .month-control:hover {
+        background: rgba(0, 0, 0, 0.1); }
+    body .popup-template.today .week td.selected {
+      background: red; }

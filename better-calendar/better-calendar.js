@@ -266,15 +266,17 @@ BetterCalendar.Template = ElementBase.extend({
         //Insert days in week template
         week.each(function(day,i){
           var d = el.down('.'+that.days[i]);
-          if (d && day) {
-            d.update(day);
-            d.writeAttribute('data-control', 'set-day');
-            d.writeAttribute('data-control-param', day);
-            d.removeClassName('empty');
+          if (d) {
             d.removeClassName('selected');
-          } else if (d) {
-            d.update();
-            d.addClassName('empty');
+            if (day) {
+              d.update(day);
+              d.writeAttribute('data-control', 'set-day');
+              d.writeAttribute('data-control-param', day);
+              d.removeClassName('empty');
+            } else {
+              d.update();
+              d.addClassName('empty');
+            }
           }
         });
       });
@@ -593,33 +595,34 @@ BetterCalendar.TemplateCalendar = Base.extend({
 });
 
 
+
 BetterCalendar.Popup = Base.extend({
 
   setOrDefault: function(key, val, def){
     this.set(key, val === undefined ? def : val);
   },
 
-  getCalendarValue: function(){
-    return this.get('template_calendar').get('calendar');
-  },
-  setCalendarValue: function(c){
-    this.get('template_calendar').set('calendar', c);
-  },
+  getCalendarValue: function(){ return this.get('template_calendar').get('calendar'); },
+  setCalendarValue: function(c){ this.get('template_calendar').set('calendar', c); },
+
+  getTemplateValue: function(){ return this.element.down; },
+  setTemplateValue: function(t){ this.element.update(t); },
+
+  getElementValue: function(){ return this.element; },
+  setElementValue: function(e){ this.element = e; },
 
   init: function(options){
     options = options || {};
     this._super();
-    this.setOrDefault('include_date', options.includeDate, true);
-    this.setOrDefault('include_time', options.includeTime, false);
-    this.setOrDefault('insertion_point', options.insertionPoint, document.body);
-    this.setOrDefault('openers', options.openers, []);
+    this.setOrDefault('insertion_point', options.insertAt, document.body);
+    if (options.opener) this.set('opener', options.opener);
     if (options.selects) this.set('selects', options.selects);
     if (options.input) this.set('input', options.input);
     this.setOrDefault('class', options['class'], 'better-calendar');
-    this.element = this.buildContainer();
-    this.template = this.element.update(this.buildTemplate());
-    this.set('template_calendar', new BetterCalendar.TemplateCalendar(this.template, options.calendar));
-    this.get('insertion_point').insert(this.element);
+    this.set('element', this.buildContainer());
+    this.set('template', options.template || this.buildTemplate());
+    this.set('template_calendar', new BetterCalendar.Template(this.get('element'), options.calendar));
+    this.get('insertion_point').insert(this.get('element'));
     this.observe();
   },
 
@@ -637,76 +640,68 @@ BetterCalendar.Popup = Base.extend({
   },
 
   buildTemplate: function(){
-    var t = '',
-        time;
+    return '<table><thead>'+
+      '<tr class="controls"><td colspan="7"><a href="#" class="control prev-year">≤</a><a href="#" class="control prev-month" data-control="prev-month">&lt;</a>'+
+      '<span class="month" data-names="Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"></span>'+
+      '<a href="#" class="control today" data-control="today">⊚</a><span class="year"></span>'+
+      '<a href="#" class="control next-month" data-control="next-month">&gt;</a><a href="#" class="control next-year" data-control="next-year">≥</a></td></tr>'+
+      '<tr class="weekdays"><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th><th>S</th></tr>'+
+      '</thead><tbody><tr class="week">'+
+      '<td><a href="#" class="day mon"></a></td>'+
+      '<td><a href="#" class="day tue"></a></td>'+
+      '<td><a href="#" class="day wed"></a></td>'+
+      '<td><a href="#" class="day thu"></a></td>'+
+      '<td><a href="#" class="day fri"></a></td>'+
+      '<td><a href="#" class="day sat"></a></td>'+
+      '<td><a href="#" class="day sun"></a></td>'+
+      '</tr></tbody>'+
+      '<tfoot><tr class="time"><td colspan="7">'+
+      '<a href="#" class="control prev-minute" data-control="prev-minute">«</a>' +
+      '<a href="#" class="control prev-hour" data-control="prev-hour">&lt;</a>' +
+      '<span class="hour"></span><a href="#" class="control separator" data-control="now">:</a><span class="minute"></span>' +
+      '<a href="#" class="control next-hour" data-control="next-hour">&gt;</a>' +
+      '<a href="#" class="control next-minute" data-control="next-minute">»</a>'+
+      '</td></tr></tfoot>'+
+      '</table>';
+  },
 
-    if (this.get('include_time')) {
-      time = '<a href="#" class="control prev-minute" data-control="prev-minute">«</a>' +
-        '<a href="#" class="control prev-hour" data-control="prev-hour">&lt;</a>' +
-        '<span class="hour"></span><a href="#" class="control separator" data-control="now">:</a><span class="minute"></span>' +
-        '<a href="#" class="control next-hour" data-control="next-hour">&gt;</a>' +
-        '<a href="#" class="control next-minute" data-control="next-minute">»</a>';
-    }
-    if (this.get('include_date')) {
-      t += '<table><thead>';
-      t += '<tr class="controls"><td colspan="7"><a href="#" class="control prev-year">≤</a><a href="#" class="control prev-month" data-control="prev-month">&lt;</a>';
-      t += '<span class="month" data-names="Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"></span>';
-      t += '<a href="#" class="control today" data-control="today">⊚</a><span class="year"></span>';
-      t += '<a href="#" class="control next-month" data-control="next-month">&gt;</a><a href="#" class="control next-year" data-control="next-year">≥</a></td></tr>';
-      t += '<tr class="weekdays"><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th><th>S</th></tr>';
-      t += '</thead><tbody><tr class="week">';
-      t += '<td><a href="#" class="day mon"></a></td>';
-      t += '<td><a href="#" class="day tue"></a></td>';
-      t += '<td><a href="#" class="day wed"></a></td>';
-      t += '<td><a href="#" class="day thu"></a></td>';
-      t += '<td><a href="#" class="day fri"></a></td>';
-      t += '<td><a href="#" class="day sat"></a></td>';
-      t += '<td><a href="#" class="day sun"></a></td>';
-      t += '</tr></tbody>';
-      if (this.get('include_time')) t += '<tfoot><tr class="time"><td colspan="7">'+time+'</td></tr></tfoot>';
-      t += '</table>';
-    } else if (this.get('include_time')) {
-      t += time;
-    }
+  //Opens up the popup when element is clicked, closing it when anything outside of element is clicked
+  observeOpener: function(element){
+    var that = this,
+        opening = false,
+        open = false,
+        html = $$('html')[0],
+        opener = function(e){
+          e.preventDefault();
+          if (!open) {
+            opening = true; //Prevent the closer from executing on the same event
+            that.open(e.pointerX()+20, e.pointerY());
+            element.addClassName('active');
+            html.observe('click', closer); //The event triggering the opener will bubble up to <body>, triggering the just-added closer listener
+            open = true;
+          }
+        },
+        closer = function(e){
+          var el = e.element(),
+              close = true;
+          if (!opening) { //Don't close if this event is the one that triggered the opener
+            while (el != html) { if (el === that.element){ close = false } el = el.up(); } //Only close if click happened outside the calendar container
+            if (close) {
+              that.close();
+              element.removeClassName('active');
+              html.stopObserving('click', closer);
+              open = false;
+            }
+          } else {
+            opening = false;
+          }
+        };
 
-    return t;
+    element.observe('click', opener);
   },
 
   observe: function(){
-    var that = this;
-
-    this.get('openers').each(function(element){
-      var opening = false,
-          open = false,
-          html = $$('html')[0],
-          opener = function(e){
-            e.preventDefault();
-            if (!open) {
-              opening = true; //Prevent the closer from executing on the same event
-              that.open(e.pointerX()+20, e.pointerY());
-              element.addClassName('active');
-              html.observe('click', closer); //The event triggering the opener will bubble up to <body>, triggering the just-added closer listener
-              open = true;
-            }
-          },
-          closer = function(e){
-            var el = e.element(),
-                close = true;
-            if (!opening) { //Don't close if this event is the one that triggered the opener
-              while (el != html) { if (el === that.element){ close = false } el = el.up(); } //Only close if click happened outside the calendar container
-              if (close) {
-                that.close();
-                element.removeClassName('active');
-                html.stopObserving('click', closer);
-                open = false;
-              }
-            } else {
-              opening = false;
-            }
-          };
-
-      element.observe('click', opener);
-    });
+    if (this.get('opener')) this.observeOpener(this.get('opener'));
 
     if (this.get('selects')) {
       var bridge = BetterCalendar.object(BetterCalendar.SelectBridge.prototype);
@@ -717,6 +712,10 @@ BetterCalendar.Popup = Base.extend({
     if (this.get('input')) {
       this.set('input_bridge', new BetterCalendar.InputBridge(this.get('calendar'), this.get('input')));
     }
+
+    this.listen('template value changed', function(t){
+      this.get('template_calendar').set('template', t);
+    });
   }
 
 });

@@ -247,7 +247,7 @@ body
       label
         display: block
 
-    #popup
+    #popup, #popup-template
       font-size: 70%
       text-decoration: none
       color: #fff
@@ -334,3 +334,63 @@ body
           &:hover, &:focus
             border-style: outset
             border-color: #bbb
+
+  .popup-template
+    display: table
+    font-size: 70%
+    background: #fff
+    background: -moz-linear-gradient(bottom, #f0f0f0, #fff)
+    background: -webkit-gradient(linear, left bottom, left top, from(#f0f0f0), to(#fff))
+    border: 1px solid #333
+    -moz-border-radius: 2px
+    -webkit-border-radius: 2px
+    -moz-box-shadow: 1px 1px 5px rgba(0,0,0,0.5)
+    -webkit-box-shadow: 1px 1px 5px rgba(0,0,0,0.5)
+
+    .month-control, table
+      display: table-cell
+
+    table
+      padding: 0.2em
+      border-spacing: 0
+      text-align: center
+
+      .info
+        color: #666
+
+        td
+
+          .month, .year
+            display: inline-block
+            padding: 0.2em
+
+      .week
+
+        td
+          padding: 0.1em 0.2em
+          cursor: pointer
+
+          &:hover:not(.empty):not(.selected)
+            background: rgba(0,0,0,0.2)
+
+          &.selected
+            background: #000
+            color: #fff
+
+        &:last-child td
+          margin-bottom: 0.3em
+
+    .month-control
+      padding: 0 0.5em
+      vertical-align: middle
+      color: #000
+      text-decoration: none
+      outline: none
+
+      &:hover
+        background: rgba(0,0,0,0.1)
+
+    &.today
+
+      .week td.selected
+        background: #f00
