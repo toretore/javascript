@@ -211,7 +211,7 @@ BetterCalendar.Template = ElementBase.extend({
     this._super(element);
     this.controls = BetterCalendar.object(this.controls); //Allow instance-specific controls
     this.observe();
-    this.set('calendar', calendar);
+    this.set('calendar', calendar || new BetterCalendar.Calendar());
   },
 
   //Controls are executed when an element inside the template is clicked and its data-control
@@ -611,11 +611,19 @@ BetterCalendar.Popup = Base.extend({
   getElementValue: function(){ return this.element; },
   setElementValue: function(e){ this.element = e; },
 
+  getOpenersValue: function(){
+    var o = this.values.openers
+    if (!o) o = [];
+    else if (typeof o.length != 'number') o = [o];
+    return o;
+  },
+
   init: function(options){
     options = options || {};
     this._super();
     this.setOrDefault('insertion_point', options.insertAt, document.body);
-    if (options.opener) this.set('opener', options.opener);
+    if (options.opener) this.set('openers', [options.opener]);
+    else if (options.openers) this.set('openers', options.openers);
     if (options.selects) this.set('selects', options.selects);
     if (options.input) this.set('input', options.input);
     this.setOrDefault('class', options['class'], 'better-calendar');
@@ -626,13 +634,19 @@ BetterCalendar.Popup = Base.extend({
     this.observe();
   },
 
+  isOpen: function(){ return this.element.visible(); },
+
   open: function(x, y){
     this.element.setStyle({'left':x+'px', 'top':y+'px'});
     this.element.show();
+    this.get('openers').invoke('addClassName', 'active');
+    this.fire('opened');
   },
 
   close: function(){
     this.element.hide();
+    this.get('openers').invoke('removeClassName', 'active');
+    this.fire('closed');
   },
 
   buildContainer: function(){
@@ -665,43 +679,25 @@ BetterCalendar.Popup = Base.extend({
       '</table>';
   },
 
-  //Opens up the popup when element is clicked, closing it when anything outside of element is clicked
-  observeOpener: function(element){
-    var that = this,
-        opening = false,
-        open = false,
-        html = $$('html')[0],
-        opener = function(e){
-          e.preventDefault();
-          if (!open) {
-            opening = true; //Prevent the closer from executing on the same event
-            that.open(e.pointerX()+20, e.pointerY());
-            element.addClassName('active');
-            html.observe('click', closer); //The event triggering the opener will bubble up to <body>, triggering the just-added closer listener
-            open = true;
-          }
-        },
-        closer = function(e){
-          var el = e.element(),
-              close = true;
-          if (!opening) { //Don't close if this event is the one that triggered the opener
-            while (el != html) { if (el === that.element){ close = false } el = el.up(); } //Only close if click happened outside the calendar container
-            if (close) {
-              that.close();
-              element.removeClassName('active');
-              html.stopObserving('click', closer);
-              open = false;
-            }
-          } else {
-            opening = false;
-          }
-        };
-
-    element.observe('click', opener);
-  },
-
   observe: function(){
-    if (this.get('opener')) this.observeOpener(this.get('opener'));
+    var openers = this.get('openers'),
+        that = this,
+        html = $$('html')[0];
+
+    html.observe('click', function(e){
+      var el = e.element(),
+          target;
+
+      while(!target) {
+        if (el == that.element) break;
+        else if (el == html) target = 'close';
+        else if (openers.any(function(o){ return el == o; })) { e.preventDefault(); target = that.isOpen() ? 'close' : 'open'; }
+        else el = el.up();
+      }
+
+      if (target == 'open') that.open(e.pointerX()+20, e.pointerY());
+      else if (target == 'close' && that.isOpen()) that.close();
+    });
 
     if (this.get('selects')) {
       var bridge = BetterCalendar.object(BetterCalendar.SelectBridge.prototype);

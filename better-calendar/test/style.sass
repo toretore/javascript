@@ -239,6 +239,7 @@ body
 
   .inputs
     overflow: hidden
+    padding-bottom: 1em
 
     p
       float: left
@@ -253,6 +254,20 @@ body
       color: #fff
       background: #000
       padding: 0.2em 0.5em
+
+      &.active
+        background: #f00
+
+    #text-date
+      border: 1px solid #000
+      padding: 0.2em
+      -moz-box-shadow: 1px 1px #ccc
+      -webkit-box-shadow: 1px 1px #ccc
+
+      &.active
+        border-color: #f00
+        -moz-box-shadow: 1px 1px #fcc
+        -webkit-box-shadow: 1px 1px #fcc
 
   .popup-calendar
     background: #ccc

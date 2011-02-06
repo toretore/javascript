@@ -161,7 +161,8 @@ body {
             -webkit-animation-delay: 1s;
             -webkit-animation-timing-function: linear; }
   body .inputs {
-    overflow: hidden; }
+    overflow: hidden;
+    padding-bottom: 1em; }
     body .inputs p {
       float: left;
       margin-right: 2em; }
@@ -173,6 +174,17 @@ body {
       color: white;
       background: black;
       padding: 0.2em 0.5em; }
+      body .inputs #popup.active, body .inputs #popup-template.active {
+        background: red; }
+    body .inputs #text-date {
+      border: 1px solid black;
+      padding: 0.2em;
+      -moz-box-shadow: 1px 1px #cccccc;
+      -webkit-box-shadow: 1px 1px #cccccc; }
+      body .inputs #text-date.active {
+        border-color: red;
+        -moz-box-shadow: 1px 1px #ffcccc;
+        -webkit-box-shadow: 1px 1px #ffcccc; }
   body .popup-calendar {
     background: #cccccc;
     background: -moz-linear-gradient(bottom, #999999, #bbbbbb);
