@@ -389,11 +389,11 @@ BetterCalendar.Popup = Base.extend({
     this.set(key, val === undefined ? def : val);
   },
 
-  getCalendarValue: function(){ return this.get('template_calendar').get('calendar'); },
-  setCalendarValue: function(c){ this.get('template_calendar').set('calendar', c); },
+  getCalendarValue: function(){ return this.get('template').get('calendar'); },
+  setCalendarValue: function(c){ this.get('template').set('calendar', c); },
 
-  getTemplateValue: function(){ return this.element.down; },
-  setTemplateValue: function(t){ this.element.update(t); },
+  getContentValue: function(){ return this.element.down; },
+  setContentValue: function(t){ this.element.update(t); },
 
   getElementValue: function(){ return this.element; },
   setElementValue: function(e){ this.element = e; },
@@ -415,8 +415,8 @@ BetterCalendar.Popup = Base.extend({
     if (options.input) this.set('input', options.input);
     this.setOrDefault('class', options['class'], 'better-calendar');
     this.set('element', this.buildContainer());
-    this.set('template', options.template || this.buildTemplate());
-    this.set('template_calendar', new BetterCalendar.Template(this.get('element'), options.calendar));
+    this.set('content', options.content || this.buildContent());
+    this.set('template', new BetterCalendar.Template(this.get('element'), options.calendar));
     this.get('insertion_point').insert(this.get('element'));
     this.observe();
   },
@@ -440,7 +440,7 @@ BetterCalendar.Popup = Base.extend({
     return new Element('div', {'class':this.get('class'), style:'display:none; position:absolute; z-index:9001'});
   },
 
-  buildTemplate: function(){
+  buildContent: function(){
     return '<table><thead>'+
       '<tr class="controls"><td colspan="7"><a href="#" class="control prev-year">≤</a><a href="#" class="control prev-month" data-control="prev-month">&lt;</a>'+
       '<span class="month" data-names="Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"></span>'+
@@ -495,13 +495,10 @@ BetterCalendar.Popup = Base.extend({
     if (this.get('input')) {
       this.set('input_bridge', new BetterCalendar.InputBridge(this.get('calendar'), this.get('input')));
     }
-
-    this.listen('template value changed', function(t){
-      this.get('template_calendar').set('template', t);
-    });
   }
 
 });
+
 
 
 //Updates a text (or hidden) input whenever the calendar's date changes
@@ -564,6 +561,8 @@ BetterCalendar.InputBridge = Base.extend({
   }
 
 });
+
+
 
 //Provides a bridge between select elements that represent a date and time and
 //a calendar. Updates the selects when the calendar's date changes and vice versa.
