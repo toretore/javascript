@@ -319,8 +319,6 @@ BetterCalendar.Template = ElementBase.extend({
         html = $$('html')[0],
 
         //Simulate repeat-click when holding down button
-        //TODO Make this more resistant. If mouseup for some reason happens outside this element it's not
-        //     registered and the interval goes on forever
         onMouseDown = function(e){
           html.observe('mouseup', onMouseUp);
           isMouse = true;
