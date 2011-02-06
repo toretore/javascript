@@ -303,12 +303,12 @@
       var popup = new BetterCalendar.Popup({calendar:calendar, opener:$('popup'), 'class':'popup-calendar',
         selects:[$('select-year'), $('select-month'), $('select-day'), $('select-hour'), $('select-minute')],
         input: $('text-date')});
-      var template ='<a class="month-control" href="#" data-control="prev-month">◀</a><table>'+
+      var template ='<a class="month-control" href="#" data-control="prev-month" title="Previous month">◀</a><table>'+
         '<tr class="info"><td colspan="7"><span class="month" data-names="January February March April May June July August September October November December">'+
         '</span><span class="year"></span></td></tr><tr class="week">'+
         '<td class="day mon"></td><td class="day tue"></td><td class="day wed"></td><td class="day thu"></td>'+
         '<td class="day fri"></td><td class="day sat"></td><td class="day sun"></td></tr>'+
-        '</table><a class="month-control" href="#" data-control="next-month">▶</a>';
+        '</table><a class="month-control" href="#" data-control="next-month" title="Next month">▶</a>';
       var templatepopup = new BetterCalendar.Popup({'class':'popup-template', content:template, openers:[$('popup-template'), $('text-date')], calendar:calendar});
       templatepopup.get('template').listen('date selected', function(d){ templatepopup.close(); });
     </script>

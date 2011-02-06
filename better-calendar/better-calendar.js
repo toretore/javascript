@@ -20,6 +20,27 @@ BetterCalendar = {
 };
 
 
+
+/* Calendar is the part that joins everything together. Its only purpose is to contain
+ * a date and allow manipulating it with accessors for year, month, etc. Other classes
+ * then use Calendars as their source for date information. A Calendar instance can be
+ * shared between many Templates, InputBridges, etc so you can create a single Calendar,
+ * then add a Template for controlling it and an InputBridge which is updated when the
+ * date is changed through the Template. Here's a fancy diagram of an example setup:
+ *
+ *     Popup
+ *       |
+ *    Template  Template
+ *          |    |
+ *         Calendar
+ *          |    |
+ *  InputBridge SelectBridge
+ *     |            |
+ *  <input>      <selects>
+ *
+ * Example: A template that's a popup, one that isn't a popup, an input bridge and a select bridge,
+ *          all joined together by a Calendar, meaning they're all in sync with each other.
+ */
 BetterCalendar.Calendar = Base.extend({
 
   init: function(d){
@@ -151,7 +172,35 @@ BetterCalendar.Calendar = Base.extend({
 
 
 
-
+/* Template is a container element linked to a Calendar. Elements inside it can have values that are
+ * synced with the calendar based on their class names (Template is_an ElementBase).
+ *
+ * The following class names signify elements that are updated:
+ * - year
+ * - month (requires a data-month-names attribute with a space-separated list of month names)
+ * - day (the day of the month)
+ * - hour
+ * - minute
+ * - week: This element represents the days of the week. You just need one element, it will
+ *         be duplicated for the required amount fo weeks for a given month. Descendant elements
+ *         with the class 'day' and one of (mon,tue,wed,thu,fri,sat,sun) will receive the date
+ *         for the week in question which falls on that day.
+ *
+ * Additionally, any element can be a control by having the data-control attribute whose content is the
+ * name of the control. For a list of controls, see the 'controls' property.
+ *
+ * Here's a very simple example template consisting of just the weeks and month name with controls for prev- and next-month:
+ *
+ *   <table class="my-simple-calendar">
+ *    <tr><td colspan="7"><a data-control="prev-month">prev</a><span class="month"></span><a data-control="next-month">next</a></td></tr>
+ *     <tr class="week">
+ *       <td class="day mon"></td><td class="day tue"></td><td class="day wed"></td><td class="day thu"></td>
+ *       <td class="day fri"></td><td class="day sat"></td><td class="day sun"></td>
+ *     </tr>
+ *   </table>
+ *
+ * The containing element (<table> in the example above) will receive the class 'today' when today's date is selected.
+ */
 BetterCalendar.Template = ElementBase.extend({
 
   days: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
@@ -217,6 +266,12 @@ BetterCalendar.Template = ElementBase.extend({
   //Controls are executed when an element inside the template is clicked and its data-control
   //attribute has a corresponding control function.
   //<a data-control="Today">Today</a> will execute the 'today' control.
+  //If a data-param attribute is present, its value will be passed to the control.
+  //
+  //You can add or override controls for a template object:
+  //var t = new Template(element)
+  //t.controls.say = function(what){ console.log(what); };
+  //<a data-control="say" data-param="hello world">Say something</a>
   controls: {
     'prev-year': function(){ this.get('calendar').prevYear(); },
     'next-year': function(){ this.get('calendar').nextYear(); },
@@ -234,10 +289,8 @@ BetterCalendar.Template = ElementBase.extend({
     'set-day': function(day){ var c=this.get('calendar'); c.set('day', parseInt(day)); this.fire('date selected', c.get('date')); }
   },
 
-  executeControl: function(name){
-    this.controls[name].apply(this, $A(arguments).slice(1));
-  },
-
+  //Draw the dates in the current month (from the associated Calendar)
+  //Finds the first .week element, duplicates it and fills in the dates.
   drawWeeks: function(){
     var that = this,
         el = that.get('element'),
@@ -283,6 +336,7 @@ BetterCalendar.Template = ElementBase.extend({
     }
   },
 
+  //Draw everything. Weeks, month name, year etc.
   draw: function(){
     var that = this,
         c = this.get('calendar');
@@ -345,7 +399,7 @@ BetterCalendar.Template = ElementBase.extend({
 
         calendarDateChange = function(nd, od){
           if (nd.getFullYear() != od.getFullYear() || nd.getMonth() != od.getMonth()){
-            that.draw();
+            that.draw(); //Only redraw everything when year or month has changed
           } else {
             if (nd.getDate() != od.getDate()) that.set('day', nd.getDate());
             if (nd.getHours() != od.getHours()) that.set('hour', nd.getHours());
@@ -382,7 +436,25 @@ BetterCalendar.Template = ElementBase.extend({
 
 
 
-
+/* Popup contains a Template that is floated above other elements and shown
+ * when necessary. Trigger elements can be specified which will open up the
+ * calendar when clicked. The popup will be positioned where the pointer was
+ * registered. Clicking anywhere outside the popup closes it.
+ *
+ * Example:
+ *
+ * new Popup({openers:[$('open-calendar')], input:$('date-value')});
+ *
+ * Available options:
+ *
+ * - openers: An array of elements that will open the popup when clicked
+ * - input: A single input element for which an InputBridge will be created
+ * - selects: An array of select elements that will be passed on to a SelectBridge
+ * - class: The class name of the container element [better-calendar]
+ * - insertAt: The element into which the container will be inserted
+ * - content: The content of the popup. This is essentially the content that
+ *            will be used by the associated Template instance.
+ */
 BetterCalendar.Popup = Base.extend({
 
   setOrDefault: function(key, val, def){
@@ -400,8 +472,8 @@ BetterCalendar.Popup = Base.extend({
 
   getOpenersValue: function(){
     var o = this.values.openers
-    if (!o) o = [];
-    else if (typeof o.length != 'number') o = [o];
+    if (!o) o = []; //Make sure
+    else if (typeof o.length != 'number') o = [o]; //..it's an array
     return o;
   },
 
@@ -440,6 +512,7 @@ BetterCalendar.Popup = Base.extend({
     return new Element('div', {'class':this.get('class'), style:'display:none; position:absolute; z-index:9001'});
   },
 
+  //The default content of the popup unless otherwise is specified
   buildContent: function(){
     return '<table><thead>'+
       '<tr class="controls"><td colspan="7"><a href="#" class="control prev-year">≤</a><a href="#" class="control prev-month" data-control="prev-month">&lt;</a>'+
@@ -471,28 +544,33 @@ BetterCalendar.Popup = Base.extend({
         that = this,
         html = $$('html')[0];
 
+    //Add a single delegating observer to <html>
     html.observe('click', function(e){
       var el = e.element(),
           target;
 
+      //Move up the DOM until an interesting element is found
       while(!target) {
-        if (el == that.element) break;
-        else if (el == html) target = 'close';
-        else if (openers.any(function(o){ return el == o; })) { e.preventDefault(); target = that.isOpen() ? 'close' : 'open'; }
-        else el = el.up();
+        if (el == that.element) { break; } //Click occured inside the popup, don't do anything
+        else if (el == html) { target = 'close'; } //Click occured outside calendar, close if open
+        else if (openers.any(function(o){ return el == o; })) { //Click occured inside an opener element
+          e.preventDefault();
+          target = that.isOpen() ? 'close' : 'open'; //If popup is open, this just a click outside the popup, so close it
+        }
+        else { el = el.up(); }
       }
 
       if (target == 'open') that.open(e.pointerX()+20, e.pointerY());
       else if (target == 'close' && that.isOpen()) that.close();
     });
 
-    if (this.get('selects')) {
+    if (this.get('selects')) { //For convenience, allow passing an array of selects to bridge with
       var bridge = BetterCalendar.object(BetterCalendar.SelectBridge.prototype);
       BetterCalendar.SelectBridge.apply(bridge, [this.get('calendar')].concat(this.get('selects')));
       this.set('select_bridge', bridge);
     }
 
-    if (this.get('input')) {
+    if (this.get('input')) { //Ditto for input
       this.set('input_bridge', new BetterCalendar.InputBridge(this.get('calendar'), this.get('input')));
     }
   }
@@ -503,7 +581,7 @@ BetterCalendar.Popup = Base.extend({
 
 //Updates a text (or hidden) input whenever the calendar's date changes
 //Also parses the input value when it's changed and updates the calendar (probably doesn't work with hidden)
-//Only works with the YYYY-MM-DD HH:MM:SS format. Not at all flexible.
+//Only works with the YYYY-MM-DD HH:MM:SS format. Not at all flexible. For now.
 BetterCalendar.InputBridge = Base.extend({
 
   init: function(calendar, input){
@@ -566,6 +644,9 @@ BetterCalendar.InputBridge = Base.extend({
 
 //Provides a bridge between select elements that represent a date and time and
 //a calendar. Updates the selects when the calendar's date changes and vice versa.
+//
+//A SelectBridge will set the associated Calendar instance's date to that which is
+//specified in the selects on load.
 BetterCalendar.SelectBridge = Base.extend({
 
   _readSelect: function(name){
