@@ -200,6 +200,8 @@ BetterCalendar.Calendar = Base.extend({
  *   </table>
  *
  * The containing element (<table> in the example above) will receive the class 'today' when today's date is selected.
+ *
+ * The element will have no styling. That's what CSS is for.
  */
 BetterCalendar.Template = ElementBase.extend({
 
