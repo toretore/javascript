@@ -310,6 +310,7 @@
         '<td class="day fri"></td><td class="day sat"></td><td class="day sun"></td></tr>'+
         '</table><a class="month-control" href="#" data-control="next-month">▶</a>';
       var templatepopup = new BetterCalendar.Popup({'class':'popup-template', template:template, openers:[$('popup-template'), $('text-date')], calendar:calendar});
+      templatepopup.get('template_calendar').listen('date selected', function(d){ templatepopup.close(); });
     </script>
   </body>
 </html>

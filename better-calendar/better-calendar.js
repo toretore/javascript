@@ -231,7 +231,7 @@ BetterCalendar.Template = ElementBase.extend({
     'today': function(){ this.get('calendar').setToday(); },
     'now': function(){ this.get('calendar').setNow(); },
     'today-now': function(){ var c=this.get('calendar'); c.set('date', new Date()) },
-    'set-day': function(day){ this.get('calendar').set('day', parseInt(day)); }
+    'set-day': function(day){ var c=this.get('calendar'); c.set('day', parseInt(day)); this.fire('date selected', c.get('date')); }
   },
 
   executeControl: function(name){
