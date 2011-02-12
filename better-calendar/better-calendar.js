@@ -568,9 +568,10 @@ BetterCalendar.Popup = Base.extend({
   },
 
   //The default content of the popup unless otherwise is specified
+  //TODO Make this a little better
   buildContent: function(){
     return '<table><thead>'+
-      '<tr class="controls"><td colspan="7"><a href="#" class="control prev-year">≤</a><a href="#" class="control prev-month" data-control="prev-month">&lt;</a>'+
+      '<tr class="controls"><td colspan="7"><a href="#" class="control prev-year" data-control="prev-year">≤</a><a href="#" class="control prev-month" data-control="prev-month">&lt;</a>'+
       '<span class="month" data-names="Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"></span>'+
       '<a href="#" class="control today" data-control="today">⊚</a><span class="year"></span>'+
       '<a href="#" class="control next-month" data-control="next-month">&gt;</a><a href="#" class="control next-year" data-control="next-year">≥</a></td></tr>'+
