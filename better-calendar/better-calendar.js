@@ -213,14 +213,25 @@ BetterCalendar.Template = ElementBase.extend({
   monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 
   _parseInt: function(str){
-    return parseInt(str.replace(/^0/, ''));
+    if (str.match(/^0+$/)) return 0;
+    return parseInt(str.replace(/^0+/, ''));
   },
   _padInt: function(i){
     return (i < 10 ? '0' : '') + i;
   },
   _readInt: function(key){
     var v = this.getValueByElement(key);
-    return v && this._parseInt(v);
+    v = v && this._parseInt(v);
+    return isNaN(v) ? null : v;
+  },
+
+  //Reads a value from the template. If it makes sense (is a number), pass that value back
+  //to the calendar.
+  reverseSet: function(key){
+    var cal = this.get('calendar'),
+        newVal = this.get(key);
+    if (newVal != null) cal.set(key, newVal);
+    else this.set(key, cal.get(key));
   },
 
   getTodayValue: function(){ return this.element.hasClassName('today'); },
@@ -248,6 +259,8 @@ BetterCalendar.Template = ElementBase.extend({
   getSecondValue: function(){ return this._readInt('second'); },
   setSecondValue: function(h){ this.setValueByElement('second', this._padInt(h)); },
 
+  getYearValue: function(){ return this._readInt('year'); },
+
   getMonthNamesValue: function(){
     var el = this.getElement('month'),
         s = el && el.readAttribute('data-names');
@@ -259,8 +272,9 @@ BetterCalendar.Template = ElementBase.extend({
   },
 
   getMonthValue: function(){
-    var names = this.get('month_names');
-    return names && names.indexOf(this.getValueByElement('month')) + 1;
+    var names = this.get('month_names'),
+        n = names && names.indexOf(this.getValueByElement('month'));
+    return n >= 0 ? n + 1 : null;
   },
   setMonthValue: function(n){
     var names = this.get('month_names');
@@ -410,6 +424,11 @@ BetterCalendar.Template = ElementBase.extend({
           if (preventDefault) e.preventDefault();
         },
 
+        onBlur = function(e){
+          var p = e.target.readAttribute('data-property');
+          if (p) that.reverseSet(p);
+        },
+
         calendarDateChange = function(nd, od){
           if (nd.getFullYear() != od.getFullYear() || nd.getMonth() != od.getMonth()){
             that.draw(); //Only redraw everything when year or month has changed
@@ -423,12 +442,15 @@ BetterCalendar.Template = ElementBase.extend({
 
     this.element.observe('mousedown', onMouseDown);
     this.element.observe('click', onClick);
+    this.element.addEventListener && this.element.addEventListener('blur', onBlur, true);
     this.listen('element value changed', function(e, oe){
       that.draw();
       e.observe('mousedown', onMouseDown);
       e.observe('click', onClick);
+      e.addEventListener && e.addEventListener('blur', onBlur, true);
       oe.stopObserving('mousedown', onMouseDown);
       oe.stopObserving('click', onClick);
+      oe.removeEventListener && oe.removeEventListener('blur', onBlur, true);
     });
 
     this.listen('calendar value changed', function(cal, oldCal){
