@@ -120,10 +120,9 @@ body {
           body .calendars .calendar.date table thead tr {
             font-size: 90%; }
             body .calendars .calendar.date table thead tr.ongabonga td {
-              padding: 0.2em;
-              background: rgba(0, 0, 0, 0.3);
-              -moz-border-radius: 1px;
-              -webkit-border-radius: 1px; }
+              padding: 0.2em; }
+              body .calendars .calendar.date table thead tr.ongabonga td select {
+                margin: 0 0.5em; }
             body .calendars .calendar.date table thead tr.date-controls td {
               padding: 0.3em 0; }
               body .calendars .calendar.date table thead tr.date-controls td a {

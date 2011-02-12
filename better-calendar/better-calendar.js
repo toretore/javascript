@@ -225,6 +225,16 @@ BetterCalendar.Template = ElementBase.extend({
     return isNaN(v) ? null : v;
   },
 
+  extractValueFromElement: function(el){
+    var v = el.getValue ? el.getValue() : el.innerHTML;
+    //Remove dirty, filthy HTML from contenteditable elements
+    return typeof v == 'string' ? v.replace(/<[^>]*>/, '') : v;
+  },
+  insertValueInElement: function(el, v){
+    if (el.getValue) el.value = v;
+    else el.innerHTML = v;
+  },
+
   //Reads a value from the template. If it makes sense (is a number), pass that value back
   //to the calendar.
   reverseSet: function(key){
@@ -261,14 +271,20 @@ BetterCalendar.Template = ElementBase.extend({
 
   getYearValue: function(){ return this._readInt('year'); },
 
+  //TODO: get/setMonth is probably a little inefficient. "Works fast" may trump "just magically works".
   getMonthNamesValue: function(){
-    var el = this.getElement('month'),
-        s = el && el.readAttribute('data-names');
-    return s ? s.split(' ') : this.monthNames;
+    var el = this.getElement('month');
+
+    if (el && el.tagName.toLowerCase() == 'select') return el.select('option').pluck('innerHTML');
+    else {
+      var s = el && el.readAttribute('data-names');
+      return s ? s.split(' ') : this.monthNames;
+    }
   },
   setMonthNamesValue: function(m){
     var el = this.getElement('month');
-    el ? el.writeAttribute('data-names', m.join(' ')) : this.monthNames = m;
+    if (el && el.tagName.toLowerCase() == 'select') el.select('option').each(function(o,i){ o.innerHTML = m[i]; });
+    else { el ? el.writeAttribute('data-names', m.join(' ')) : this.monthNames = m; }
   },
 
   getMonthValue: function(){
@@ -424,6 +440,9 @@ BetterCalendar.Template = ElementBase.extend({
           if (preventDefault) e.preventDefault();
         },
 
+        //TODO: Find a way to observe onchange along with onblur (mostly for selects)
+        //      Inputs will fire both at the same time. Maybe onblur for non-form-elements (contenteditable) and onchange for form els?
+        //      Must do this without introducing a lot of complexity.
         onBlur = function(e){
           var p = e.target.readAttribute('data-property');
           if (p) that.reverseSet(p);
