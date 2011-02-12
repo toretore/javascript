@@ -177,7 +177,7 @@ BetterCalendar.Calendar = Base.extend({
  *
  * The following class names signify elements that are updated:
  * - year
- * - month (requires a data-month-names attribute with a space-separated list of month names)
+ * - month (can have a data-month-names attribute with a space-separated list of month names)
  * - day (the day of the month)
  * - hour
  * - minute
@@ -206,6 +206,8 @@ BetterCalendar.Calendar = Base.extend({
 BetterCalendar.Template = ElementBase.extend({
 
   days: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
+  //Defaults. Can be overridden.
+  monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 
   _parseInt: function(str){
     return parseInt(str.replace(/^0/, ''));
@@ -241,12 +243,13 @@ BetterCalendar.Template = ElementBase.extend({
   setMinuteValue: function(h){ this.setValueByElement('minute', this._padInt(h)); },
 
   getMonthNamesValue: function(){
-    var el = this.getElement('month');
-    return el ? el.readAttribute('data-names').split(' ') : this.values.month_names;
+    var el = this.getElement('month'),
+        s = el && el.readAttribute('data-names');
+    return s ? s.split(' ') : this.monthNames;
   },
   setMonthNamesValue: function(m){
     var el = this.getElement('month');
-    el ? el.writeAttribute('data-names', m.join(' ')) : this.values.month_names = m;
+    el ? el.writeAttribute('data-names', m.join(' ')) : this.monthNames = m;
   },
 
   getMonthValue: function(){
