@@ -116,6 +116,9 @@ BetterCalendar.Calendar = Base.extend({
     this.set('date', d);
   },
 
+  prevSecond: function(){ this.set('second', this.get('second')-1); },
+  nextSecond: function(){ this.set('second', this.get('second')+1); },
+
 
   setToday: function(){
     var today = new Date(),
@@ -242,6 +245,9 @@ BetterCalendar.Template = ElementBase.extend({
   getMinuteValue: function(){ return this._readInt('minute'); },
   setMinuteValue: function(h){ this.setValueByElement('minute', this._padInt(h)); },
 
+  getSecondValue: function(){ return this._readInt('second'); },
+  setSecondValue: function(h){ this.setValueByElement('second', this._padInt(h)); },
+
   getMonthNamesValue: function(){
     var el = this.getElement('month'),
         s = el && el.readAttribute('data-names');
@@ -288,6 +294,8 @@ BetterCalendar.Template = ElementBase.extend({
     'next-hour': function(){ this.get('calendar').nextHour(); },
     'prev-minute': function(){ this.get('calendar').prevMinute(); },
     'next-minute': function(){ this.get('calendar').nextMinute(); },
+    'prev-second': function(){ this.get('calendar').prevSecond(); },
+    'next-second': function(){ this.get('calendar').nextSecond(); },
     'today': function(){ this.get('calendar').setToday(); },
     'now': function(){ this.get('calendar').setNow(); },
     'today-now': function(){ var c=this.get('calendar'); c.set('date', new Date()) },
@@ -348,7 +356,7 @@ BetterCalendar.Template = ElementBase.extend({
 
     if (c) {
       this.drawWeeks();
-      ['year', 'month', 'day', 'hour', 'minute'].each(function(p){
+      ['year', 'month', 'day', 'hour', 'minute', 'second'].each(function(p){
         that.set(p, c.get(p));
       });
     }
@@ -409,6 +417,7 @@ BetterCalendar.Template = ElementBase.extend({
             if (nd.getDate() != od.getDate()) that.set('day', nd.getDate());
             if (nd.getHours() != od.getHours()) that.set('hour', nd.getHours());
             if (nd.getMinutes() != od.getMinutes()) that.set('minute', nd.getMinutes());
+            if (nd.getSeconds() != od.getSeconds()) that.set('second', nd.getSeconds());
           }
         };
 
