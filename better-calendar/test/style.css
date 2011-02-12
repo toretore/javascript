@@ -176,6 +176,20 @@ body {
       padding: 0.2em 0.5em; }
       body .inputs #popup.active, body .inputs #popup-template.active {
         background: red; }
+    body .inputs #noinput {
+      background: #eeeeee;
+      background: -moz-linear-gradient(bottom, #dddddd, #eeeeee);
+      color: #333333;
+      font-size: 70%;
+      padding: 0.2em 0.5em;
+      text-decoration: none;
+      -moz-box-shadow: 1px 1px #333333;
+      -moz-border-radius: 2px;
+      text-shadow: 1px 1px rgba(255, 255, 255, 0.7); }
+      body .inputs #noinput:hover, body .inputs #noinput.active {
+        background: #cccccc;
+        background: -moz-linear-gradient(bottom, #bbbbbb, #cccccc);
+        color: black; }
     body .inputs #text-date {
       border: 1px solid black;
       padding: 0.2em;
