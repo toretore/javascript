@@ -123,6 +123,12 @@ body {
               padding: 0.2em; }
               body .calendars .calendar.date table thead tr.ongabonga td select {
                 margin: 0 0.5em; }
+              body .calendars .calendar.date table thead tr.ongabonga td input.year {
+                text-align: center;
+                border: 1px inset #666666;
+                width: 4em;
+                padding: 0.1em 0;
+                background: rgba(255, 255, 255, 0.5); }
             body .calendars .calendar.date table thead tr.date-controls td {
               padding: 0.3em 0; }
               body .calendars .calendar.date table thead tr.date-controls td a {

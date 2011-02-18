@@ -338,8 +338,7 @@
                     '<option value="novembre">novembre</option>'+
                     '<option value="décembre">décembre</option>'+
                   '</select>'+
-                  '<select class="year" data-property="year"><option value="2008">2008</option><option value="2009">2009</option>'+
-                  '<option value="2010">2010</option><option value="2011">2011</option><option value="2012">2012</option></select>'+
+                  '<input type="text" class="year" data-property="year" />'+
                 '</td>'+
               '</tr>'+
               '<tr class="date-controls">'+
@@ -383,7 +382,7 @@
         selects:[$('select-year'), $('select-month'), $('select-day'), $('select-hour'), $('select-minute'), $('select-second')],
         input: $('text-date')});
       var template ='<a class="month-control" href="#" data-control="prev-month" title="Previous month">◀</a><table>'+
-        '<tr class="info"><td colspan="7"><span class="month"></span><span class="year"></span></td></tr><tr class="week">'+
+        '<tr class="info"><td colspan="7"><span class="month"></span><span class="year" contenteditable="true" data-property="year"></span></td></tr><tr class="week">'+
         '<td class="day mon"></td><td class="day tue"></td><td class="day wed"></td><td class="day thu"></td>'+
         '<td class="day fri"></td><td class="day sat"></td><td class="day sun"></td></tr>'+
         '</table><a class="month-control" href="#" data-control="next-month" title="Next month">▶</a>';

@@ -440,12 +440,15 @@ BetterCalendar.Template = ElementBase.extend({
           if (preventDefault) e.preventDefault();
         },
 
-        //TODO: Find a way to observe onchange along with onblur (mostly for selects)
-        //      Inputs will fire both at the same time. Maybe onblur for non-form-elements (contenteditable) and onchange for form els?
-        //      Must do this without introducing a lot of complexity.
         onBlur = function(e){
-          var p = e.target.readAttribute('data-property');
-          if (p) that.reverseSet(p);
+          var p = e.target.readAttribute('data-property'),
+              form = e.target.getValue; //Form elements will have a getValue fn
+          if (p && !form) that.reverseSet(p);
+        },
+        onChange = function(e){
+          var p = e.target.readAttribute('data-property'),
+              form = e.target.getValue; //Form elements will have a getValue fn
+          if (p && form) that.reverseSet(p);
         },
 
         calendarDateChange = function(nd, od){
@@ -462,14 +465,17 @@ BetterCalendar.Template = ElementBase.extend({
     this.element.observe('mousedown', onMouseDown);
     this.element.observe('click', onClick);
     this.element.addEventListener && this.element.addEventListener('blur', onBlur, true);
+    this.element.observe('change', onChange);
     this.listen('element value changed', function(e, oe){
       that.draw();
       e.observe('mousedown', onMouseDown);
       e.observe('click', onClick);
       e.addEventListener && e.addEventListener('blur', onBlur, true);
+      e.observe('change', onChange);
       oe.stopObserving('mousedown', onMouseDown);
       oe.stopObserving('click', onClick);
       oe.removeEventListener && oe.removeEventListener('blur', onBlur, true);
+      oe.stopObserving('change', onChange);
     });
 
     this.listen('calendar value changed', function(cal, oldCal){
