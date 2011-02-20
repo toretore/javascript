@@ -338,15 +338,21 @@ BetterCalendar.Template = ElementBase.extend({
     var that = this,
         el = that.get('element'),
         cal = that.get('calendar'),
-        weekTemplate = el.down('.week'),
+        weekTemplate = this._weekTemplate || el.down('.week'),
         target;
 
     if (cal && weekTemplate){
-      //Detect where to insert week elements.
-      if (weekTemplate.previous()) {//If no previous sibling, insert at top of parent element
-        target = {position: 'after', element: weekTemplate.previous()};
-      } else {//If there's a prev sibling, insert after it
-        target = {position: 'top', element: weekTemplate.up()};
+      if (!this._weekTemplate) {
+        //Detect where to insert week elements.
+        if (weekTemplate.previous()) {//If no previous sibling, insert at top of parent element
+          target = {position: 'after', element: weekTemplate.previous()};
+        } else {//If there's a prev sibling, insert after it
+          target = {position: 'top', element: weekTemplate.up()};
+        }
+        this._weekTemplate = weekTemplate;
+        this._target = target;
+      } else {
+        target = this._target;
       }
       weekTemplate = $(weekTemplate.cloneNode(true));
 
