@@ -57,13 +57,15 @@ body {
         body .calendars .calendar.datetime table tbody tr.week td a {
           display: block;
           padding: 0.2em 0.5em; }
-          body .calendars .calendar.datetime table tbody tr.week td a:hover, body .calendars .calendar.datetime table tbody tr.week td a:focus {
+          body .calendars .calendar.datetime table tbody tr.week td a:hover:not(.disabled):not(.selected):not(.empty) {
             background: #eeeeee; }
-          body .calendars .calendar.datetime table tbody tr.week td a.selected, body .calendars .calendar.datetime table tbody tr.week td a.selected:hover, body .calendars .calendar.datetime table tbody tr.week td a.selected:focus {
+          body .calendars .calendar.datetime table tbody tr.week td a.selected {
             background: black;
             color: white; }
           body .calendars .calendar.datetime table tbody tr.week td a.empty {
             display: none; }
+          body .calendars .calendar.datetime table tbody tr.week td a.disabled, body .calendars .calendar.datetime table tbody tr.week td a.prev-month, body .calendars .calendar.datetime table tbody tr.week td a.next-month {
+            color: #999999; }
         body .calendars .calendar.datetime table tbody tr.time {
           font-size: 80%; }
           body .calendars .calendar.datetime table tbody tr.time td a {
@@ -153,6 +155,8 @@ body {
               background: rgba(255, 255, 255, 0.2); }
             body .calendars .calendar.date table tbody tr.week td a.empty {
               display: none; }
+            body .calendars .calendar.date table tbody tr.week td a.prev-month, body .calendars .calendar.date table tbody tr.week td a.next-month {
+              color: rgba(255, 255, 255, 0.2); }
             body .calendars .calendar.date table tbody tr.week td a.selected, body .calendars .calendar.date table tbody tr.week td a.selected:hover, body .calendars .calendar.date table tbody tr.week td a.selected:focus {
               background: -moz-linear-gradient(bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.4));
               background: -webkit-gradient(linear, left bottom, left top, from(rgba(255, 255, 255, 0.1)), to(rgba(255, 255, 255, 0.4))); }
@@ -284,13 +288,19 @@ body {
           display: inline-block;
           padding: 0.2em; }
       body .popup-template table .week td {
-        padding: 0.1em 0.2em;
-        cursor: pointer; }
-        body .popup-template table .week td:hover:not(.empty):not(.selected) {
-          background: rgba(0, 0, 0, 0.2); }
+        padding: 0.1em 0.2em; }
+        body .popup-template table .week td:hover:not(.empty):not(.selected):not(.disabled) {
+          background: rgba(0, 0, 0, 0.2);
+          cursor: pointer; }
         body .popup-template table .week td.selected {
           background: black;
           color: white; }
+        body .popup-template table .week td.prev-month, body .popup-template table .week td.next-month {
+          color: #999999; }
+          body .popup-template table .week td.prev-month.disabled, body .popup-template table .week td.next-month.disabled {
+            color: #cc9999; }
+        body .popup-template table .week td.disabled {
+          color: #cc0000; }
       body .popup-template table .week:last-child td {
         margin-bottom: 0.3em; }
     body .popup-template .month-control {

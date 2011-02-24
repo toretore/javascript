@@ -15,6 +15,10 @@ BetterCalendar = {
     var F = function(){};
     F.prototype = o;
     return new F();
+  },
+
+  cloneDate: function(d){
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds());
   }
 
 };
@@ -166,7 +170,7 @@ BetterCalendar.Calendar = Base.extend({
   },
 
   _cloneDate: function(d){
-    return new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds());
+    return BetterCalendar.cloneDate(d);
   }
 
 });
@@ -247,15 +251,29 @@ BetterCalendar.Template = ElementBase.extend({
   getTodayValue: function(){ return this.element.hasClassName('today'); },
   setTodayValue: function(b){ this.element[b ? 'addClassName' : 'removeClassName']('today'); },
 
+  //Get the selected day. May be null.
+  //If your template has disabled days this should be checked first because
+  //the calendar will always have a date set but it might not be a settable one.
+  //
+  //var selectedDate = template.get('day') ? null : calendar.get('date');
   getDayValue: function(){
     var el = this.element.down('.week .day.selected');
-    return el && parseInt(el.innerHTML);
+    return el ? parseInt(el.innerHTML) : null;
   },
+  //Sets the selected day.
+  //
+  //NOTE: Determines "settable" days by the presence of data-control="set-day" and
+  //      data-control-param, with the selected day being the one for which
+  //      data-control-param matches. If no day matching those criteria is
+  //      found, no day is selected. This can be the case if the calendar's
+  //      day is set to a disabled/non-settable day in the template, but
+  //      the calendar will always have a day set even if the template doesn't.
   setDayValue: function(day){
     var current = this.element.down('.week .day.selected');
-        next = this.element.select('.week .day').find(function(el){
-          return el.innerHTML == day;
+        next = this.element.select('.week .day[data-control=set-day]').find(function(el){
+          return el.readAttribute('data-control-param') == day;
         });
+
     current && current.removeClassName('selected');
     next && next.addClassName('selected');
   },
@@ -312,7 +330,7 @@ BetterCalendar.Template = ElementBase.extend({
   //You can add or override controls for a template object:
   //var t = new Template(element)
   //t.controls.say = function(what){ console.log(what); };
-  //<a data-control="say" data-param="hello world">Say something</a>
+  //<a data-control="say" data-control-param="hello world">Say something</a>
   controls: {
     'prev-year': function(){ this.get('calendar').prevYear(); },
     'next-year': function(){ this.get('calendar').nextYear(); },
@@ -329,7 +347,19 @@ BetterCalendar.Template = ElementBase.extend({
     'today': function(){ this.get('calendar').setToday(); },
     'now': function(){ this.get('calendar').setNow(); },
     'today-now': function(){ var c=this.get('calendar'); c.set('date', new Date()) },
-    'set-day': function(day){ var c=this.get('calendar'); c.set('day', parseInt(day)); this.fire('date selected', c.get('date')); }
+    'set-day': function(day){
+      var c = this.get('calendar');
+      c.set('day', parseInt(day));
+      this.fire('date selected', c.get('date'));
+    },
+    'set-date': function(d){ //Set a new date. d is in y-m-d format, no 0 padding, m is 0-indexed
+      var c = this.get('calendar'),
+          dd = BetterCalendar.cloneDate(this.get('calendar').get('date')),
+          els = d.split('-');
+      c.set('date', new Date(parseInt(els[0]), parseInt(els[1]), parseInt(els[2]), dd.getHours(), dd.getMinutes(), dd.getSeconds()));
+      this.fire('date selected', c.get('date'));
+    },
+    'disabled-day': function(day){} //Allows marking days as disabled/non-clickable. Doesn't do anything, but its presence will prevent default action on the target.
   },
 
   //Draw the dates in the current month (from the associated Calendar)
@@ -342,8 +372,10 @@ BetterCalendar.Template = ElementBase.extend({
         target;
 
     if (cal && weekTemplate){
+
+      //Cache weekTemplate first time
       if (!this._weekTemplate) {
-        //Detect where to insert week elements.
+        //Detect where to insert week elements. Only done on first draw.
         if (weekTemplate.previous()) {//If no previous sibling, insert at top of parent element
           target = {position: 'after', element: weekTemplate.previous()};
         } else {//If there's a prev sibling, insert after it
@@ -354,34 +386,94 @@ BetterCalendar.Template = ElementBase.extend({
       } else {
         target = this._target;
       }
+
       weekTemplate = $(weekTemplate.cloneNode(true));
 
       //Remove any week elements already in the target. If target.position is 'top', target.element
       //is the parent, otherwise it's a sibling, so do up() to get parent.
       (target.position == 'top' ? target.element : target.element.up()).select('.week').invoke('remove');
-      //Insert weeks, last week first because each week is inserted before the previous
-      cal.get('weeks').reverse().each(function(week){
-        var el = $(weekTemplate.cloneNode(true)),
+
+      var dayOfWeek = 0,
+          week,
+          lastWeek,
+          ins;
+
+      that.eachDay(function(day){
+        if (dayOfWeek == 0) { //New week
+          lastWeek = week;
+          week = $(weekTemplate.cloneNode(true)); //New week container
+          if (lastWeek) {//Additional week, insert after lastWeek
+            lastWeek.insert({after:week});
+          } else {//First week, insert at position stored in target
             ins = {};
-        ins[target.position] = el; //{top: el} or {after: el}
-        target.element.insert(ins);
-        //Insert days in week template
-        week.each(function(day,i){
-          var d = el.down('.'+that.days[i]);
-          if (d) {
-            d.removeClassName('selected');
-            if (day) {
-              d.update(day);
-              d.writeAttribute('data-control', 'set-day');
-              d.writeAttribute('data-control-param', day);
-              d.removeClassName('empty');
-            } else {
-              d.update();
-              d.addClassName('empty');
-            }
+            ins[target.position] = week; //{top: week} or {after: week}
+            target.element.insert(ins);
           }
-        });
+        }
+
+        var dayEl = week.down('.'+that.days[dayOfWeek]); //.down('.mon')
+        if (dayEl) that.drawDay(dayEl, day);
+
+        if (dayOfWeek == 6) dayOfWeek = 0; //Start next week
+        else dayOfWeek++;
       });
+
+    }
+  },
+
+  //Iterate each day of the current month. The default implementation
+  //includes days in prev & next month to fill any gaps in the first & last week.
+  //It is permissible for an alternative implementation to return null values for 'empty' days
+  //NOTE: The yielded Date object remains the same for each iteration.
+  eachDay: function(fn){
+    var startDate = BetterCalendar.cloneDate(this.get('calendar').get('date')),
+        endDate = BetterCalendar.cloneDate(this.get('calendar').get('date'));
+    startDate.setDate(1);
+    while (startDate.getDay() != 1) startDate.setDate(startDate.getDate()-1) //If first of month is not monday, go back to start of week (prev month)
+    endDate.setDate(1); //Avoid overflow for e.g. jan 31 > feb (resulting in march 2 or 3)
+    endDate.setMonth(endDate.getMonth()+1); //Skip to next month
+    endDate.setDate(0); //Then go back to last day of current month
+    while (endDate.getDay() != 0) endDate.setDate(endDate.getDate()+1) //If last of month is not sunday, go forward to end of week (next month)
+
+    while (startDate <= endDate) {
+      fn(startDate);
+      startDate.setDate(startDate.getDate()+1);
+    }
+  },
+
+  //Override this to return true for dates that are disabled.
+  //E.g. return d.getDay() == 6 || d.getDay() == 0; //Weekends
+  isDayDisabled: function(d){ return false; },
+
+  drawDay: function(el, d){
+    if (d) {
+      var dd = this._calendarDate;
+          prevYear = d.getFullYear() < dd.getFullYear(),
+          prevMonth = prevYear || d.getMonth() < dd.getMonth(),
+          nextYear = d.getFullYear() > dd.getFullYear(),
+          nextMonth = nextYear || d.getMonth() > dd.getMonth();
+
+      el.update(d.getDate());
+
+      if (prevYear) el.addClassName('prev-year');
+      if (prevMonth) el.addClassName('prev-month');
+      if (nextYear) el.addClassName('next-year');
+      if (nextMonth) el.addClassName('next-month');
+
+      if (this.isDayDisabled(d)) {
+        el.writeAttribute('data-control', 'disabled-day');
+        el.addClassName('disabled');
+      } else if (prevMonth || nextMonth) {
+        el.writeAttribute('data-control', 'set-date');
+        el.writeAttribute('data-control-param', d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate());
+      } else {
+        el.writeAttribute('data-control', 'set-day');
+        el.writeAttribute('data-control-param', ''+d.getDate());
+      }
+
+    } else {
+      dayEl.update();
+      dayEl.addClassName('empty');
     }
   },
 
@@ -391,10 +483,13 @@ BetterCalendar.Template = ElementBase.extend({
         c = this.get('calendar');
 
     if (c) {
+    //console.log(this.element);
+    //console.time('draw');
       this.drawWeeks();
       ['year', 'month', 'day', 'hour', 'minute', 'second'].each(function(p){
         that.set(p, c.get(p));
       });
+    //console.timeEnd('draw');
     }
   },
 
@@ -458,6 +553,7 @@ BetterCalendar.Template = ElementBase.extend({
         },
 
         calendarDateChange = function(nd, od){
+          that._calendarDate = nd; //Cache it
           if (nd.getFullYear() != od.getFullYear() || nd.getMonth() != od.getMonth()){
             that.draw(); //Only redraw everything when year or month has changed
           } else {
@@ -485,6 +581,7 @@ BetterCalendar.Template = ElementBase.extend({
     });
 
     this.listen('calendar value changed', function(cal, oldCal){
+      that._calendarDate = cal.get('date'); //Cache it
       that.draw();
       oldCal && oldCal.stopListening('date value changed', calendarDateChange);
       cal && cal.listen('date value changed', calendarDateChange);

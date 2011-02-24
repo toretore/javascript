@@ -100,7 +100,7 @@
         <p>
           <label>Selects</label>
           <select id="select-day">
-            <option selected="selected" value="1">1</option>
+            <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
@@ -109,7 +109,7 @@
             <option value="7">7</option>
             <option value="8">8</option>
             <option value="9">9</option>
-            <option value="10">10</option>
+            <option selected="selected" value="10">10</option>
             <option value="11">11</option>
             <option value="12">12</option>
             <option value="13">13</option>
@@ -371,6 +371,7 @@
       $('date-only-wrapper').insert(dateonlytable);
       var calendar = new BetterCalendar.Calendar();
       var datetime = new BetterCalendar.Template($('date-time'), calendar);
+      datetime.isDayDisabled = function(d){ return d.getFullYear() < 2000; }; //Anything before 2000 can't be selected
       var dateonly = new BetterCalendar.Template(dateonlytable, calendar);
       var timeonly = new BetterCalendar.Template($('time-only'), calendar);
       datetime.controls.humbaba = function(){ console.log('coffee'); };
@@ -388,6 +389,8 @@
         '</table><a class="month-control" href="#" data-control="next-month" title="Next month">▶</a>';
       var templatepopup = new BetterCalendar.Popup({'class':'popup-template', content:template, openers:[$('popup-template'), $('text-date'), $('noinput')], calendar:calendar});
       templatepopup.get('template').listen('date selected', function(d){ templatepopup.close(); });
+      templatepopup.get('template').isDayDisabled = function(d){ return d.getDay() == 0 || d.getDay() == 6; }; //Weekends disabled
+      templatepopup.get('template').draw(); //Initial draw didn't have the isDayDisabled method, redraw
       function updateDate(d){
         $('noinput').update(templatepopup.get('template').get('month_names')[d.getMonth()]+' '+d.getDate()+' '+d.getFullYear());
       };

@@ -88,15 +88,18 @@ body
                     display: block
                     padding: 0.2em 0.5em
 
-                    &:hover, &:focus
+                    &:hover:not(.disabled):not(.selected):not(.empty)
                       background: #eee
 
-                    &.selected, &.selected:hover, &.selected:focus
+                    &.selected
                       background: #000
                       color: #fff
 
                     &.empty
                       display: none
+
+                    &.disabled, &.prev-month, &.next-month
+                      color: #999
 
               &.time
                 font-size: 80%
@@ -229,6 +232,9 @@ body
 
                     &.empty
                       display: none
+
+                    &.prev-month, &.next-month
+                      color: rgba(255,255,255,0.2)
 
                     &.selected, &.selected:hover, &.selected:focus
                       background: -moz-linear-gradient(bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.4))
@@ -406,14 +412,23 @@ body
 
         td
           padding: 0.1em 0.2em
-          cursor: pointer
 
-          &:hover:not(.empty):not(.selected)
+          &:hover:not(.empty):not(.selected):not(.disabled)
             background: rgba(0,0,0,0.2)
+            cursor: pointer
 
           &.selected
             background: #000
             color: #fff
+
+          &.prev-month, &.next-month
+            color: #999
+
+            &.disabled
+              color: #c99
+
+          &.disabled
+            color: #c00
 
         &:last-child td
           margin-bottom: 0.3em
