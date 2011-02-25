@@ -74,21 +74,15 @@ Strxtime = (function(){
           return zeroPad(d.getDate());
         },
 
-        'D': function(d){ //%m/%d/%y
-          return this.m(d)+'/'+this.d(d)+'/'+this.y(d);
-        },
+        'D': '%m/%d/%y',
 
         'e': function(d){ // Like %d, the day of the month as a decimal number, but a leading zero is replaced by a space.
           return spacePad(d.getDate());
         },
 
-        'F': function(d){ //%Y-%m-%d
-          return this.Y(d)+'-'+this.m(d)+'-'+this.d(d);
-        },
+        'F': '%Y-%m-%d',
 
-        'h': function(d){ // equivalent to b
-          return this.b(d);
-        },
+        'h': '%b',
 
         'H': function(d){
           return zeroPad(d.getHours());
@@ -137,13 +131,9 @@ Strxtime = (function(){
           return this.p(d).toLowerCase();
         },
 
-        'r': function(d){ // %I:%M:%S %p
-          return this.I(d)+':'+this.M(d)+':'+this.S(d)+" "+this.p(d);
-        },
+        'r': '%I:%M:%S %p',
 
-        'R': function(d){ // %H:%M
-          return this.H(d)+':'+this.M(d);
-        },
+        'R': '%H:%M',
 
         's': function(d){ // seconds since epoch
           var s = d.getTime().toString();
@@ -158,9 +148,7 @@ Strxtime = (function(){
           return "\t";
         },
 
-        'T': function(d){ // %H:%M:%S
-          return this.H(d)+':'+this.M(d)+':'+this.S(d);
-        },
+        'T': '%H:%M:%S',
 
         'u': function(d){ // The day of the week as a decimal, range 1 to 7, Monday being 1. See also %w.
           return ''+this.weekdayNumbersMon[d.getDay()];
@@ -197,9 +185,12 @@ Strxtime = (function(){
     },
 
     strftime: function(date, str, locale){
-      var formats = this.formats[locale || this.defaultLocale] || {};
+      var that = this,
+          formats = this.formats[locale || this.defaultLocale] || {};
       return str.replace(/%([a-zA-Z%])/g, function(s, f){
-        return formats[f] ? formats[f](date) : s;
+        if (typeof formats[f] == 'string') return that.strftime(date, formats[f], locale);
+        else if (typeof formats[f] == 'function') return formats[f](date);
+        else return s;
       });
     },
 
