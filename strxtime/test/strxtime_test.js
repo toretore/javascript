@@ -18,7 +18,7 @@ StrftimeTest = TestCase("StrftimeTest", {
   },
   
   'test non-existing formats should be left in place': function(){
-    assertEquals('i %e like %f turtles', X.strftime(this.d, 'i %e like %f turtles'));
+    assertEquals('i %g like %f turtles', X.strftime(this.d, 'i %g like %f turtles'));
   },
 
   'test %a should be replaced with abbreviated weekday name': function(){
