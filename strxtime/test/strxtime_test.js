@@ -243,11 +243,11 @@ StrftimeTest = TestCase("StrftimeTest", {
   },
 
   'test %w should be replaced with week day number, Sunday being 0': function(){
-    assertEquals('this is the 6th day of the week', X.strftime(this.d, 'this is the %wth day of the week'));
+    assertEquals('this is the 5th day of the week', X.strftime(this.d, 'this is the %wth day of the week'));
     this.d.setDate(13);//Sat nov 13
-    assertEquals('this is the 7th day of the week', X.strftime(this.d, 'this is the %wth day of the week'));
+    assertEquals('this is the 6th day of the week', X.strftime(this.d, 'this is the %wth day of the week'));
     this.d.setDate(7);//Sun nov 7
-    assertEquals('this is the 1st day of the week', X.strftime(this.d, 'this is the %wst day of the week'));
+    assertEquals('this is the 0st day of the week', X.strftime(this.d, 'this is the %wst day of the week'));
   },
 
   'test %x should be replaced with whatever toLocaleDateString returns': function(){
@@ -289,7 +289,7 @@ StrftimeTest = TestCase("StrftimeTest", {
   'test them all': function(){
     assertEquals('Today is Friday November 12, and the time is 13:14:15!', X.strftime(this.d, 'Today is %A %B %d, and the time is %H:%M:%S!'));
     assertEquals('Today is Fri. Nov. 12, and the time is 01:14:15 PM!', X.strftime(this.d, 'Today is %a. %b. %d, and the time is %I:%M:%S %p!'));
-    assertEquals('Friday is the 6th day of the week', X.strftime(this.d, '%A is the %wth day of the week'));
+    assertEquals('Friday is the 5th day of the week', X.strftime(this.d, '%A is the %wth day of the week'));
     assertEquals('On Friday Nov. 12 only: 20% off all goats! Store opens at precisely 01:14 PM.', X.strftime(this.d, 'On %A %b. %d only: 20%% off all goats! Store opens at precisely %I:%M %p.'));
     assertEquals('Friday Friday Friday Friday Friday 2010 2010', X.strftime(this.d, '%A %A %A %A %A %Y %Y'));
   }
@@ -375,15 +375,6 @@ StrftimeLocaleTest = TestCase('StrftimeLocaleTest', {
     assertEquals('10 på førmeddan', X.strftime(this.d, '%I %p', 'tr'));
     this.d.setHours(15);
     assertEquals('03 på ættmeddan', X.strftime(this.d, '%I %p', 'tr'));
-  },
-
-  'test should be able to override weekday numbers': function(){
-    X.addLocale('not stupid', {weekdayNumbers:[7,1,2,3,4,5,6]}, X.formats['default']);
-    assertEquals('Friday is the 5th day of the week', X.strftime(this.d, '%A is the %wth day of the week', 'not stupid'));
-    this.d.setDate(8);
-    assertEquals('Monday is the 1st day of the week', X.strftime(this.d, '%A is the %wst day of the week', 'not stupid'));
-    this.d.setDate(14);
-    assertEquals('Sunday is the 7th day of the week', X.strftime(this.d, '%A is the %wth day of the week', 'not stupid'));
   },
 
   'test should be able to add new formatters': function(){

@@ -39,26 +39,24 @@ Strxtime = (function(){
         weekdays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
         abbrWeekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
         meridian: {am: 'AM', pm: 'PM'},
-        weekdayNumbers:    [1, 2, 3, 4, 5, 6, 7], //By default, week starts on Sunday (which is stupid)
-        weekdayNumbersMon: [7, 1, 2, 3, 4, 5, 6], // Monday is 1 but Sunday is 7 not zero
 
         '%': function(d){
           return '%';
         },
 
-        'a': function(d){
+        'a': function(d){ // Abbreviated name of the day of the week
           return this.abbrWeekdays[d.getDay()];
         },
 
-        'A': function(d){
+        'A': function(d){ // Name of the day of the week
           return this.weekdays[d.getDay()];
         },
 
-        'b': function(d){
+        'b': function(d){ // Abbreviated month name
           return this.abbrMonthNames[d.getMonth()];
         },
 
-        'B': function(d){
+        'B': function(d){ // Month name
           return this.monthNames[d.getMonth()];
         },
 
@@ -70,7 +68,7 @@ Strxtime = (function(){
           return zeroPad(Math.floor(d.getFullYear() / 100));
         },
 
-        'd': function(d){
+        'd': function(d){ //Zero-padded day of the month
           return zeroPad(d.getDate());
         },
 
@@ -84,11 +82,11 @@ Strxtime = (function(){
 
         'h': '%b',
 
-        'H': function(d){
+        'H': function(d){ // Zero-padded hour of the day
           return zeroPad(d.getHours());
         },
 
-        'I': function(d){
+        'I': function(d){ // Zero-padded 12-hour hour of the day
           var h = d.getHours();
           if (h == 0 || h == 12) return 12;
           else return zeroPad(h % 12);
@@ -110,19 +108,19 @@ Strxtime = (function(){
           else return spacePad(h % 12);
         },
 
-        'm': function(d){
+        'm': function(d){ // Zero-padded month number
           return zeroPad(d.getMonth()+1);
         },
 
-        'M': function(d){
+        'M': function(d){ //Zero-padded minutes
           return zeroPad(d.getMinutes());
         },
 
-        'n': function(d){ // a newline character
+        'n': function(d){ // A newline character
           return "\n";
         },
 
-        'p': function(d){
+        'p': function(d){ // Meridian indicator
           var h = d.getHours();
           return h < 12 ? this.meridian.am : this.meridian.pm;
         },
@@ -135,27 +133,27 @@ Strxtime = (function(){
 
         'R': '%H:%M',
 
-        's': function(d){ // seconds since epoch
+        's': function(d){ // Seconds since epoch
           var s = d.getTime().toString();
           return s.substring(0,s.length-3);
         },
 
-        'S': function(d){
+        'S': function(d){ // Zero-padded seconds
           return zeroPad(d.getSeconds());
         },
 
-        't': function(d){ // a tab character
+        't': function(d){ // A tab character
           return "\t";
         },
 
         'T': '%H:%M:%S',
 
         'u': function(d){ // The day of the week as a decimal, range 1 to 7, Monday being 1. See also %w.
-          return ''+this.weekdayNumbersMon[d.getDay()];
+          return ''+(((d.getDay() + 6) % 7) + 1);
         },
 
-        'w': function(d){
-          return ''+this.weekdayNumbers[d.getDay()];
+        'w': function(d){ // Day of the week, 0 is Sunday, 6 is Saturday
+          return ''+d.getDay();
         },
 
         'x': function(d){ // The preferred date representation for the current locale without the time.
@@ -166,11 +164,11 @@ Strxtime = (function(){
           return d.toLocaleTimeString();
         },
 
-        'y': function(d){
+        'y': function(d){ // Zero-padded year w/o century
           return zeroPad((d.getFullYear() % 1000) % 100);
         },
 
-        'Y': function(d){
+        'Y': function(d){ // Year
           return ''+d.getFullYear();
         },
 
