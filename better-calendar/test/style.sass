@@ -88,8 +88,14 @@ body
                     display: block
                     padding: 0.2em 0.5em
 
-                    &:hover:not(.disabled):not(.selected):not(.empty)
+                    &:hover:not(.disabled):not(.selected):not(.empty):not(.today)
                       background: #eee
+
+                    &.today
+                      background: #eee
+
+                      &:hover:not(.selected)
+                        background: #ccc
 
                     &.selected
                       background: #000
@@ -417,15 +423,15 @@ body
             background: rgba(0,0,0,0.2)
             cursor: pointer
 
+          &.today
+            background: #eeb
+
           &.selected
             background: #000
             color: #fff
 
           &.prev-month, &.next-month
-            color: #999
-
-            &.disabled
-              color: #c99
+            opacity: 0.4
 
           &.disabled
             color: #c00

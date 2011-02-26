@@ -451,7 +451,9 @@ BetterCalendar.Template = ElementBase.extend({
           prevYear = d.getFullYear() < dd.getFullYear(),
           prevMonth = prevYear || d.getMonth() < dd.getMonth(),
           nextYear = d.getFullYear() > dd.getFullYear(),
-          nextMonth = nextYear || d.getMonth() > dd.getMonth();
+          nextMonth = nextYear || d.getMonth() > dd.getMonth(),
+          now = new Date(),
+          today = d.getFullYear() == now.getFullYear() && d.getMonth() == now.getMonth() && d.getDate() == now.getDate();
 
       el.update(d.getDate());
 
@@ -459,6 +461,7 @@ BetterCalendar.Template = ElementBase.extend({
       if (prevMonth) el.addClassName('prev-month');
       if (nextYear) el.addClassName('next-year');
       if (nextMonth) el.addClassName('next-month');
+      if (today) el.addClassName('today');
 
       if (this.isDayDisabled(d)) {
         el.writeAttribute('data-control', 'disabled-day');
