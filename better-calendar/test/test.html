@@ -370,7 +370,7 @@
       );
       $('date-only-wrapper').insert(dateonlytable);
       var calendar = new BetterCalendar.Calendar();
-      var datetime = new BetterCalendar.Template($('date-time'), calendar);
+      var datetime = new BetterCalendar.Template($('date-time'), calendar, {fillBlanks:false});
       datetime.isDayDisabled = function(d){ return d.getFullYear() < 2000; }; //Anything before 2000 can't be selected
       var dateonly = new BetterCalendar.Template(dateonlytable, calendar);
       var timeonly = new BetterCalendar.Template($('time-only'), calendar);

@@ -19,6 +19,19 @@ BetterCalendar = {
 
   cloneDate: function(d){
     return new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds());
+  },
+
+  //Returns the number of days between d1 and d2. Does not take time of day into account.
+  daysBetween: function(d1, d2){
+    return((
+      Date.UTC(d2.getFullYear(), d2.getMonth(), d2.getDate(), 0, 0, 0, 0) -
+      Date.UTC(d1.getFullYear(), d1.getMonth(), d1.getDate(), 0, 0, 0, 0)
+    ) / 86400000)
+  },
+
+  //Returns the number of days included in the range d1..d2, including both d1 and d2
+  numberOfDays: function(d1, d2){
+    return this.daysBetween(d1, d2) + 1;
   }
 
 };
@@ -315,9 +328,15 @@ BetterCalendar.Template = ElementBase.extend({
     names && this.setValueByElement('month', names[n-1]);
   },
 
-  init: function(element, calendar){
+  defaultOptions: {
+    fillBlanks: true, //Include days from prev&next months in first&last weeks
+    sixWeeks: true //Always include 6 weeks to avoid calendar size changing all the time
+  },
+
+  init: function(element, calendar, options){
     this._super(element);
     this.controls = BetterCalendar.object(this.controls); //Allow instance-specific controls
+    this.set('options', Object.extend(BetterCalendar.object(this.defaultOptions), options || {}));
     this.observe();
     this.set('calendar', calendar || new BetterCalendar.Calendar());
   },
@@ -393,52 +412,57 @@ BetterCalendar.Template = ElementBase.extend({
       //is the parent, otherwise it's a sibling, so do up() to get parent.
       (target.position == 'top' ? target.element : target.element.up()).select('.week').invoke('remove');
 
-      var dayOfWeek = 0,
-          week,
-          lastWeek,
-          ins;
-
-      that.eachDay(function(day){
-        if (dayOfWeek == 0) { //New week
-          lastWeek = week;
-          week = $(weekTemplate.cloneNode(true)); //New week container
-          if (lastWeek) {//Additional week, insert after lastWeek
-            lastWeek.insert({after:week});
-          } else {//First week, insert at position stored in target
+      this.getWeeks().reverse().each(function(week){
+        var weekEl = weekTemplate.cloneNode(true),
             ins = {};
-            ins[target.position] = week; //{top: week} or {after: week}
-            target.element.insert(ins);
-          }
-        }
+        ins[target.position] = weekEl;
+        target.element.insert(ins);
 
-        var dayEl = week.down('.'+that.days[dayOfWeek]); //.down('.mon')
-        if (dayEl) that.drawDay(dayEl, day);
-
-        if (dayOfWeek == 6) dayOfWeek = 0; //Start next week
-        else dayOfWeek++;
+        week.each(function(day, i){
+          var dayEl = weekEl.down('.'+that.days[i % 7]); //.down('.mon')
+          if (dayEl) that.drawDay(dayEl, day);
+        });
       });
 
     }
   },
 
-  //Iterate each day of the current month. The default implementation
-  //includes days in prev & next month to fill any gaps in the first & last week.
-  //It is permissible for an alternative implementation to return null values for 'empty' days
-  //NOTE: The yielded Date object remains the same for each iteration.
-  eachDay: function(fn){
-    var startDate = BetterCalendar.cloneDate(this.get('calendar').get('date')),
-        endDate = BetterCalendar.cloneDate(this.get('calendar').get('date'));
+  //Returns an array of arrays representing each week in the current month.
+  //Each week array has 7 Dates representing the week's days.
+  //If options.fillBlanks, dates from the previous and next months in the
+  //first and last weeks are included, otherwise they're null.
+  //If options.sixWeeks (and fillBlanks), it will always return six weeks, the
+  //additional week(s) being added to the end using dates from next month.
+  getWeeks: function(){
+    var opts = this.get('options'),
+        weeks = [[]];
+        week = weeks[0],
+        startDate = BetterCalendar.cloneDate(this.get('calendar').get('date')),
+        endDate = BetterCalendar.cloneDate(this.get('calendar').get('date')),
+        currentMonth = startDate.getMonth();
+
     startDate.setDate(1);
     while (startDate.getDay() != 1) startDate.setDate(startDate.getDate()-1) //If first of month is not monday, go back to start of week (prev month)
     endDate.setDate(1); //Avoid overflow for e.g. jan 31 > feb (resulting in march 2 or 3)
     endDate.setMonth(endDate.getMonth()+1); //Skip to next month
     endDate.setDate(0); //Then go back to last day of current month
     while (endDate.getDay() != 0) endDate.setDate(endDate.getDate()+1) //If last of month is not sunday, go forward to end of week (next month)
+    if (opts.fillBlanks && opts.sixWeeks) {
+      //Keep adding dates until there are 42 days (6 weeks)
+      while (BetterCalendar.numberOfDays(startDate, endDate) < 42) endDate.setDate(endDate.getDate()+1);
+    }
 
     while (startDate <= endDate) {
-      fn(startDate);
+      if (week.length == 7){
+        week = [];
+        weeks.push(week)
+      }
+      week.push(opts.fillBlanks || startDate.getMonth() == currentMonth ? startDate : null);
+      startDate = BetterCalendar.cloneDate(startDate);
       startDate.setDate(startDate.getDate()+1);
     }
+
+    return weeks;
   },
 
   //Override this to return true for dates that are disabled.
@@ -447,7 +471,8 @@ BetterCalendar.Template = ElementBase.extend({
 
   drawDay: function(el, d){
     if (d) {
-      var dd = this._calendarDate;
+      var opts = this.get('options'),
+          dd = this._calendarDate;
           prevYear = d.getFullYear() < dd.getFullYear(),
           prevMonth = prevYear || d.getMonth() < dd.getMonth(),
           nextYear = d.getFullYear() > dd.getFullYear(),
@@ -475,8 +500,8 @@ BetterCalendar.Template = ElementBase.extend({
       }
 
     } else {
-      dayEl.update();
-      dayEl.addClassName('empty');
+      el.update();
+      el.addClassName('empty');
     }
   },
 
