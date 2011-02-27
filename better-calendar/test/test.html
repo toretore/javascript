@@ -381,7 +381,7 @@
       //var selectBridge = new BetterCalendar.SelectBridge(calendar, $('select-year'), $('select-month'), $('select-day'), $('select-hour'), $('select-minute'));
       var popup = new BetterCalendar.Popup({calendar:calendar, opener:$('popup'), 'class':'popup-calendar',
         selects:[$('select-year'), $('select-month'), $('select-day'), $('select-hour'), $('select-minute'), $('select-second')],
-        input: $('text-date')});
+        input: $('text-date'), template:{fillBlanks:false}});
       var template ='<a class="month-control" href="#" data-control="prev-month" title="Previous month">◀</a><table>'+
         '<tr class="info"><td colspan="7"><span class="month"></span><span class="year" contenteditable="true" data-property="year"></span></td></tr><tr class="week">'+
         '<td class="day mon"></td><td class="day tue"></td><td class="day wed"></td><td class="day thu"></td>'+

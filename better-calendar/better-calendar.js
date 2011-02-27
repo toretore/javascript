@@ -680,7 +680,7 @@ BetterCalendar.Popup = Base.extend({
     this.setOrDefault('class', options['class'], 'better-calendar');
     this.set('element', this.buildContainer());
     this.set('content', options.content || this.buildContent());
-    this.set('template', new BetterCalendar.Template(this.get('element'), options.calendar));
+    this.set('template', new BetterCalendar.Template(this.get('element'), options.calendar, options.template));
     this.get('insertion_point').insert(this.get('element'));
     this.observe();
   },
