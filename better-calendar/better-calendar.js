@@ -524,6 +524,8 @@ BetterCalendar.Template = ElementBase.extend({
   observe: function(){
     var that = this,
 
+        preventDefault = false,
+
         //Execute controls indicated by elements within the bubble range. That is,
         //between the event target and that.element.
         executeControls = function(e){
@@ -572,7 +574,7 @@ BetterCalendar.Template = ElementBase.extend({
           //If keyboard was used, execute control onclick because mousedown/up won't have been fired
           if (!isMouse) executeControls(e);
           isMouse = false;//Reset
-          //Only prevent default action if target was a control
+          //Only prevent default if an action was executed
           if (preventDefault) e.preventDefault();
         },
 
