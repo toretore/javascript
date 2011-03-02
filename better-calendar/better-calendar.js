@@ -524,19 +524,26 @@ BetterCalendar.Template = ElementBase.extend({
   observe: function(){
     var that = this,
 
-        executeControl = function(e){
-          var target = e.element(),
-              name = target.readAttribute('data-control'),
-              param = target.readAttribute('data-control-param');
-              control = name && that.controls[name];
-
-          if (control) {
-            preventDefault = true;
-            param ? control.call(that, param) : control.call(that);
-            that.fire('control executed', name, param);
-          } else {
-            preventDefault = false;
+        //Execute controls indicated by elements within the bubble range. That is,
+        //between the event target and that.element.
+        executeControls = function(e){
+          var controls = [],
+              el = e.element(),
+              stop = that.element.up(), //Stop checking elements at that.element
+              name, param, control;
+          while (el != stop) {
+            name = el.readAttribute('data-control');
+            param = el.readAttribute('data-control-param');
+            control = name && that.controls[name];
+            if (control) controls.push([name, control, param]);
+            el = el.up();
           }
+
+          preventDefault = !!controls.length; //preventDefault only if >= 1 controls are found
+          controls.each(function(c){
+            c[2] ? c[1].call(that, c[2]) : c[1].call(that);
+            that.fire('control executed', c[0], c[2]);
+          });
         },
 
         isMouse = false,
@@ -548,11 +555,11 @@ BetterCalendar.Template = ElementBase.extend({
         onMouseDown = function(e){
           html.observe('mouseup', onMouseUp);
           isMouse = true;
-          executeControl(e); //First, "normal" click
+          executeControls(e); //First, "normal" click
           timeout = setTimeout(function(){//Then, after a second
-            executeControl(e);//Execute again
+            executeControls(e);//Execute again
             interval = setInterval(function(){//And then every 200ms after that
-              executeControl(e);
+              executeControls(e);
             }, 200);
           }, 1000);
         },
@@ -563,7 +570,7 @@ BetterCalendar.Template = ElementBase.extend({
         },
         onClick = function(e){
           //If keyboard was used, execute control onclick because mousedown/up won't have been fired
-          if (!isMouse) executeControl(e);
+          if (!isMouse) executeControls(e);
           isMouse = false;//Reset
           //Only prevent default action if target was a control
           if (preventDefault) e.preventDefault();
