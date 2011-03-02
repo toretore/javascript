@@ -543,7 +543,7 @@ BetterCalendar.Template = ElementBase.extend({
 
           preventDefault = !!controls.length; //preventDefault only if >= 1 controls are found
           controls.each(function(c){
-            c[2] ? c[1].call(that, c[2]) : c[1].call(that);
+            c[1].call(that, c[2], e);
             that.fire('control executed', c[0], c[2]);
           });
         },
