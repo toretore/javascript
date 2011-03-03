@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en">
+<head>
+  <title>Sanskrit: Rich Textile editor</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+  <script type="text/javascript" src="sanskrit.js?4"></script>
+  <script type="text/javascript" src="fancy.js?4"></script>
+  <link href="style.css?3" type="text/css" rel="Stylesheet" media="screen"/>
+</head>
+<body>
+
+  <h1>Sanskrit</h1>
+  
+  <p>
+    Sanskrit is a rich-text editor that outputs Textile instead of XHTML. See
+    <a href="usage.html">usage</a>.
+  </p>
+  
+  <h2>Example 1</h2>
+  
+  <p>
+    This example has not been styled, and the names for the "buttons" are the default values.
+    These names are the same as the class names used for the list items. The dashed outline is the container
+    for the button list and the iframe.
+  </p>
+  
+  <form>
+    <p>
+      <textarea class="sanskrit">I have _no_ style, but *lots* of charm to make up for it!</textarea>
+    </p>
+  </form>
+  
+  <h2>Example 2</h2>
+  
+  <p>
+    This example has been styled to make it look more like a normal textarea with buttons
+    to control the styling of the text. It also replaces the default names for the buttons
+    with new ones. This editor was created from an <a href="fancy.js">external Javascript file</a>.
+  </p>
+  
+  <p>
+    To get an idea of how the DOM tree is built and styled, you can have a look at the
+    <a href="style.css">style sheet</a>.
+  </p>
+  
+  <form>
+    <p>
+      <textarea id="fancypants">-Goodbye- +Hello+ *world!*</textarea>
+    </p>
+    
+    <p>
+      <input type="submit" value="Show textile" class="button" />
+    </p>
+  </form>
+
+</body>
+</html>

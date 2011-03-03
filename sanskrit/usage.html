@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en">
+<head>
+  <title>Sanskrit: Rich Textile editor</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+  <link href="style.css" type="text/css" rel="Stylesheet" media="screen"/>
+</head>
+<body>
+
+  <h1><a href="index.html">Sanskrit</a> &gt; Usage</h1>
+  
+  <p>
+    Sanskrit replaces normal textareas with an IFrame that has been set to
+    "design mode". This allows us to edit the XHTML inside it and retrieve it.
+    When the form is submitted, the XHTML is transformed into Textile.
+  </p>
+  
+  <h2>JavaScript</h2>
+  
+  <p>
+    Sanskrit will automatically look for textareas with the class name
+    "sanskrit" and turn them into iframes. You can do this manually by creating
+    a new Sanskrit object and passing it the textarea:
+  </p>
+  
+  <pre><code class="javascript">new Sanskrit(aTextarea);</code></pre>
+  
+  <p>
+    The <code class="javascript">Sanskrit</code> constructor takes an optional
+    <em>options</em> parameter, which is an object containing various values
+    that will affect the way the editor works.
+  </p>
+  
+  <pre><code class="javascript">new Sanskrit(aTextarea, {
+  className: 'prakrit',
+  onSubmit: function(){ alert(this.getContents()); },
+  toolbar: {
+    onEm: function(){ alert('Italic text will be, my master') },
+    actions: {'strong': 'strong', 'em': 'em', 'ins': 'ins', 'del': 'del', 'link': 'link', 'unlink': 'unlink'}
+  }
+});</code></pre>
+  
+  <h2>XHTML</h2>
+  
+  <p>
+    The DOM structure that replaces the textarea looks something like this:
+  </p>
+  
+  <pre><code class="html">&lt;div class="sanskrit"&gt;
+  &lt;ul&gt;
+    &lt;li class="em"&gt;&lt;a href=""&gt;em&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="strong"&gt;&lt;a href=""&gt;strong&lt;/a&gt;&lt;/li&gt;
+    &lt;!-- Etc. --&gt;
+  &lt;/ul&gt;
+  &lt;iframe /&gt;
+&lt;/div&gt;</code></pre>
+  
+  <p>
+    The class name for the container is the one from the options object, or
+    "sanskrit" if not set.
+  </p>
+
+</body>
+</html>

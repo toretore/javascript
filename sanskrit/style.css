@@ -1,0 +1,147 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: #ccc;
+  padding: 1em;
+}
+
+body {
+  width: 50em;
+  max-width: 100%;
+  margin: auto;
+  padding: 1em;
+  background: #fff;
+  font-size: 90%;
+  font-family: Verdana, Arial, sans-serif;
+  border: 1px solid #999;
+}
+
+h1, h2 {
+  margin: 1em 0 0.5em 0;
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 200%;
+}
+
+h2 {
+  font-size: 150%;
+}
+
+p {
+  text-align: justify;
+  margin: 0.5em 0;
+}
+
+ul {
+  margin: 0.5em 0;
+  padding-left: 1em;
+}
+
+  ul li {
+    
+  }
+
+pre {
+  margin: 1em;
+  padding: 1em;
+  background: #000;
+  color: #ccc;
+  overflow: auto;
+}
+
+code {
+  background: #000;
+  color: #ccc;
+}
+
+input.button {
+  background: #333;
+  border: 1px outset #333;
+  color: #ccc;
+  font-weight: bold;
+  padding: 0.5em;
+}
+
+.sanskrit {
+  border: 1px dashed #c99;
+  padding: 0.5em;
+}
+
+.fancy {
+  border: 1px inset #000;
+  width: 60%;
+}
+
+  .fancy iframe, .fancy textarea {
+    width: 100%;
+    border: none;
+    height: 10em;
+  }
+  
+  .fancy textarea {
+    
+  }
+
+  .fancy ul {
+    list-style-type: none;
+    overflow: hidden;
+    margin: 0;
+    padding: 0.15em;
+    background: #ddd;
+  }
+  
+    .fancy ul li {
+      float: left;
+    }
+    
+      .fancy ul li a {
+        display: block;
+        padding: 0 0.25em;
+        color: #000;
+        text-decoration: none;
+        border: 1px solid #ddd;
+        outline: none;
+      }
+      
+        .fancy ul li a:hover, .fancy ul li a:focus {
+          border-style: outset;
+        }
+        
+        .fancy ul li a:active, .fancy ul li.active a {
+          border-style: inset;
+        }
+      
+      .fancy ul li.active a {
+        background-color: #bbb;
+      }
+      
+      .fancy ul li.strong a {
+        font-weight: bold;
+      }
+      
+      .fancy ul li.em a {
+        font-style: italic;
+      }
+      
+      .fancy ul li.ins a {
+        text-decoration: underline;
+      }
+      
+      .fancy ul li.del a {
+        text-decoration: line-through;
+      }
+      
+      .fancy ul li.link a {
+        text-decoration: underline;
+        color: #00f;
+      }
+      
+      .fancy ul li.unlink a {
+        text-decoration: underline;
+        color: #f00;
+      }
