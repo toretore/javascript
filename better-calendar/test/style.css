@@ -190,6 +190,7 @@ body {
       body .inputs #popup.active, body .inputs #popup-template.active {
         background: red; }
     body .inputs #noinput {
+      outline: none;
       background: #eeeeee;
       background: -moz-linear-gradient(bottom, #dddddd, #eeeeee);
       color: #333333;

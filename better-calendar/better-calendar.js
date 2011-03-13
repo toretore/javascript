@@ -741,6 +741,12 @@ BetterCalendar.Popup = Base.extend({
       '</table>';
   },
 
+  //Returns the [x,y] for the container element's top and left attributes. This is called
+  //when an opener element triggers opening, and it receives the event object.
+  getPosition: function(e){
+    return [e.pointerX()+20, e.pointerY()];
+  },
+
   observe: function(){
     var openers = this.get('openers'),
         that = this,
@@ -762,7 +768,7 @@ BetterCalendar.Popup = Base.extend({
         else { el = el.up(); }
       }
 
-      if (target == 'open') that.open(e.pointerX()+20, e.pointerY());
+      if (target == 'open') that.open.apply(that, that.getPosition(e));
       else if (target == 'close' && that.isOpen()) that.close();
     });
 

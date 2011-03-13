@@ -388,6 +388,12 @@
         '<td class="day fri"></td><td class="day sat"></td><td class="day sun"></td></tr>'+
         '</table><a class="month-control" href="#" data-control="next-month" title="Next month">▶</a>';
       var templatepopup = new BetterCalendar.Popup({'class':'popup-template', content:template, openers:[$('popup-template'), $('text-date'), $('noinput')], calendar:calendar});
+      templatepopup.getPosition = function(e){
+        var pos = e.element().positionedOffset(),
+            tdim = e.element().getDimensions(),
+            cdim = templatepopup.get('element').getDimensions();
+        return [pos.left+tdim.width+5, pos.top-cdim.height+tdim.height]
+      };
       templatepopup.get('template').listen('date selected', function(d){ templatepopup.close(); });
       templatepopup.get('template').isDayDisabled = function(d){ return d.getDay() == 0 || d.getDay() == 6; }; //Weekends disabled
       templatepopup.get('template').draw(); //Initial draw didn't have the isDayDisabled method, redraw
