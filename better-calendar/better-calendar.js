@@ -31,7 +31,8 @@ BetterCalendar = {
 
   //Returns the number of days included in the range d1..d2, including both d1 and d2
   numberOfDays: function(d1, d2){
-    return this.daysBetween(d1, d2) + 1;
+    var between = this.daysBetween(d1, d2);
+    return between < 0 ? between-1 : between+1;
   }
 
 };

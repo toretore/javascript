@@ -1,3 +1,31 @@
+TestCase('BetterCalendarTest', {
+
+  'test daysBetween should return the number of days between d1 and d2, excluding d2': function(){
+    assertEquals(0, BetterCalendar.daysBetween(new Date(2010, 11, 12), new Date(2010, 11, 12)));
+    assertEquals(0, BetterCalendar.daysBetween(new Date(2010, 11, 12, 1, 2, 3), new Date(2010, 11, 12, 3, 2, 1))); //Time of day shouldn't matter
+    assertEquals(0, BetterCalendar.daysBetween(new Date(2010, 11, 12, 3, 2, 1), new Date(2010, 11, 12, 1, 2, 3)));
+    assertEquals(1, BetterCalendar.daysBetween(new Date(2010, 11, 12), new Date(2010, 11, 13)));
+    assertEquals(30, BetterCalendar.daysBetween(new Date(2010, 10, 12), new Date(2010, 11, 12)));
+    assertEquals(-30, BetterCalendar.daysBetween(new Date(2010, 11, 12), new Date(2010, 10, 12)));
+    assertEquals(364, BetterCalendar.daysBetween(new Date(2010, 0, 1), new Date(2010, 11, 31))); //Should not count last day
+    assertEquals(365, BetterCalendar.daysBetween(new Date(2010, 0, 1), new Date(2011, 0, 1)));
+    assertEquals(31, BetterCalendar.daysBetween(new Date(2010, 11, 1), new Date(2011, 0, 1)));
+  },
+
+  'test numberOfDays should return the number of days between d1 and d2, including d2': function(){
+    assertEquals(1, BetterCalendar.numberOfDays(new Date(2010, 11, 12), new Date(2010, 11, 12)));
+    assertEquals(1, BetterCalendar.numberOfDays(new Date(2010, 11, 12, 1, 2, 3), new Date(2010, 11, 12, 3, 2, 1))); //Time of day shouldn't matter
+    assertEquals(1, BetterCalendar.numberOfDays(new Date(2010, 11, 12, 3, 2, 1), new Date(2010, 11, 12, 1, 2, 3)));
+    assertEquals(2, BetterCalendar.numberOfDays(new Date(2010, 11, 12), new Date(2010, 11, 13)));
+    assertEquals(31, BetterCalendar.numberOfDays(new Date(2010, 10, 12), new Date(2010, 11, 12)));
+    assertEquals(-31, BetterCalendar.numberOfDays(new Date(2010, 11, 12), new Date(2010, 10, 12)));
+    assertEquals(365, BetterCalendar.numberOfDays(new Date(2010, 0, 1), new Date(2010, 11, 31))); //Should not count last day
+    assertEquals(366, BetterCalendar.numberOfDays(new Date(2010, 0, 1), new Date(2011, 0, 1)));
+    assertEquals(32, BetterCalendar.numberOfDays(new Date(2010, 11, 1), new Date(2011, 0, 1)));
+  }
+
+});
+
 TestCase("CalendarTest", {
 
   setUp: function(){
